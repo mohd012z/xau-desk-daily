@@ -1,11 +1,14 @@
 import { BRAND, getInstrument } from '../core/instruments.mjs';
 import { adaptSnapshot } from '../adapters/snapshot-adapter.mjs';
+import { loadHistory } from '../adapters/history-adapter.mjs';
 import { calcFxReaction, calcMetalReaction, calcDigitalReaction } from '../core/reaction.mjs';
+import { buildAdvanceModel } from '../history/advance-model.mjs';
 import { createEventStore } from '../events/event-store.mjs';
 import { ingestSnapshotEvents, startGatewayPolling } from '../adapters/event-feed-adapter.mjs';
 import { dispatchRecalculation } from '../events/recalculate.mjs';
 import { renderAndRecordTradePlan } from './trade-plan-controller.mjs';
-import { buildTradePlanInput, normalizeMarketFeedState } from './trade-plan-integration.mjs';
+import { buildTradePlanInput, normalizeMarketFeedState, mergeAdvanceModelOverrides } from './trade-plan-integration.mjs';
+import { renderAdvanceModelMarkup } from './advance-model-view.mjs';
 
 const browser = typeof window !== 'undefined' && typeof document !== 'undefined';
 const $ = (s, p = document) => p.querySelector(s);
@@ -112,15 +115,44 @@ function renderSnapshot(data) {
   else list.innerHTML='<div class="empty-state">No source metadata in this snapshot.</div>';
 }
 
-function renderTradePlan(active, marketFeedState, planHistory, reason = 'SYNC', createdAtUtc = new Date().toISOString()) {
+function eventCandidates(event = {}) {
+  return [...new Set([
+    ...(event.affectedAssets?.primary ?? []),
+    ...(event.affectedAssets?.secondary ?? []),
+    ...(event.affectedAssets?.context ?? [])
+  ].filter(Boolean))];
+}
+
+function buildHistoricalBundle(active, data, historyState, nowUtc) {
+  if (!active) return null;
+  const overrides = window.MACRO_TRADE_PLAN ?? {};
+  const explicitSymbol = getInstrument(overrides.modelSymbol) ? overrides.modelSymbol : null;
+  const candidates = explicitSymbol ? [explicitSymbol] : eventCandidates(active).filter(symbol => getInstrument(symbol));
+  let symbol = candidates.find(candidate => data.instruments?.[candidate]?.price != null) ?? candidates[0] ?? null;
+  if (!symbol && data.instruments?.['XAU/USD']?.price != null && eventCandidates(active).includes('XAU/USD')) symbol = 'XAU/USD';
+  const explicitPrice = Number(overrides.prices?.from);
+  const snapshotPrice = symbol ? Number(data.instruments?.[symbol]?.price) : NaN;
+  const preEventPrice = Number.isFinite(explicitPrice) && explicitPrice > 0 ? explicitPrice : (Number.isFinite(snapshotPrice) && snapshotPrice > 0 ? snapshotPrice : null);
+  if (!symbol || preEventPrice == null) return { model:{state:'INSUFFICIENT_DATA',reason:'MISSING_EVENT_OR_PRICE'}, symbol, preEventPrice };
+  const features = Array.isArray(overrides.advanceFeatures) ? overrides.advanceFeatures : [];
+  const event = {...active, window:overrides.historyWindow ?? '5m'};
+  const model = buildAdvanceModel({event,symbol,preEventPrice,features,history:historyState.samples ?? [],asOfUtc:nowUtc});
+  return {model,symbol,preEventPrice};
+}
+
+function renderHistoricalModel(bundle, historyState) {
+  const host = $('#history-model-host');
+  const status = $('#history-data-status');
+  if (status) status.textContent = `${historyState.status ?? 'UNKNOWN'}${historyState.rejectedCount ? ` • ${historyState.rejectedCount} rejected` : ''}`;
+  if (!host) return;
+  host.className = '';
+  host.innerHTML = renderAdvanceModelMarkup(bundle?.model ?? {state:'INSUFFICIENT_DATA',reason:'NO_ACTIVE_EVENT'});
+}
+
+function renderTradePlan(active, marketFeedState, planHistory, overrides, reason = 'SYNC', createdAtUtc = new Date().toISOString()) {
   const host = $('#trade-plan-host');
   if (!host) return null;
-  const input = buildTradePlanInput({
-    event: active,
-    marketFeedState,
-    overrides: window.MACRO_TRADE_PLAN ?? {},
-    nowUtc: createdAtUtc
-  });
+  const input = buildTradePlanInput({event:active,marketFeedState,overrides,nowUtc:createdAtUtc});
   if (!input) {
     host.className = 'empty-state';
     host.textContent = 'No active timed event available for the MYT Trade Plan.';
@@ -129,24 +161,25 @@ function renderTradePlan(active, marketFeedState, planHistory, reason = 'SYNC', 
   host.className = '';
   const history = planHistory.get(active.id) ?? [];
   const sourceRevisionNumber = active.revisions?.at(-1)?.revisionNumber ?? 0;
-  const result = renderAndRecordTradePlan(host, input, {
-    history,
-    createdAtUtc,
-    reason,
-    sourceRevisionNumber
-  });
+  const result = renderAndRecordTradePlan(host, input, {history,createdAtUtc,reason,sourceRevisionNumber});
   planHistory.set(active.id, result.history);
   return result.plan;
 }
 
-function renderEventStore(store, eventFeedState = 'SNAPSHOT', marketFeedState = 'SNAPSHOT', planHistory = new Map(), reason = 'SYNC', createdAtUtc = new Date().toISOString()) {
+function renderEventStore(store, data, historyState, eventFeedState = 'SNAPSHOT', marketFeedState = 'SNAPSHOT', planHistory = new Map(), reason = 'SYNC', createdAtUtc = new Date().toISOString()) {
   const events = store.list();
   const active = events[0] ?? null;
   const view = formatEventView(active);
   $('#active-event').textContent = view.title;
   $('#active-event-meta').textContent = active ? `${view.badge} • ${view.time} • ${view.provenance}` : 'No active material event in the current feed.';
   $('#event-feed-state').textContent = eventFeedState;
-  renderTradePlan(active, marketFeedState, planHistory, reason, createdAtUtc);
+
+  const bundle = buildHistoricalBundle(active, data, historyState, createdAtUtc);
+  renderHistoricalModel(bundle, historyState);
+  const baseOverrides = {...(window.MACRO_TRADE_PLAN ?? {})};
+  if (bundle?.preEventPrice != null && !baseOverrides.prices) baseOverrides.prices = {from:bundle.preEventPrice};
+  const planOverrides = bundle?.model && ['READY','LOW_SAMPLE'].includes(bundle.model.state) ? mergeAdvanceModelOverrides(bundle.model, baseOverrides) : baseOverrides;
+  renderTradePlan(active, marketFeedState, planHistory, planOverrides, reason, createdAtUtc);
 
   const eventList = $('#event-list'); eventList.innerHTML = '';
   if (!events.length) eventList.innerHTML = '<div class="empty-state">No material event detected from the current snapshot.</div>';
@@ -190,15 +223,29 @@ function boot() {
   let eventFeedState = 'SNAPSHOT';
   const marketFeedState = normalizeMarketFeedState(window.MACRO_MARKET_FEED_STATE ?? data.status);
   const planHistory = new Map();
-  const store = createEventStore({ onUpdate(event, change){
-    const requestedAt = new Date().toISOString();
-    dispatchRecalculation(event,{feedStatus:eventFeedState,requestedAt},window);
-    renderEventStore(store,eventFeedState,marketFeedState,planHistory,String(change ?? 'SYNC').toUpperCase(),requestedAt);
+  let historyState = {schemaVersion:'1.0',generatedAt:null,samples:[],rejectedCount:0,status:'LOADING'};
+  let store;
+  const renderCurrent = (reason='SYNC', at=new Date().toISOString()) => renderEventStore(store,data,historyState,eventFeedState,marketFeedState,planHistory,reason,at);
+  const onRecalculation = event => renderCurrent(`RECALC_${event.detail?.modelMode ?? 'UPDATE'}`, event.detail?.requestedAt ?? new Date().toISOString());
+  window.addEventListener('macrodesk:event-update', onRecalculation);
+  store = createEventStore({ onUpdate(event){
+    dispatchRecalculation(event,{feedStatus:eventFeedState,requestedAt:new Date().toISOString()},window);
   } });
   store.ingestMany(ingestSnapshotEvents(raw));
-  renderEventStore(store,eventFeedState,marketFeedState,planHistory,'SYNC',new Date().toISOString());
+  renderCurrent('SYNC');
+
+  loadHistory({url:'./data/event-history.json'}).then(result => {
+    historyState = result;
+    renderCurrent('HISTORY_LOADED');
+  });
+
   const gatewayUrl = window.MACRO_DESK_CONFIG?.eventGatewayUrl ?? null;
-  startGatewayPolling({ url: gatewayUrl, intervalMs: window.MACRO_DESK_CONFIG?.eventPollMs ?? 60000, onUpdate(candidates){ eventFeedState='GATEWAY'; store.ingestMany(candidates); renderEventStore(store,eventFeedState,marketFeedState,planHistory,'SYNC',new Date().toISOString()); }, onError(){ eventFeedState='SNAPSHOT • GATEWAY ERROR'; renderEventStore(store,eventFeedState,marketFeedState,planHistory,'GATEWAY_ERROR',new Date().toISOString()); } });
+  startGatewayPolling({
+    url: gatewayUrl,
+    intervalMs: window.MACRO_DESK_CONFIG?.eventPollMs ?? 60000,
+    onUpdate(candidates){ eventFeedState='GATEWAY'; store.ingestMany(candidates); renderCurrent('GATEWAY_SYNC'); },
+    onError(){ eventFeedState='SNAPSHOT • GATEWAY ERROR'; renderCurrent('GATEWAY_ERROR'); }
+  });
   showView('BRIEF');
 }
 
