@@ -1,10 +1,50 @@
-import { BRAND } from '../core/instruments.mjs';
+import { BRAND, getInstrument } from '../core/instruments.mjs';
 import { adaptSnapshot } from '../adapters/snapshot-adapter.mjs';
+import { calcFxReaction, calcMetalReaction, calcDigitalReaction } from '../core/reaction.mjs';
 
+const browser = typeof window !== 'undefined' && typeof document !== 'undefined';
 const $ = (s, p = document) => p.querySelector(s);
 const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
-const raw = window.XAUUSD_DATA ?? {};
-const data = adaptSnapshot(raw);
+
+function fixed(value, digits) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) return '—';
+  return Number(value).toFixed(digits);
+}
+
+function signed(value, digits = 2) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) return '—';
+  const n = Number(value);
+  return `${n > 0 ? '+' : ''}${n.toFixed(digits)}`;
+}
+
+export function formatReactionCard({ symbol, assetClass, reaction, expectedPressure = '—', observedReaction = '—' }) {
+  const priceDigits = assetClass === 'fx' ? (symbol.endsWith('/JPY') ? 3 : 5) : 2;
+  let movement = '—';
+  let detail = '—';
+
+  if (assetClass === 'fx') {
+    movement = `${signed(reaction.pips, 1)} pips`;
+    detail = `max up ${signed(reaction.maxUpPips, 1)} • max down ${signed(reaction.maxDownPips, 1)} • range ${fixed(reaction.rangePips, 1)} pips`;
+  } else if (assetClass === 'metal') {
+    const points = reaction.providerPoints == null ? '—' : signed(reaction.providerPoints, 1);
+    movement = `$${signed(reaction.dollarMove, 2)} • ${signed(reaction.returnPct, 2)}% • ${points} provider pts`;
+    detail = 'Gold movement uses provider point metadata, not a universal pip definition.';
+  } else if (assetClass === 'digital') {
+    movement = `$${signed(reaction.dollarMove, 2)} • ${signed(reaction.returnPct, 2)}%`;
+    detail = 'Digital assets use dollar and percentage movement.';
+  }
+
+  return {
+    symbol,
+    assetClass,
+    from: fixed(reaction.fromPrice, priceDigits),
+    to: fixed(reaction.toPrice, priceDigits),
+    movement,
+    detail,
+    expectedPressure,
+    observedReaction
+  };
+}
 
 function fmt(value, digits = 2) {
   if (value === null || value === undefined || Number.isNaN(Number(value))) return '—';
@@ -21,7 +61,73 @@ function formatMyt(iso) {
   }).format(d)} MYT`;
 }
 
-function renderSnapshot() {
+function reactionFromInput(item) {
+  const meta = getInstrument(item.symbol);
+  if (!meta || item.before == null || item.after == null) return null;
+  if (meta.assetClass === 'fx') return calcFxReaction(item.symbol, item.before, item.after, item.high, item.low);
+  if (meta.assetClass === 'metal') return calcMetalReaction(item.before, item.after, meta.tickSize ?? null);
+  if (meta.assetClass === 'digital') return calcDigitalReaction(item.before, item.after);
+  return null;
+}
+
+function cardElement(card) {
+  const el = document.createElement('article');
+  el.className = 'reaction-card';
+  const title = document.createElement('div');
+  title.className = 'reaction-title';
+  title.textContent = card.symbol;
+  const prices = document.createElement('div');
+  prices.className = 'reaction-prices';
+  prices.textContent = `${card.from} → ${card.to}`;
+  const move = document.createElement('div');
+  move.className = 'reaction-move';
+  move.textContent = card.movement;
+  const states = document.createElement('div');
+  states.className = 'reaction-states';
+  states.innerHTML = '<span>Expected</span><strong></strong><span>Observed</span><strong></strong>';
+  states.querySelectorAll('strong')[0].textContent = card.expectedPressure;
+  states.querySelectorAll('strong')[1].textContent = card.observedReaction;
+  const detail = document.createElement('div');
+  detail.className = 'reaction-detail';
+  detail.textContent = card.detail;
+  el.append(title, prices, move, states, detail);
+  return el;
+}
+
+function renderReactionCards() {
+  const inputs = Array.isArray(window.MACRO_EVENT_REACTIONS) ? window.MACRO_EVENT_REACTIONS : [];
+  if (!inputs.length) return;
+  const fxHost = $('#fx-reactions');
+  const metalHost = $('#metal-reaction');
+  const digitalHost = $('#digital-reactions');
+  fxHost.innerHTML = '';
+  metalHost.innerHTML = '';
+  digitalHost.innerHTML = '';
+  let fxCount = 0, metalCount = 0, digitalCount = 0;
+
+  inputs.forEach((item) => {
+    const meta = getInstrument(item.symbol);
+    const reaction = reactionFromInput(item);
+    if (!meta || !reaction) return;
+    const card = formatReactionCard({
+      symbol: item.symbol,
+      assetClass: meta.assetClass,
+      reaction,
+      expectedPressure: item.expectedPressure ?? '—',
+      observedReaction: item.observedReaction ?? '—'
+    });
+    const el = cardElement(card);
+    if (meta.assetClass === 'fx') { fxHost.appendChild(el); fxCount++; }
+    if (meta.assetClass === 'metal') { metalHost.appendChild(el); metalCount++; }
+    if (meta.assetClass === 'digital') { digitalHost.appendChild(el); digitalCount++; }
+  });
+
+  if (!fxCount) fxHost.innerHTML = '<div class="empty-state">No measured FX event reaction yet.</div>';
+  if (!metalCount) metalHost.innerHTML = '<div class="empty-state">No measured metal event reaction yet.</div>';
+  if (!digitalCount) digitalHost.innerHTML = '<div class="empty-state">No measured digital-asset event reaction yet.</div>';
+}
+
+function renderSnapshot(data) {
   document.title = `${BRAND.name} — ${BRAND.subtitle}`;
   $('#feed-status').textContent = data.status;
   $('#updated-at').textContent = formatMyt(data.updatedAt);
@@ -63,7 +169,7 @@ function renderSnapshot() {
 function showView(view) {
   const normalized = view === 'DIGITAL' ? 'DIGITAL ASSETS' : view;
   $$('.nav-item, .bottom-nav button').forEach((button) => {
-    button.classList.toggle('active', button.dataset.view === normalized || (normalized === 'DIGITAL ASSETS' && button.dataset.view === 'DIGITAL ASSETS'));
+    button.classList.toggle('active', button.dataset.view === normalized);
   });
   $$('[data-view-section]').forEach((section) => {
     const tags = section.dataset.viewSection.split(/\s+/);
@@ -72,23 +178,32 @@ function showView(view) {
 }
 
 function bindNavigation() {
-  $$('.nav-item, .bottom-nav button').forEach((button) => {
-    button.addEventListener('click', () => showView(button.dataset.view));
-  });
+  $$('.nav-item, .bottom-nav button').forEach((button) => button.addEventListener('click', () => showView(button.dataset.view)));
 }
 
 function bindTheme() {
   const key = 'macro-desk-theme';
-  const saved = localStorage.getItem(key);
+  let saved = null;
+  try { saved = localStorage.getItem(key); } catch {}
   if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
   $('#theme-toggle').addEventListener('click', () => {
     const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
     document.documentElement.dataset.theme = next;
-    localStorage.setItem(key, next);
+    try { localStorage.setItem(key, next); } catch {}
   });
 }
 
-renderSnapshot();
-bindNavigation();
-bindTheme();
-showView('BRIEF');
+function boot() {
+  const raw = window.XAUUSD_DATA ?? {};
+  const data = adaptSnapshot(raw);
+  renderSnapshot(data);
+  renderReactionCards();
+  bindNavigation();
+  bindTheme();
+  showView('BRIEF');
+}
+
+if (browser) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+}
