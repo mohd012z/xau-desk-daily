@@ -7,25 +7,76 @@ function toIso(value) {
   return Number.isFinite(ms) ? new Date(ms).toISOString() : null;
 }
 
+function isRecent(eventAt, receivedAt, windowMs = 2 * 60 * 60 * 1000) {
+  if (!eventAt || !receivedAt) return false;
+  const age = Date.parse(receivedAt) - Date.parse(eventAt);
+  return Number.isFinite(age) && age >= 0 && age <= windowMs;
+}
+
 export function ingestSnapshotEvents(snapshot = {}) {
   const receivedAt = toIso(snapshot?.meta?.generatedAt) ?? null;
   const candidates = [];
   for (const item of snapshot.news ?? []) {
-    candidates.push({ title: item.title ?? '', text: item.summary ?? '', source: item.source ?? 'News', url: item.url ?? null, articlePublishedAt: toIso(item.time), receivedAt, sourceType: 'provider', kind: 'unplanned', isSpeech: false });
+    const articlePublishedAt = toIso(item.time);
+    candidates.push({
+      title: item.title ?? '',
+      text: item.summary ?? '',
+      source: item.source ?? 'News',
+      url: item.url ?? null,
+      articlePublishedAt,
+      receivedAt,
+      sourceType: 'provider',
+      kind: 'unplanned',
+      state: isRecent(articlePublishedAt, receivedAt) ? 'DETECTED' : 'CLOSED',
+      isSpeech: false
+    });
   }
   for (const item of snapshot.speakers ?? []) {
-    candidates.push({ title: item.name ?? item.title ?? 'Central-bank communication', text: item.quote ?? item.impact ?? '', source: item.source ?? 'Official', url: item.url ?? null, receivedAt, sourceType: 'official', kind: 'unplanned', isSpeech: true, speechMode: item.mode ?? 'prepared_remarks', entities: [item.role ?? ''] });
+    candidates.push({
+      title: item.name ?? item.title ?? 'Central-bank communication',
+      text: item.quote ?? item.impact ?? '',
+      source: item.source ?? 'Official',
+      url: item.url ?? null,
+      receivedAt,
+      sourceType: 'official',
+      kind: 'reference',
+      state: 'CLOSED',
+      isSpeech: true,
+      speechMode: item.mode ?? 'prepared_remarks',
+      entities: [item.role ?? '']
+    });
   }
   for (const item of snapshot.calendar ?? []) {
     const scheduled = toIso(item.eventTimeUtc ?? item.utc ?? item.time ?? item.dateTime);
-    candidates.push({ title: item.title ?? item.name ?? item.event ?? 'Scheduled event', text: item.summary ?? item.note ?? '', source: item.source ?? 'Calendar', url: item.url ?? null, officialScheduledAt: scheduled, receivedAt, sourceType: item.official ? 'official' : 'provider', kind: 'scheduled', isSpeech: Boolean(item.isSpeech), speechMode: item.speechMode ?? null, entities: item.entities ?? [] });
+    candidates.push({
+      title: item.title ?? item.name ?? item.event ?? 'Scheduled event',
+      text: item.summary ?? item.note ?? '',
+      source: item.source ?? 'Calendar',
+      url: item.url ?? null,
+      officialScheduledAt: scheduled,
+      receivedAt,
+      sourceType: item.official ? 'official' : 'provider',
+      kind: 'scheduled',
+      state: 'UPCOMING',
+      isSpeech: Boolean(item.isSpeech),
+      speechMode: item.speechMode ?? null,
+      entities: item.entities ?? []
+    });
   }
   return candidates;
 }
 
 export function ingestGatewayPayload(payload = {}) {
   const receivedAt = toIso(payload.receivedAt) ?? new Date().toISOString();
-  return (payload.events ?? []).map(item => ({ ...item, providerEventAt: toIso(item.providerEventAt ?? item.eventTimeUtc), providerPublishedAt: toIso(item.providerPublishedAt ?? item.publishedAt), officialScheduledAt: toIso(item.officialScheduledAt), officialStatementAt: toIso(item.officialStatementAt), receivedAt: toIso(item.receivedAt) ?? receivedAt, sourceType: item.sourceType ?? 'provider' }));
+  return (payload.events ?? []).map(item => ({
+    ...item,
+    providerEventAt: toIso(item.providerEventAt ?? item.eventTimeUtc),
+    providerPublishedAt: toIso(item.providerPublishedAt ?? item.publishedAt),
+    officialScheduledAt: toIso(item.officialScheduledAt),
+    officialStatementAt: toIso(item.officialStatementAt),
+    receivedAt: toIso(item.receivedAt) ?? receivedAt,
+    sourceType: item.sourceType ?? 'provider'
+  }));
 }
 
 export function startGatewayPolling({ url, intervalMs = 60000, onUpdate = () => {}, onError = () => {}, fetchImpl = globalThis.fetch } = {}) {
