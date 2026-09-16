@@ -10,3 +10,4 @@ test('composer never emits automatic order fields',()=>{const p=buildTradePlan(b
 test('historical sample count cannot be smaller than effective sample size',()=>{const p=buildTradePlan({...base,historical:{n:5,median:-8,p25:-18,p75:5,p10:-30,p90:20},effectiveSampleSize:60});assert.equal(p.quality.label,'LOW');assert.ok(p.quality.reasons.includes('HISTORY_SAMPLE_MISMATCH'));});
 test('weighted effective sample size may be smaller than raw historical count',()=>{const p=buildTradePlan({...base,historical:{...base.historical,n:60},effectiveSampleSize:25});assert.equal(p.quality.label,'MODERATE');assert.ok(!p.quality.reasons.includes('HISTORY_SAMPLE_MISMATCH'));});
 test('invalid event timestamp is rejected',()=>{assert.throws(()=>buildTradePlan({...base,eventTimeUtc:'bad'}),/Invalid UTC timestamp/);});
+test('invalid current timestamp is rejected',()=>{assert.throws(()=>buildTradePlan({...base,nowUtc:'bad'}),/Invalid UTC timestamp/);});
