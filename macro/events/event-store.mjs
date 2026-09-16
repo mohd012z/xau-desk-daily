@@ -8,6 +8,7 @@ export function createEventStore({ detectorOptions = {}, onUpdate = () => {} } =
   const map = new Map();
   const listeners = new Set();
   const notify = (event, change) => {
+    if (event?.state === 'CLOSED') return;
     onUpdate(event, change);
     for (const fn of listeners) fn(event, change);
   };
