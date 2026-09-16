@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {normalizeHistorySample,validateHistorySample} from '../../macro/history/history-schema.mjs';
+test('normalizes a valid FX sample',()=>{const s=normalizeHistorySample({eventId:'e1',eventType:'CPI',eventTimeUtc:'2026-01-01T13:30:00Z',symbol:'EUR/USD',window:'5m',before:'1.1',after:'1.099'});assert.equal(s.assetClass,'fx');assert.equal(s.before,1.1);assert.equal(validateHistorySample(s).valid,true)});
+test('rejects missing event aligned price',()=>{const s=normalizeHistorySample({eventId:'e1',eventType:'CPI',eventTimeUtc:'2026-01-01T13:30:00Z',symbol:'EUR/USD',window:'5m',before:1.1});assert.equal(validateHistorySample(s).valid,false);assert.ok(validateHistorySample(s).errors.includes('after'))});
