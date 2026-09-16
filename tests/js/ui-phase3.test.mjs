@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const html = fs.readFileSync('macro-preview.html','utf8');
+const app = fs.readFileSync('macro/ui/app.mjs','utf8');
 
 test('Phase 3 preview exposes MYT Trade Plan surface and stylesheet',()=>{
   assert.match(html,/href="\.\/macro\/ui\/phase3\.css"/);
@@ -18,6 +19,13 @@ test('desktop navigation includes PLAN and mobile order is PLAN EVENTS FX METALS
   const nav = html.match(/<nav class="bottom-nav"[\s\S]*?<\/nav>/)?.[0] ?? '';
   const views = [...nav.matchAll(/data-view="([^"]+)"/g)].map(m=>m[1]);
   assert.deepEqual(views,['PLAN','EVENTS','FX','METALS','MORE']);
+});
+
+test('runtime app records append-only plan snapshots per event revision',()=>{
+  assert.match(app,/renderAndRecordTradePlan/);
+  assert.match(app,/planHistory/);
+  assert.match(app,/sourceRevisionNumber/);
+  assert.match(app,/onUpdate\(event,\s*change\)/);
 });
 
 test('Phase 3 preview still declares production index unchanged',()=>{
