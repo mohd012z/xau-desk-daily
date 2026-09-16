@@ -5,6 +5,7 @@ on:
     branches: [main, feature/phase3-myt-trade-plan]
     paths:
       - 'macro/**'
+      - 'macro-preview.html'
       - 'tests/js/**'
       - '.github/workflows/macro-phase3-ci.yml'
 permissions:
@@ -29,7 +30,9 @@ jobs:
           node --check macro/events/trade-plan-revisions.mjs
           node --check macro/ui/trade-plan-view.mjs
           node --check macro/ui/trade-plan-controller.mjs
+          node --check macro/ui/trade-plan-integration.mjs
+          node --check macro/ui/app.mjs
       - name: Public-source safety checks
         run: |
-          ! grep -R -E 'apikey=[A-Za-z0-9_-]{8,}|TWELVE_DATA_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}|NEWS_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}|FRED_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}' macro
-          ! grep -R -E 'BUY setup|SELL setup|Stop loss|Take profit' macro/events macro/ui/trade-plan-*.mjs
+          ! grep -R -E 'apikey=[A-Za-z0-9_-]{8,}|TWELVE_DATA_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}|NEWS_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}|FRED_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}' macro macro-preview.html
+          ! grep -R -E 'BUY setup|SELL setup|Stop loss|Take profit' macro/events macro/ui/trade-plan-*.mjs macro-preview.html
