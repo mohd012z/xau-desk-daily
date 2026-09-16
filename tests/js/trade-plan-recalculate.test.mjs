@@ -7,14 +7,28 @@ test('invalid revision timestamp is rejected instead of silently using another t
 test('revision order cannot move backwards in time',()=>{const old=[{id:'r1',createdAtUtc:'2026-09-16T18:08:00Z'}];assert.throws(()=>appendPlanRevision(old,{id:'r2',createdAtUtc:'2026-09-16T18:07:59Z'}),/chronological/);});
 test('revision history rejects an invalid existing tail timestamp',()=>{assert.throws(()=>appendPlanRevision([{id:'bad',createdAtUtc:'bad'}],{id:'r2',createdAtUtc:'2026-09-16T18:08:00Z'}),/existing revision timestamp/);});
 
-test('plan snapshot records descriptive model state without order geometry',()=>{
-  const plan={eventId:'e1',modelState:'LIVE REACTION',pressure:'DOWN_PRESSURE',observed:'DOWN',confirmation:'CONFIRMED',quality:{label:'HIGH',reasons:[]},pivotConfluence:{status:'CONFLUENCE',level:'S1',price:1.1819},historical:{n:50,median:-12},prices:{from:1.184},entry:1.184,stopLoss:1.19,takeProfit:1.1819};
+test('plan snapshot records full analytical inputs without order geometry',()=>{
+  const plan={
+    eventId:'e1',eventName:'Fed speech',eventTimeUtc:'2026-09-16T18:00:00Z',eventTimeMyt:'17 Sep 2026 02:00:00 MYT',timeSource:'OFFICIAL',timeConfidence:'HIGH',affectedAssets:['USD','EUR/USD','XAU/USD'],
+    modelState:'LIVE REACTION',pressure:'DOWN_PRESSURE',observed:'DOWN',confirmation:'CONFIRMED',quality:{label:'HIGH',reasons:[]},
+    historical:{n:50,median:-12,p10:-25,p25:-18,p75:1,p90:8},prices:{from:1.184},priceBand:[1.181,1.182],atrContext:{atr:.008,eventMultiplier:1.4},
+    pivotContext:{timeframe:'D1',source:'PREVIOUS_COMPLETED_PERIOD',levels:{pivot:1.1846,s1:1.1819,s2:1.1797}},pivotConfluence:{status:'CONFLUENCE',level:'S1',price:1.1819},
+    entry:1.184,stopLoss:1.19,takeProfit:1.1819
+  };
   const history=appendPlanSnapshot([],{createdAtUtc:'2026-09-16T18:08:00Z',reason:'SPEECH_REVISION',sourceRevisionNumber:2,plan});
   assert.equal(history.length,1);
-  assert.equal(history[0].createdAtMyt,'17 Sep 2026 02:08:00 MYT');
-  assert.equal(history[0].pressure,'DOWN_PRESSURE');
-  assert.equal(history[0].pivotConfluence.level,'S1');
-  const json=JSON.stringify(history[0]);
+  const snapshot=history[0];
+  assert.equal(snapshot.createdAtMyt,'17 Sep 2026 02:08:00 MYT');
+  assert.equal(snapshot.eventName,'Fed speech');
+  assert.equal(snapshot.timeSource,'OFFICIAL');
+  assert.deepEqual(snapshot.affectedAssets,['USD','EUR/USD','XAU/USD']);
+  assert.deepEqual(snapshot.priceBand,[1.181,1.182]);
+  assert.equal(snapshot.atrContext.atr,.008);
+  assert.equal(snapshot.pivotContext.source,'PREVIOUS_COMPLETED_PERIOD');
+  assert.equal(snapshot.pivotContext.levels.s1,1.1819);
+  assert.equal(snapshot.pressure,'DOWN_PRESSURE');
+  assert.equal(snapshot.pivotConfluence.level,'S1');
+  const json=JSON.stringify(snapshot);
   assert.doesNotMatch(json,/entry|stopLoss|takeProfit/);
 });
 
