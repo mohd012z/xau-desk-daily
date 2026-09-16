@@ -1,5 +1,1 @@
-import { formatMyt } from '../core/time-myt.mjs';
-export function appendPlanRevision(existing=[],revision={}){
- const copy=existing.map(r=>({...r})); const createdAtUtc=revision.createdAtUtc||new Date().toISOString();
- copy.push({...revision,createdAtUtc,createdAtMyt:formatMyt(createdAtUtc)}); return copy;
-}
+import{formatMyt}from'../core/time-myt.mjs';export function appendPlanRevision(existing=[],revision={}){const copy=existing.map(r=>({...r}));if(!revision.createdAtUtc)throw new TypeError('createdAtUtc is required');const createdAtUtc=revision.createdAtUtc;const createdAtMyt=formatMyt(createdAtUtc);copy.push({...revision,createdAtUtc,createdAtMyt});return copy;}
