@@ -10,6 +10,8 @@ on:
     paths:
       - 'index.html'
       - 'xauusd-data.js'
+      - 'macro-preview.html'
+      - 'macro/**'
       - '.nojekyll'
       - '.github/workflows/pages.yml'
 
@@ -66,6 +68,14 @@ jobs:
           cp index.html _site/index.html
           cp xauusd-data.js _site/xauusd-data.js
 
+          if [ -f "macro-preview.html" ]; then
+            cp macro-preview.html _site/macro-preview.html
+          fi
+
+          if [ -d "macro" ]; then
+            cp -R macro _site/macro
+          fi
+
           if [ -f ".nojekyll" ]; then
             cp .nojekyll _site/.nojekyll
           else
@@ -73,7 +83,7 @@ jobs:
           fi
 
           echo "Files prepared:"
-          ls -la _site
+          find _site -maxdepth 3 -type f -print
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v4
@@ -87,8 +97,10 @@ jobs:
       - name: Deployment summary
         run: |
           echo "===================================="
-          echo "XAU DESK DEPLOYED"
+          echo "XAU DESK + MACRO DESK PREVIEW DEPLOYED"
           echo "===================================="
-          echo "Branch: main"
-          echo "Data  : xauusd-data.js"
+          echo "Branch : main"
+          echo "Home   : index.html"
+          echo "Preview: macro-preview.html"
+          echo "Data   : xauusd-data.js"
           echo "===================================="
