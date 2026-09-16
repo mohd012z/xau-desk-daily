@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>XAU//DESK - Daily Gold Brief &amp; Speaker Watch</title>
+  <style>
+    :root{
+      --bg:#0a0f15;--panel:#101821;--panel2:#141f2b;--line:#243444;--text:#e9f0f7;--muted:#8ba0b5;
+      --accent:#e2b04a;--accent2:#6fd3c7;--good:#3ecf8e;--bad:#ff5f7a;--warn:#f0c04a;
+      --hawk:#ff6b6b;--dove:#4bb3ff;--chip:#16222f;
+    }
+    html[data-theme="light"]{
+      --bg:#eef2f6;--panel:#ffffff;--panel2:#f6f9fc;--line:#d7e0ea;--text:#0d1a26;--muted:#5a7086;
+      --accent:#a9781a;--accent2:#158a7d;--good:#12805a;--bad:#c33b56;--warn:#9a6f00;
+      --hawk:#c0334b;--dove:#1f76bd;--chip:#eef3f8;
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;background:
+      radial-gradient(900px 380px at 12% -12%,rgba(226,176,74,.10),transparent),
+      radial-gradient(700px 320px at 100% 0%,rgba(111,211,199,.08),transparent),var(--bg);color:var(--text);}
+    .app{display:grid;grid-template-columns:216px 1fr;min-height:100%}
+    .side{border-right:1px solid var(--line);padding:16px;background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 92%,transparent),color-mix(in srgb,var(--panel2) 82%,transparent));position:sticky;top:0;height:100vh;overflow:auto}
+    .brand{font-weight:800;letter-spacing:.16em;font-size:13px;margin:6px 8px 4px;font-family:"Sora",system-ui,sans-serif}
+    .brand small{display:block;font-weight:600;letter-spacing:.14em;font-size:9px;color:var(--muted);margin-top:4px}
+    .nav{display:grid;gap:5px;margin-top:14px}
+    .nav button{border:1px solid transparent;text-align:left;padding:9px 10px;border-radius:9px;background:transparent;color:var(--muted);font-weight:600;font-size:12.5px;cursor:pointer}
+    .nav button.active,.nav button:hover{background:var(--chip);color:var(--text);border-color:var(--line)}
+    .side .foot{margin:18px 8px 0;font-size:10px;line-height:1.6;color:var(--muted)}
+    .main{padding:14px 16px 40px;overflow:auto}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .status{display:flex;gap:8px;align-items:center;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--chip);font-size:11px;color:var(--muted)}
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+    .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .seg{display:inline-flex;border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:4px}
+    .seg button{border:0;background:transparent;color:var(--muted);font-size:11px;font-weight:700;padding:6px 11px;border-radius:999px;cursor:pointer;letter-spacing:.04em}
+    .seg button.active{background:var(--panel);color:var(--text)}
+    .chip{border:1px solid var(--line);background:var(--chip);color:var(--text);padding:7px 11px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.04em}
+    .chip:hover{border-color:var(--accent)}
+    .hero{margin-top:12px;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:10px}
+    .card{border:1px solid var(--line);background:linear-gradient(150deg,color-mix(in srgb,var(--panel) 97%,transparent),color-mix(in srgb,var(--panel2) 95%,transparent));border-radius:13px;padding:12px;position:relative;overflow:hidden}
+    .k{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+    .v{margin-top:5px;font-size:23px;font-weight:800;font-family:"JetBrains Mono",ui-monospace,monospace;line-height:1.15}
+    .v.sm{font-size:17px}
+    .sub{margin-top:4px;font-size:11px;color:var(--muted)}
+    .good{color:var(--good)} .bad{color:var(--bad)} .acc{color:var(--accent)}
+    .layout{display:grid;grid-template-columns:1.35fr 1fr;gap:10px;margin-top:10px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-top:10px}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th,td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    th{font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+    tbody tr:hover{background:color-mix(in srgb,var(--chip) 60%,transparent)}
+    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+    .badge{font-size:9.5px;padding:2px 7px;border-radius:999px;border:1px solid var(--line);white-space:nowrap;font-weight:700;letter-spacing:.04em}
+    .b-bear{border-color:color-mix(in srgb,var(--bad) 45%,var(--line));color:var(--bad)}
+    .b-bull{border-color:color-mix(in srgb,var(--good) 45%,var(--line));color:var(--good)}
+    .b-neu{border-color:var(--line);color:var(--muted)}
+    .b-hawk{border-color:color-mix(in srgb,var(--hawk) 50%,var(--line));color:var(--hawk)}
+    .b-dove{border-color:color-mix(in srgb,var(--dove) 50%,var(--line));color:var(--dove)}
+    .b-high{border-color:color-mix(in srgb,var(--bad) 50%,var(--line));color:var(--bad)}
+    .b-med{border-color:color-mix(in srgb,var(--warn) 50%,var(--line));color:var(--warn)}
+    .sig{font-size:10px;padding:3px 9px;border-radius:6px;font-weight:800;letter-spacing:.07em;white-space:nowrap}
+    .sig-sell{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad);border:1px solid color-mix(in srgb,var(--bad) 45%,var(--line))}
+    .sig-buy{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good);border:1px solid color-mix(in srgb,var(--good) 45%,var(--line))}
+    .sig-neu{background:var(--chip);color:var(--muted);border:1px solid var(--line)}
+    .pct{font-family:"JetBrains Mono",monospace;font-weight:700}
+    .spk{border:1px solid var(--line);border-radius:11px;padding:10px;background:var(--chip);margin-bottom:8px;border-left:3px solid var(--line)}
+    .spk.hawk{border-left-color:var(--hawk)} .spk.dove{border-left-color:var(--dove)}
+    .spk .hd{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+    .spk .nm{font-weight:700;font-size:12.5px}
+    .spk .rl{font-size:10px;color:var(--muted);letter-spacing:.04em}
+    .spk .qt{margin-top:6px;font-size:11.5px;line-height:1.5}
+    .spk .im{margin-top:6px;font-size:10.5px;color:var(--muted)}
+    .spk .mt{margin-top:7px;padding-top:6px;border-top:1px dashed var(--line);font-size:10px;color:var(--muted);font-family:"JetBrains Mono",monospace}
+    .gauge{margin-top:10px}
+    .gbar{height:10px;border-radius:999px;background:linear-gradient(90deg,var(--dove),color-mix(in srgb,var(--muted) 40%,var(--line)),var(--hawk));position:relative}
+    .gmark{position:absolute;top:-5px;width:3px;height:20px;background:var(--text);border-radius:2px;box-shadow:0 0 0 2px var(--panel)}
+    .glab{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:6px;letter-spacing:.06em}
+    .netsig{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--chip)}
+    .netsig .big{font-size:22px;font-weight:800;font-family:"JetBrains Mono",monospace}
+    .chart-shell{position:relative}
+    .chart{margin-top:8px;height:196px;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb,var(--chip) 45%,transparent);cursor:crosshair}
+    .chart svg{width:100%;height:100%;display:block}
+    .chart svg .axis-text{font:600 9px "JetBrains Mono",ui-monospace,monospace;fill:var(--muted);letter-spacing:.03em}
+    .chart svg .axis-title{font:700 9px "IBM Plex Sans",sans-serif;fill:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+    .legend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:7px;font-size:10px;color:var(--muted);letter-spacing:.04em}
+    .legend .lg{display:inline-flex;align-items:center;gap:6px;font-weight:700}
+    .legend .lg::before{content:"";width:11px;height:2px;background:var(--lg-c,var(--accent));border-radius:2px}
+    .cursor{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .12s}
+    .chart-shell.active .cursor{opacity:1}
+    .cursor .vx,.cursor .hy{position:absolute;background:color-mix(in srgb,var(--accent) 85%,transparent)}
+    .cursor .vx{width:1px;top:0;bottom:0;left:50%}
+    .cursor .hy{height:1px;left:0;right:0;top:50%;background:color-mix(in srgb,var(--accent2) 75%,transparent)}
+    .cursor .lb{position:absolute;right:8px;top:8px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px 7px;font:700 10px "JetBrains Mono",monospace}
+    .ladder{display:grid;gap:6px;margin-top:8px}
+    .rung{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:12px;background:var(--chip)}
+    .rung .lab{color:var(--muted);font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+    .rung .num{font-family:"JetBrains Mono",monospace;font-weight:700}
+    .cal{display:grid;gap:6px;margin-top:8px}
+    .cal .row{display:flex;justify-content:space-between;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:7px 2px;font-size:11.5px}
+    .cal .dt{color:var(--muted);min-width:74px;font-size:10.5px;letter-spacing:.04em}
+    .pres{display:grid;gap:9px;margin-top:8px}
+    .pres .row .hd{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px}
+    .bar{height:6px;border-radius:999px;background:color-mix(in srgb,var(--line) 80%,transparent);overflow:hidden}
+    .bar>i{display:block;height:100%;width:var(--w,50%);background:linear-gradient(90deg,var(--accent),var(--accent2))}
+    .bar>i.dn{background:linear-gradient(90deg,var(--warn),var(--bad))}
+    .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:8px}
+    .step{border:1px solid var(--line);border-radius:10px;background:var(--chip);padding:10px}
+    .step h4{margin:0 0 5px;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase}
+    .step p{margin:0;font-size:11px;color:var(--muted);line-height:1.5}
+    .formula{margin-top:8px;padding:10px;border:1px dashed var(--line);border-radius:9px;font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--accent);background:var(--chip);overflow-x:auto}
+    .mtable{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+    .mtable td{padding:5px 6px;border-bottom:1px solid var(--line)}
+    .mtable td:last-child{text-align:right;font-family:"JetBrains Mono",monospace;color:var(--accent)}
+    .palette{position:fixed;inset:0;background:rgba(5,10,18,.5);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding-top:14vh;z-index:40}
+    .palette.open{display:flex}
+    .palette-card{width:min(660px,92vw);border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+    .palette input{width:100%;border:0;border-bottom:1px solid var(--line);padding:12px;background:var(--chip);color:var(--text);font:12px "JetBrains Mono",monospace;outline:none}
+    .palette button{width:100%;border:0;border-bottom:1px solid var(--line);padding:10px 12px;background:transparent;color:var(--text);text-align:left;cursor:pointer;font-size:12px}
+    .palette button:hover{background:var(--chip)}
+    .focus{position:fixed;inset:0;background:rgba(4,8,15,.62);backdrop-filter:blur(4px);display:none;z-index:30}
+    .focus.show{display:block}
+    .chart-shell.floating{position:fixed!important;z-index:31!important;box-shadow:0 30px 90px rgba(0,0,0,.5)!important;background:var(--panel)}
+    .note{font-size:10.5px;color:var(--muted);line-height:1.6;margin-top:8px}
+    .hidden{display:none!important}
+    .healthbar{margin-top:10px;display:grid;grid-template-columns:1.25fr .9fr .9fr 1.2fr;gap:8px}
+    .healthitem{border:1px solid var(--line);background:var(--chip);border-radius:10px;padding:9px 10px;min-width:0}
+    .healthitem .hv{margin-top:3px;font:800 12px "JetBrains Mono",ui-monospace,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .healthitem .hs{margin-top:3px;font-size:9.5px;color:var(--muted);line-height:1.35}
+    .health-state{display:inline-flex;align-items:center;gap:6px}
+    .health-state::before{content:"";width:8px;height:8px;border-radius:999px;background:var(--warn)}
+    .health-state.fresh::before{background:var(--good)}
+    .health-state.stale::before,.health-state.seed::before{background:var(--bad)}
+    .health-state.aging::before,.health-state.degraded::before{background:var(--warn)}
+    .source-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:6px;margin-top:7px}
+    .source-row{border:1px solid var(--line);border-radius:8px;padding:7px 8px;font-size:10px;color:var(--muted);background:color-mix(in srgb,var(--panel) 75%,transparent)}
+    .source-row b{color:var(--text)}
+    .source-row.ok{border-left:3px solid var(--good)}
+    .source-row.fail{border-left:3px solid var(--warn)}
+    @media (max-width:1150px){.hero,.layout,.grid2,.grid4,.flow,.healthbar{grid-template-columns:1fr}.app{grid-template-columns:78px 1fr}.brand small,.side .foot{display:none}}
+  </style>
+</head>
+<body>
+  <div class="focus" id="focus"></div>
+  <div class="app">
+    <aside class="side">
+      <div class="brand">XAU<span style="color:var(--accent)">//</span>DESK<small>GOLD BRIEF &amp; SPEAKER WATCH</small></div>
+      <nav class="nav" id="nav">
+        <button data-filter="all" class="active">Overview</button>
+        <button data-filter="news">News Feed</button>
+        <button data-filter="speakers">Speaker Watch</button>
+        <button data-filter="model">Impact Model</button>
+        <button data-filter="levels">Levels &amp; Calendar</button>
+        <button data-filter="charts">Charts</button>
+      </nav>
+      <div class="foot">
+        <div id="nav-updated">—</div>
+        <div style="margin-top:6px">Model convention: <b>hawkish = DOWN pressure</b>, <b>dovish = UP pressure</b>. Press <b>/</b> for commands.</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="top">
+        <div class="status"><span class="dot"></span><span>XAU/USD · <b id="session-label">—</b> · Updated <b id="updated-label">—</b></span></div>
+        <div class="controls">
+          <div class="seg" id="mode"><button data-mode="daily" class="active">DAILY</button><button data-mode="demo">DEMO</button></div>
+          <button class="chip" id="refresh">Refresh Data</button>
+          <div class="seg" id="theme"><button data-theme="dark" class="active">Dark</button><button data-theme="light">Light</button></div>
+        </div>
+      </div>
+
+      <section class="healthbar" aria-label="Daily data health">
+        <div class="healthitem"><div class="k">Data status</div><div class="hv"><span id="health-state" class="health-state">CHECKING</span></div><div class="hs" id="health-detail">—</div></div>
+        <div class="healthitem"><div class="k">Snapshot age</div><div class="hv" id="health-age">—</div><div class="hs">Measured from generated timestamp</div></div>
+        <div class="healthitem"><div class="k">Sources</div><div class="hv" id="health-sources">—</div><div class="hs">Successful / configured sources</div></div>
+        <div class="healthitem"><div class="k">Daily schedule</div><div class="hv" id="health-next">07:10 MYT</div><div class="hs">GitHub Actions · Asia/Kuala_Lumpur</div></div>
+      </section>
+      <details class="card" style="margin-top:8px;padding:9px 11px"><summary style="cursor:pointer;font-size:11px;font-weight:700">Source health & warnings</summary><div id="source-health" class="source-grid"></div><div id="health-warnings" class="note"></div></details>
+
+      <p class="note" id="demo-note" style="display:none">DEMO mode: the spot price and the last chart point are <b>simulated</b> for demonstration only. No live feed is connected.</p>
+
+      <section class="hero" data-sec="charts">
+        <div class="card"><div class="k">XAU/USD Spot</div><div class="v" id="k-spot">—</div><div class="sub" id="k-spot-sub">—</div></div>
+        <div class="card"><div class="k">Brent Spot</div><div class="v" id="k-odds">—</div><div class="sub" id="k-odds-sub">—</div></div>
+        <div class="card"><div class="k">DXY</div><div class="v sm" id="k-dxy">—</div><div class="sub" id="k-dxy-sub">—</div></div>
+        <div class="card"><div class="k">US 10Y Yield</div><div class="v sm" id="k-y10">—</div><div class="sub" id="k-y10-sub">—</div></div>
+      </section>
+
+      <section class="card" style="margin-top:10px" data-sec="speakers model">
+        <div class="k">Hawkish / Dovish Gauge</div>
+        <div class="gauge">
+          <div class="gbar"><span class="gmark" id="gmark" style="left:50%"></span></div>
+          <div class="glab"><span>DOVISH</span><span id="gauge-label">—</span><span>HAWKISH</span></div>
+        </div>
+        <div class="note" id="gauge-summary">—</div>
+        <div class="netsig">
+          <div><div class="k">Net speech signal</div><div class="big" id="net-sig">—</div></div>
+          <div style="flex:1;min-width:200px"><div class="k">Cumulative est. move</div><div class="big" id="net-pct">—</div>
+            <div class="note" id="net-note">—</div></div>
+        </div>
+      </section>
+
+      <section class="layout">
+        <article class="card" data-sec="news">
+          <div class="k">Today's XAUUSD News Feed</div>
+          <table>
+            <thead><tr><th>Date</th><th>Headline</th><th>Signal</th><th>Est. move</th><th>Source</th></tr></thead>
+            <tbody id="news-body"></tbody>
+          </table>
+          <div class="note">Model tilt: bearish/hawkish language = DOWN pressure, bullish/dovish language = UP pressure. Numeric event-impact estimates are not fabricated.</div>
+        </article>
+        <article class="card" data-sec="speakers">
+          <div class="k">Speaker Watch — Hawkish / Dovish Hints</div>
+          <div id="speaker-list" style="margin-top:8px"></div>
+        </article>
+      </section>
+
+      <section class="card" style="margin-top:10px" data-sec="model">
+        <div class="k">Speech Impact Model — how the % is calculated</div>
+        <div class="formula" id="model-formula">—</div>
+        <div class="note" id="model-note"></div>
+        <div class="grid4" style="margin-top:10px">
+          <div><div class="k">BASE</div><div class="v sm acc" id="m-base">—</div><div class="note">Assumed max single-event gold move.</div></div>
+          <div><div class="k">Speaker weight</div><table class="mtable" id="m-weights"></table></div>
+          <div><div class="k">Signal strength</div><table class="mtable" id="m-strength"></table></div>
+          <div><div class="k">Surprise factor</div><table class="mtable" id="m-surprise"></table></div>
+        </div>
+        <div class="note"><b>Read this as a labelled heuristic, not a measurement or trade instruction.</b> Sourced facts and derived pressure are shown separately. The genuine daily updater does not invent numeric event-impact percentages.</div>
+      </section>
+
+      <section class="grid2" data-sec="charts">
+        <div class="card chart-shell">
+          <div class="k" id="c1-title">Gold price — recent path</div>
+          <div class="chart" id="chart1"></div>
+          <div class="legend" id="legend1"></div>
+          <div class="cursor"><span class="vx"></span><span class="hy"></span><span class="lb">x:0 y:0</span></div>
+          <div class="note" id="c1-note"></div>
+        </div>
+        <div class="card chart-shell">
+          <div class="k" id="c2-title">DXY — recent daily path</div>
+          <div class="chart" id="chart2"></div>
+          <div class="legend" id="legend2"></div>
+          <div class="cursor"><span class="vx"></span><span class="hy"></span><span class="lb">x:0 y:0</span></div>
+          <div class="note" id="c2-note"></div>
+        </div>
+      </section>
+
+      <section class="grid4" data-sec="levels">
+        <div class="card"><div class="k">Resistance</div><div class="ladder" id="res-ladder"></div></div>
+        <div class="card"><div class="k">Support</div><div class="ladder" id="sup-ladder"></div></div>
+        <div class="card"><div class="k">Macro Pressure</div><div class="pres" id="pressure"></div><div class="note">Qualitative analyst read — not measured data.</div></div>
+        <div class="card"><div class="k">Event Calendar</div><div class="cal" id="calendar"></div></div>
+      </section>
+
+      <section class="card" style="margin-top:10px" data-sec="news speakers">
+        <div class="k">Daily Flow</div>
+        <div class="flow">
+          <div class="step"><h4>1 · Fetch</h4><p id="f1">Retrieve last-24h gold news + central-bank speeches.</p></div>
+          <div class="step"><h4>2 · Classify</h4><p id="f2">Tag each item hawkish / dovish / neutral.</p></div>
+          <div class="step"><h4>3 · Score</h4><p id="f3">Apply the pressure model; hawkish language = DOWN pressure, dovish language = UP pressure.</p></div>
+          <div class="step"><h4>4 · Publish</h4><p id="f4">Write the daily snapshot to the data file.</p></div>
+        </div>
+        <div class="note" id="sources">Sources: —</div>
+      </section>
+    </main>
+  </div>
+
+  <div class="palette" id="palette">
+    <div class="palette-card">
+      <input id="cmd" value="/" />
+      <button data-cmd="theme dark">theme dark</button>
+      <button data-cmd="theme light">theme light</button>
+      <button data-cmd="mode demo">mode demo</button>
+      <button data-cmd="mode daily">mode daily</button>
+      <button data-cmd="filter news">filter news</button>
+      <button data-cmd="filter speakers">filter speakers</button>
+      <button data-cmd="filter model">filter model</button>
+      <button data-cmd="filter all">filter all</button>
+      <button data-cmd="focus chart">focus chart</button>
+    </div>
+  </div>
+
+  <script>
+    window.XAUUSD_EMBEDDED = {
+      updated: "2026-09-16 10:03 SGT",
+      session: "Pre-FOMC decision (FOMC 16 Sep, ~18:00 GMT)",
+      price: { spot: 4310.27, change: 11.18, changePct: 0.26, dayRange: "4,290 - 4,315", monthPct: -2.40, yearPct: 16.75, ath: 5608.35, note: "5-week low $4,282 hit Mon 14 Sep; 3rd straight weekly loss" },
+      macro: [
+        { label: "DXY", value: "99.50", delta: "+0.39%", tone: "bad", note: "5th consecutive session of gains" },
+        { label: "US 10Y", value: "4.955%", delta: "toward 5.0%", tone: "bad", note: "Inflation + fiscal pressure" },
+        { label: "Brent", value: "$107.35", delta: "+2.62%", tone: "bad", note: "Saudi East-West pipeline still shut" },
+        { label: "Sep hike odds", value: "~92%", delta: "25bp", tone: "bad", note: "First Fed hike in 3 years" }
+      ],
+      sentiment: { bias: "HAWKISH", goldTone: "BEARISH", score: -0.62, confidence: 88, summary: "Energy-led inflation plus a firm dollar and rising real yields are capping gold into the FOMC. Structural central-bank and ETF demand is the offset.", netSpeechSignal: "SELL", netSpeechPct: -3.96, netNote: "Sum of independent speech estimates; events overlap, so the total is a directional gauge, not an additive forecast." },
+      model: {
+        base: 2.5,
+        formula: "impact% = BASE x speakerWeight x signalStrength x surpriseFactor",
+        note: "Model output - a transparent heuristic, NOT measured data. Legacy interpretation only: hawkish -> DOWN pressure, dovish -> UP pressure.",
+        weights: [ { k: "Fed Chair", v: 1.0 }, { k: "Central-bank decision / head", v: 0.9 }, { k: "FOMC voter", v: 0.8 }, { k: "Analyst / CIO", v: 0.35 }, { k: "Politician", v: 0.15 } ],
+        strength: [ { k: "Actual policy decision", v: 1.0 }, { k: "Explicit forward guidance", v: 0.7 }, { k: "Vote / dissent", v: 0.6 }, { k: "Commentary", v: 0.4 }, { k: "Political pressure", v: 0.25 } ],
+        surprise: [ { k: "Unpriced / surprise", v: 1.0 }, { k: "Partly priced", v: 0.5 }, { k: "Largely priced", v: 0.35 }, { k: "Fully priced / stale", v: 0.15 } ]
+      },
+      news: [
+        { time: "16 Sep", title: "FOMC decision due today; market prices ~92% odds of a 25bp hike", summary: "Dot plot and Warsh press conference are the swing factors. Most of the hike already looks priced.", source: "Trading Economics", url: "https://tradingeconomics.com/commodity/gold", impact: "bearish", signal: "SELL", impactPct: -0.88 },
+        { time: "16 Sep", title: "Oil extends rally as Saudi East-West pipeline stays shut", summary: "Brent ~$107. Higher energy feeds inflation expectations and hardens the Fed's tightening case.", source: "Trading Economics", url: "https://tradingeconomics.com/commodity/gold", impact: "bearish", signal: "SELL", impactPct: -0.45 },
+        { time: "15 Sep", title: "US 10Y yield pushes toward 5%; DXY gains a fifth session", summary: "Rising real yields and a firmer dollar raise the opportunity cost of holding non-yielding bullion.", source: "Trading Economics", url: "https://tradingeconomics.com/commodity/gold", impact: "bearish", signal: "SELL", impactPct: -0.35 },
+        { time: "14 Sep", title: "Gold slides to a one-month low as oil rally fans hike bets", summary: "Spot fell 0.8% to $4,312.59, having touched its lowest since 7 Aug.", source: "Reuters", url: "https://www.reuters.com/world/india/gold-slips-oil-rally-fans-r…bets-ahead-fed-meeting-2026-09-14/", impact: "bearish", signal: "SELL", impactPct: -0.25 },
+        { time: "13 Sep", title: "BoJ expected to hike on Friday (18 Sep)", summary: "A synchronised G3 tightening backdrop (ECB hiked 10 Sep) adds to gold's headwind.", source: "Trading Economics", url: "https://tradingeconomics.com/commodity/gold", impact: "bearish", signal: "SELL", impactPct: -0.30 },
+        { time: "10 Sep", title: "Central banks bought a record 288.9t in Q2 2026; August ETF inflows $18B", summary: "Reserve managers and ETF holders are leaning the same way - a structural demand floor.", source: "GoldSilver / World Gold Council", url: "https://goldsilver.com/industry-news/article/gold-price-outlook-september-2026/", impact: "bullish", signal: "BUY", impactPct: 0.55 },
+        { time: "14 Sep", title: "ANZ keeps 12-month gold target at $5,400 despite 3-hike forecast", summary: "Sees three 25bp Fed hikes by Mar 2027 but expects geopolitical uncertainty to keep supporting gold.", source: "Yahoo Finance", url: "https://uk.finance.yahoo.com/news/gold-prices-decline-markets-price-093344058.html", impact: "bullish", signal: "BUY", impactPct: 0.20 }
+      ],
+      speakers: [
+        { name: "FOMC decision (today)", role: "Federal Reserve", side: "hawkish", signal: "SELL", quote: "Consensus 25bp hike; the surprise would be a hold or a dovish dot plot.", impact: "Raises real yields - direct pressure on gold", date: "16 Sep 2026", source: "Trading Economics", url: "https://tradingeconomics.com/commodity/gold", w: 1.0, s: 1.0, f: 0.35, impactPct: -0.88 },
+        { name: "Kevin Warsh", role: "Fed Chair", side: "hawkish", signal: "SELL", quote: "Hawkish stance; open to raising rates if inflation does not keep declining.", impact: "Forward guidance sets the real-yield path", date: "Sep 2026", source: "LiteFinance", url: "https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/daily-and-weekly/", w: 1.0, s: 0.7, f: 0.35, impactPct: -0.61 },
+        { name: "ECB", role: "European Central Bank", side: "hawkish", signal: "SELL", quote: "Raised key rates 25bp on 10 September.", impact: "Global tightening cycle - gold headwind", date: "10 Sep 2026", source: "Livemint", url: "https://www.livemint.com/market/stock-market-news/the-us-federal-reserves-policy-meeting-due-on-wednesday-september-16-how-will-it-impact-your-stocks-gold-and-rupee-11789368302533.html", w: 0.9, s: 1.0, f: 0.35, impactPct: -0.79 },
+        { name: "Bank of Japan", role: "BoJ", side: "hawkish", signal: "SELL", quote: "Widely expected to raise rates on 18 September.", impact: "Yen-funded carry unwind risk", date: "18 Sep 2026", source: "Trading Economics", url: "https://tradingeconomics.com/commodity/gold", w: 0.9, s: 0.7, f: 0.5, impactPct: -0.79 },
+        { name: "3 FOMC members", role: "Fed voters", side: "hawkish", signal: "SELL", quote: "Dissented in July, voting for an immediate 25bp hike.", impact: "First 3-way dissent since 2016", date: "Jul 2026", source: "Livemint", url: "https://www.livemint.com/market/stock-market-news/the-us-federal-reserves-policy-meeting-due-on-wednesday-september-16-how-will-it-impact-your-stocks-gold-and-rupee-11789368302533.html", w: 0.8, s: 0.6, f: 0.5, impactPct: -0.60 },
+        { name: "Chris Zaccarelli", role: "CIO, Northlight Asset Mgmt", side: "hawkish", signal: "SELL", quote: "With a 0.3% m/m core CPI, the Fed now finds itself with its back against the wall.", impact: "Reinforces the hike case", date: "Sep 2026", source: "Livemint", url: "https://www.livemint.com/market/stock-market-news/the-us-federal-reserves-policy-meeting-due-on-wednesday-september-16-how-will-it-impact-your-stocks-gold-and-rupee-11789368302533.html", w: 0.35, s: 0.4, f: 0.35, impactPct: -0.12 },
+        { name: "Madhavi Arora", role: "Lead Economist, Emkay", side: "hawkish", signal: "SELL", quote: "Markets pricing ~70% odds of a hike; an October hike is priced in fully.", impact: "Hawkish path priced further out", date: "Sep 2026", source: "Livemint", url: "https://www.livemint.com/market/stock-market-news/the-us-federal-reserves-policy-meeting-due-on-wednesday-september-16-how-will-it-impact-your-stocks-gold-and-rupee-11789368302533.html", w: 0.35, s: 0.4, f: 0.5, impactPct: -0.18 },
+        { name: "Donald Trump", role: "US President", side: "dovish", signal: "BUY", quote: "Again called for lower interest rates, criticising the Fed.", impact: "Political pressure; limited near-term effect", date: "14 Sep 2026", source: "Yahoo Finance", url: "https://uk.finance.yahoo.com/news/gold-prices-decline-markets-price-093344058.html", w: 0.15, s: 0.25, f: 0.15, impactPct: 0.01 },
+        { name: "Justin Khoo", role: "Senior Market Analyst, VT Markets", side: "neutral", signal: "NEUTRAL", quote: "Gold could weaken if the hike pushes real yields and the dollar higher; the signals on the path ahead matter more than the decision.", impact: "Scenario framing, not a directional call", date: "Sep 2026", source: "Livemint", url: "https://www.livemint.com/market/stock-market-news/the-us-federal-reserves-policy-meeting-due-on-wednesday-september-16-how-will-it-impact-your-stocks-gold-and-rupee-11789368302533.html", w: 0.35, s: 0.4, f: 0.15, impactPct: 0.00 }
+      ],
+      levels: { resistance: [4376, 4441, 4509, 4577], support: [4313, 4255, 4202, 4157], note: "Analyst technical levels (4H), not guarantees." },
+      calendar: [
+        { date: "Tue 15 Sep", event: "Weekly ADP employment; NY Empire State Mfg Index", importance: "med" },
+        { date: "Wed 16 Sep", event: "FOMC decision + dot plot + press conference", importance: "high" },
+        { date: "Thu 17 Sep", event: "Initial jobless claims; Philadelphia Fed Mfg Index", importance: "med" },
+        { date: "Fri 18 Sep", event: "August industrial production; BoJ rate decision", importance: "high" }
+      ],
+      pressure: [
+        { label: "Hawkish Fed", level: "Very high", w: 92, dir: "down" },
+        { label: "Real-yield pressure", level: "High", w: 78, dir: "down" },
+        { label: "USD pressure", level: "High", w: 72, dir: "down" },
+        { label: "Oil / inflation", level: "High", w: 70, dir: "down" },
+        { label: "Safe-haven bid", level: "Moderate", w: 45, dir: "up" }
+      ],
+      priceSeries: { label: "Recent gold path (cited anchor points)", unit: "USD / troy oz", yMin: 4000, yMax: 5700, points: [
+        { x: "Jan 2026", y: 5608.35 }, { x: "Jul 2026", y: 4029.08 }, { x: "Sep 3", y: 4488.54 }, { x: "Sep 7", y: 4410.55 },
+        { x: "Sep 10", y: 4385.00 }, { x: "Sep 14", y: 4312.59 }, { x: "Sep 15", y: 4306.00 }, { x: "Sep 16", y: 4310.27 }
+      ]},
+      oddsSeries: { label: "September hike odds (cited snapshots)", unit: "%", yMin: 0, yMax: 100, points: [
+        { x: "Aug 14", y: 31 }, { x: "Sep 1", y: 70 }, { x: "Sep 5", y: 61 }, { x: "Sep 10", y: 60 },
+        { x: "Sep 12", y: 90 }, { x: "Sep 14", y: 88 }, { x: "Sep 16", y: 92 }
+      ]},
+      sources: ["Trading Economics - Gold", "Reuters - Gold slides to one-month low (14 Sep)", "Yahoo Finance - Gold prices decline (14 Sep)", "Livemint - Fed 16 Sep impact on gold", "GoldSilver - Gold Price Outlook September 2026", "LiteFinance - XAU/USD daily/weekly forecast"]
+    };
+  </script>
+  <!-- External snapshot generated by the daily updater. Cache-busted so Refresh Data checks the newest file. -->
+  <script>document.write('<script src="./xauusd-data.js?v=' + Date.now() + '" onerror="window.__xauusdExternalMissing=true"><\/script>');</script>
+  <script>
+  (function () {
+    "use strict";
+    var $ = function (s, p) { return (p || document).querySelector(s); };
+    var $$ = function (s, p) { return Array.prototype.slice.call((p || document).querySelectorAll(s)); };
+    var D = window.XAUUSD_DATA || window.XAUUSD_EMBEDDED;
+    var SOURCE = window.XAUUSD_DATA ? "external snapshot" : "embedded snapshot";
+    var money = function (v) { return (v == null || !isFinite(Number(v))) ? "—" : "$" + Number(v).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+    var num = function (v) { return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 }); };
+    function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); }
+    function pctTxt(v) { if (v == null) return "—"; var n = Number(v); return (n > 0 ? "+" : "") + n.toFixed(2) + "%"; }
+    function pctCls(v) { var n = Number(v); return n > 0 ? "good" : n < 0 ? "bad" : ""; }
+    function sigCls(s) { return (s === "SELL" || s === "DOWN") ? "sig-sell" : (s === "BUY" || s === "UP") ? "sig-buy" : "sig-neu"; }
+    function sigLabel(s) { return s === "SELL" ? "DOWN" : s === "BUY" ? "UP" : (s || "—"); }
+
+    /* ---------- theme ---------- */
+    var safeGet = function () { try { return localStorage.getItem("xau-theme"); } catch (e) { return null; } };
+    var safeSet = function (t) { try { localStorage.setItem("xau-theme", t); } catch (e) {} };
+    function setTheme(t) {
+      document.documentElement.setAttribute("data-theme", t); safeSet(t);
+      $$("#theme button").forEach(function (b) { b.classList.toggle("active", b.dataset.theme === t); });
+    }
+    $$("#theme button").forEach(function (b) { b.onclick = function () { setTheme(b.dataset.theme); }; });
+    var savedTheme = safeGet(); if (savedTheme) setTheme(savedTheme);
+
+    /* ---------- render ---------- */
+    function parseGeneratedAt() {
+      var raw = D.meta && D.meta.generatedAt;
+      if (raw) { var t = Date.parse(raw); if (!isNaN(t)) return t; }
+      var u = String(D.updated || "").replace(" MYT", "+08:00").replace(" SGT", "+08:00");
+      var t2 = Date.parse(u); return isNaN(t2) ? null : t2;
+    }
+    function renderDataHealth() {
+      var meta = D.meta || {};
+      var t = parseGeneratedAt(), ageH = t == null ? null : (Date.now() - t) / 36e5;
+      var ss = meta.sourceStatus || {}, keys = Object.keys(ss), ok = keys.filter(function(k){return ss[k] && ss[k].ok;}).length;
+      var verified = meta.verified === true && meta.seed !== true;
+      var staleH = Number(meta.staleAfterHours || 30);
+      var state = "FRESH", cls = "fresh";
+      if (!verified) { state = "SEED / UNVERIFIED"; cls = "seed"; }
+      else if (ageH == null || ageH > 48) { state = "STALE"; cls = "stale"; }
+      else if (ageH > staleH) { state = "AGING"; cls = "aging"; }
+      else if (keys.length && ok < keys.length) { state = "DEGRADED"; cls = "degraded"; }
+      var hs = $("#health-state"); hs.textContent = state; hs.className = "health-state " + cls;
+      $("#health-age").textContent = ageH == null ? "unknown" : (ageH < 1 ? Math.max(0,Math.round(ageH*60)) + " min" : ageH.toFixed(1) + " h");
+      $("#health-sources").textContent = keys.length ? (ok + " / " + keys.length + " OK") : "not reported";
+      $("#health-next").textContent = (meta.expectedUpdateLocal || "07:10") + " MYT";
+      $("#health-detail").textContent = verified ? ("Verified generated snapshot · " + SOURCE) : "Starter snapshot only — run the updater before relying on it.";
+      var box = $("#source-health"); box.innerHTML = "";
+      if (!keys.length) box.innerHTML = '<div class="source-row fail"><b>No source metadata</b><br>Legacy/seed snapshot.</div>';
+      keys.forEach(function(k){ var x=ss[k]||{}; var el=document.createElement("div"); el.className="source-row "+(x.ok?"ok":"fail"); el.innerHTML="<b>"+esc(x.label||k)+"</b><br>"+esc(x.detail|| (x.ok?"OK":"Unavailable")); box.appendChild(el); });
+      var ws = meta.warnings || []; $("#health-warnings").textContent = ws.length ? ("Warnings: " + ws.join(" · ")) : "No pipeline warnings reported.";
+      if (state === "STALE" || state === "SEED / UNVERIFIED") document.title = "⚠ " + document.title.replace(/^⚠ /, "");
+    }
+    function renderHero() {
+      var p = D.price;
+      $("#k-spot").textContent = money(p.spot);
+      $("#k-spot-sub").innerHTML = '<span class="' + (p.change >= 0 ? "good" : "bad") + '">' + (p.change >= 0 ? "+" : "") + num(p.change) + " (" + (p.change >= 0 ? "+" : "") + num(p.changePct) + "%)</span> · " + esc(p.dayRange);
+      var odds = (D.macro.filter(function (m) { return m.label === "Brent"; })[0] || {});
+      $("#k-odds").textContent = odds.value || "—";
+      $("#k-odds-sub").textContent = (odds.delta ? odds.delta + " · " : "") + (odds.note || "");
+      var dxy = D.macro.filter(function (m) { return m.label === "DXY"; })[0] || {};
+      $("#k-dxy").textContent = dxy.value || "—";
+      $("#k-dxy-sub").textContent = (dxy.delta ? dxy.delta + " · " : "") + (dxy.note || "");
+      var y10 = D.macro.filter(function (m) { return m.label.indexOf("10Y") > -1; })[0] || {};
+      $("#k-y10").textContent = y10.value || "—";
+      $("#k-y10-sub").textContent = (y10.delta ? y10.delta + " · " : "") + (y10.note || "");
+      $("#session-label").textContent = D.session || "—";
+      $("#updated-label").textContent = D.updated || "—";
+      $("#nav-updated").textContent = "Updated: " + (D.updated || "—");
+      renderDemoNote();
+    }
+
+    function renderGauge() {
+      var s = D.sentiment;
+      var pct = Math.max(2, Math.min(98, 50 + (s.score || 0) * 45));
+      $("#gmark").style.left = pct + "%";
+      $("#gauge-label").textContent = s.bias + " / GOLD " + s.goldTone + " · model confidence " + (s.confidence || "—") + "%";
+      $("#gauge-summary").textContent = s.summary || "";
+      $("#net-sig").innerHTML = '<span class="sig ' + sigCls(s.netSpeechSignal) + '">' + esc(sigLabel(s.netSpeechSignal)) + "</span>";
+      $("#net-sig").className = "big";
+      $("#net-sig").style.color = s.netSpeechPct > 0 ? "var(--good)" : "var(--bad)";
+      $("#net-pct").textContent = (s.netSpeechPct == null || Number(s.netSpeechPct) === 0) ? "direction only" : pctTxt(s.netSpeechPct);
+      $("#net-pct").style.color = s.netSpeechPct > 0 ? "var(--good)" : "var(--bad)";
+      $("#net-note").textContent = s.netNote || "";
+    }
+
+    function renderNews() {
+      var body = $("#news-body"); body.innerHTML = "";
+      (D.news || []).forEach(function (nw) {
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          '<td style="white-space:nowrap;color:var(--muted)">' + esc(nw.time) + "</td>" +
+          '<td><div style="font-weight:600">' + esc(nw.title) + '</div><div style="color:var(--muted);margin-top:2px">' + esc(nw.summary) + "</div></td>" +
+          '<td><span class="sig ' + sigCls(nw.signal) + '">' + esc(sigLabel(nw.signal)) + "</span></td>" +
+          '<td class="pct ' + pctCls(nw.impactPct) + '">' + pctTxt(nw.impactPct) + "</td>" +
+          '<td style="white-space:nowrap">' + (nw.url ? '<a href="' + esc(nw.url) + '" target="_blank" rel="noopener">' + esc(nw.source) + "</a>" : esc(nw.source || "—")) + "</td>";
+        body.appendChild(tr);
+      });
+      if (!(D.news || []).length) body.innerHTML = '<tr><td colspan="5" style="color:var(--muted)">No items retrieved. Re-run the daily job.</td></tr>';
+    }
+
+    function renderSpeakers() {
+      var box = $("#speaker-list"); box.innerHTML = "";
+      var order = { hawkish: 0, dovish: 1, neutral: 2 };
+      (D.speakers || []).slice().sort(function (a, b) { return (order[a.side] || 9) - (order[b.side] || 9); }).forEach(function (sp) {
+        var cls = sp.side === "hawkish" ? "b-hawk" : sp.side === "dovish" ? "b-dove" : "b-neu";
+        var side = sp.side === "hawkish" ? "hawk" : sp.side === "dovish" ? "dove" : "";
+        var el = document.createElement("div");
+        el.className = "spk " + side;
+        el.innerHTML =
+          '<div class="hd"><div><span class="nm">' + esc(sp.name) + '</span> <span class="rl">· ' + esc(sp.role) + "</span></div>" +
+          '<div style="display:flex;gap:6px;align-items:center"><span class="badge ' + cls + '">' + esc((sp.side || "").toUpperCase()) + '</span><span class="sig ' + sigCls(sp.signal) + '">' + esc(sigLabel(sp.signal)) + "</span></div></div>" +
+          '<div class="qt">"' + esc(sp.quote) + '"</div>' +
+          '<div class="im">' + esc(sp.impact) + " · " + esc(sp.date) + (sp.url ? ' · <a href="' + esc(sp.url) + '" target="_blank" rel="noopener">' + esc(sp.source) + "</a>" : "") + "</div>" +
+          '<div class="mt">est. impact ' + pctTxt(sp.impactPct) + "  ·  " + (sp.w != null ? "w " + sp.w : "") + (sp.s != null ? " x s " + sp.s : "") + (sp.f != null ? " x f " + sp.f : "") + "</div>";
+        box.appendChild(el);
+      });
+      if (!(D.speakers || []).length) box.innerHTML = '<div class="note">No speeches retrieved today.</div>';
+    }
+
+    function renderModel() {
+      var m = D.model || {};
+      $("#model-formula").textContent = m.formula || "—";
+      $("#model-note").textContent = m.note || "";
+      $("#m-base").textContent = (m.base != null ? m.base + "%" : "—");
+      var fill = function (sel, rows) {
+        var t = $(sel); if (!t) return; t.innerHTML = "";
+        (rows || []).forEach(function (r) { t.insertAdjacentHTML("beforeend", "<tr><td>" + esc(r.k) + "</td><td>" + esc(r.v) + "</td></tr>"); });
+      };
+      fill("#m-weights", m.weights); fill("#m-strength", m.strength); fill("#m-surprise", m.surprise);
+    }
+
+    function renderLevels() {
+      var r = $("#res-ladder"); r.innerHTML = "";
+      (D.levels.resistance || []).slice().reverse().forEach(function (v, i, a) {
+        r.insertAdjacentHTML("beforeend", '<div class="rung"><span class="lab">R' + (a.length - i) + '</span><span class="num bad">' + num(v) + "</span></div>");
+      });
+      var s = $("#sup-ladder"); s.innerHTML = "";
+      (D.levels.support || []).forEach(function (v, i) {
+        s.insertAdjacentHTML("beforeend", '<div class="rung"><span class="lab">S' + (i + 1) + '</span><span class="num good">' + num(v) + "</span></div>");
+      });
+    }
+
+    function renderPressure() {
+      var box = $("#pressure"); box.innerHTML = "";
+      (D.pressure || []).forEach(function (p) {
+        box.insertAdjacentHTML("beforeend",
+          '<div class="row"><div class="hd"><span>' + esc(p.label) + '</span><span style="color:var(--muted)">' + esc(p.level) + (p.dir === "up" ? " ▲" : " ▼") + "</span></div>" +
+          '<div class="bar"><i class="' + (p.dir === "down" ? "dn" : "") + '" style="--w:' + p.w + '%"></i></div></div>');
+      });
+    }
+
+    function renderCalendar() {
+      var box = $("#calendar"); box.innerHTML = "";
+      if (!(D.calendar || []).length) box.innerHTML = '<div class="note">No verified calendar provider configured in this build.</div>';
+      (D.calendar || []).forEach(function (c) {
+        var cls = c.importance === "high" ? "b-high" : "b-med";
+        box.insertAdjacentHTML("beforeend",
+          '<div class="row"><span class="dt">' + esc(c.date) + '</span><span style="flex:1">' + esc(c.event) + '</span><span class="badge ' + cls + '">' + esc((c.importance || "").toUpperCase()) + "</span></div>");
+      });
+    }
+
+    function renderSources() { $("#sources").innerHTML = "Sources: " + (D.sources || []).map(esc).join(" · ") + " · data view: " + SOURCE; }
+
+    /* ---------- charts ---------- */
+    var W = 400, H = 200, PADL = 44, PADR = 12, PADT = 16, PADB = 30;
+    function compact(v) { return v >= 1000 ? (v / 1000).toFixed(1) + "k" : String(Math.round(v * 10) / 10); }
+    function buildChart(host, series, color) {
+      var pts = series.points, yMin = series.yMin, yMax = series.yMax;
+      var x = function (i) { return PADL + (i * (W - PADL - PADR) / Math.max(1, pts.length - 1)); };
+      var y = function (v) { return PADT + (1 - (v - yMin) / (yMax - yMin)) * (H - PADT - PADB); };
+      var grid = "", ticks = 4;
+      for (var t = 0; t <= ticks; t++) {
+        var val = yMin + (yMax - yMin) * t / ticks, yy = y(val);
+        grid += '<line x1="' + PADL + '" y1="' + yy.toFixed(1) + '" x2="' + (W - PADR) + '" y2="' + yy.toFixed(1) + '" stroke="var(--line)"/>';
+        grid += '<text class="axis-text" x="' + (PADL - 6) + '" y="' + (yy + 3).toFixed(1) + '" text-anchor="end">' + compact(val) + "</text>";
+      }
+      var step = Math.ceil(pts.length / 5);
+      var xlab = pts.map(function (p, i) {
+        if (i % step !== 0 && i !== pts.length - 1) return "";
+        return '<text class="axis-text" x="' + x(i).toFixed(1) + '" y="' + (H - 12) + '" text-anchor="middle">' + esc(p.x) + "</text>";
+      }).join("");
+      var poly = pts.map(function (p, i) { return x(i).toFixed(1) + "," + y(p.y).toFixed(1); }).join(" ");
+      var dots = pts.map(function (p, i) {
+        return '<circle class="hit" data-i="' + i + '" cx="' + x(i).toFixed(1) + '" cy="' + y(p.y).toFixed(1) + '" r="3.2" fill="' + color + '"/>';
+      }).join("");
+      host.innerHTML =
+        '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + esc(series.label) + '">' +
+        "<title>" + esc(series.label) + "</title>" + grid +
+        '<line x1="' + PADL + '" y1="' + (H - PADB) + '" x2="' + (W - PADR) + '" y2="' + (H - PADB) + '" stroke="var(--line)"/>' +
+        '<line x1="' + PADL + '" y1="' + PADT + '" x2="' + PADL + '" y2="' + (H - PADB) + '" stroke="var(--line)"/>' +
+        xlab +
+        '<text class="axis-title" x="' + ((W + PADL) / 2).toFixed(0) + '" y="' + (H - 1) + '" text-anchor="middle">Period</text>' +
+        '<text class="axis-title" x="-104" y="11" transform="rotate(-90)" text-anchor="middle">' + esc(series.unit) + "</text>" +
+        '<polyline fill="none" stroke="' + color + '" stroke-width="2.6" points="' + poly + '"/>' + dots + "</svg>";
+    }
+    function renderCharts() {
+      var s1 = D.priceSeries, s2 = D.macroSeries || D.oddsSeries;
+      if (s1 && s1.points && s1.points.length) { buildChart($("#chart1"), s1, "#e2b04a"); $("#legend1").innerHTML = '<span class="lg" style="--lg-c:#e2b04a">' + esc(s1.label) + " (" + esc(s1.unit) + ")</span>"; }
+      else $("#chart1").innerHTML = '<div class="note" style="padding:20px">No verified XAU series available.</div>';
+      if (s2 && s2.points && s2.points.length) { buildChart($("#chart2"), s2, "#6fd3c7"); $("#legend2").innerHTML = '<span class="lg" style="--lg-c:#6fd3c7">' + esc(s2.label) + " (" + esc(s2.unit) + ")</span>"; $("#c2-title").textContent = s2.label; }
+      else $("#chart2").innerHTML = '<div class="note" style="padding:20px">No verified macro series available.</div>';
+      $("#c1-note").textContent = "Daily provider closes. This dashboard is a daily snapshot, not a tick feed.";
+      $("#c2-note").textContent = "Second chart uses a verified provider series when available; otherwise it is clearly marked unavailable.";
+    }
+
+    /* ---------- live / demo ---------- */
+    var demoTimer = null, demoStep = 0;
+    function currentMode() { var b = $("#mode .active"); return b ? b.dataset.mode : "daily"; }
+    function renderDemoNote() { $("#demo-note").style.display = currentMode() === "demo" ? "block" : "none"; }
+    function tick() {
+      demoStep++;
+      var j = (Math.random() - 0.5), spot = D.price.spot + j * 6;
+      $("#k-spot").textContent = money(spot);
+      var svg = $("#chart1 svg");
+      if (svg) { var last = svg.querySelector("circle.hit:last-of-type"); if (last) last.setAttribute("cy", (Number(last.getAttribute("cy")) + j * 4).toFixed(1)); }
+      $("#k-odds-sub").textContent = "demo tick " + demoStep + " · simulated";
+    }
+    $$("#mode button").forEach(function (b) {
+      b.onclick = function () {
+        $$("#mode button").forEach(function (x) { x.classList.toggle("active", x === b); });
+        renderDemoNote();
+        if (b.dataset.mode === "demo") { demoTimer = setInterval(tick, 1200); tick(); }
+        else { if (demoTimer) { clearInterval(demoTimer); demoTimer = null; } renderHero(); renderDataHealth(); }
+      };
+    });
+    $("#refresh").onclick = function () { var u = new URL(location.href); u.searchParams.set("refresh", Date.now()); location.replace(u.toString()); };
+
+    /* ---------- nav filter ---------- */
+    function applyFilter(f) {
+      $$("#nav button").forEach(function (b) { b.classList.toggle("active", b.dataset.filter === f); });
+      $$("[data-sec]").forEach(function (sec) {
+        var tags = (sec.getAttribute("data-sec") || "").split(/\s+/);
+        sec.classList.toggle("hidden", f !== "all" && tags.indexOf(f) === -1);
+      });
+    }
+    $$("#nav button").forEach(function (b) { b.onclick = function () { applyFilter(b.dataset.filter); }; });
+
+    /* ---------- chart crosshair + click-to-focus ---------- */
+    var focus = $("#focus"), floating = null, placeholder = null;
+    $$(".chart-shell").forEach(function (shell) {
+      var vx = $(".vx", shell), hy = $(".hy", shell), lb = $(".lb", shell);
+      if (!vx) return;
+      shell.onmousemove = function (e) {
+        var r = shell.getBoundingClientRect();
+        var x = ((e.clientX - r.left) / r.width) * 100, y = ((e.clientY - r.top) / r.height) * 100;
+        shell.classList.add("active");
+        vx.style.left = x + "%"; hy.style.top = y + "%";
+        lb.textContent = "x:" + x.toFixed(1) + " y:" + (100 - y).toFixed(1);
+      };
+      shell.onmouseleave = function () { shell.classList.remove("active"); };
+      shell.onclick = function () {
+        if (floating === shell) {
+          placeholder.parentNode.insertBefore(shell, placeholder); placeholder.remove(); placeholder = null; floating = null;
+          shell.classList.remove("floating"); shell.style = ""; focus.classList.remove("show"); document.body.style.overflow = ""; return;
+        }
+        if (floating) floating.click();
+        var rect = shell.getBoundingClientRect();
+        placeholder = document.createElement("div"); placeholder.style.width = rect.width + "px"; placeholder.style.height = rect.height + "px";
+        shell.parentNode.insertBefore(placeholder, shell);
+        floating = shell; shell.classList.add("floating");
+        shell.style.top = Math.max(24, (innerHeight - rect.height * 1.25) / 2) + "px";
+        shell.style.left = Math.max(24, (innerWidth - rect.width * 1.25) / 2) + "px";
+        shell.style.width = Math.min(innerWidth - 48, rect.width * 1.25) + "px";
+        shell.style.height = Math.min(innerHeight - 48, rect.height * 1.25) + "px";
+        document.body.appendChild(shell); focus.classList.add("show"); document.body.style.overflow = "hidden";
+      };
+    });
+    focus.onclick = function () { if (floating) floating.click(); };
+
+    /* ---------- command palette ---------- */
+    var palette = $("#palette"), cmd = $("#cmd");
+    function exec(q) {
+      q = String(q || "").toLowerCase();
+      if (q.indexOf("theme dark") > -1) setTheme("dark");
+      if (q.indexOf("theme light") > -1) setTheme("light");
+      if (q.indexOf("mode demo") > -1) $('#mode button[data-mode="demo"]').click();
+      if (q.indexOf("mode daily") > -1) $('#mode button[data-mode="daily"]').click();
+      if (q.indexOf("filter ") > -1) applyFilter(q.split("filter ")[1].trim());
+      if (q.indexOf("focus chart") > -1) { var c = $(".chart-shell"); if (c) c.click(); }
+      palette.classList.remove("open");
+    }
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "/" && !palette.classList.contains("open") && document.activeElement.tagName !== "INPUT") {
+        e.preventDefault(); palette.classList.add("open"); cmd.focus(); cmd.value = "/";
+      } else if (e.key === "Escape") { palette.classList.remove("open"); if (floating) floating.click(); }
+    });
+    cmd.onkeydown = function (e) { if (e.key === "Enter") exec(cmd.value); };
+    $$("#palette button").forEach(function (b) { b.onclick = function () { exec(b.dataset.cmd || ""); }; });
+    palette.onclick = function (e) { if (e.target === palette) palette.classList.remove("open"); };
+
+    /* ---------- boot ---------- */
+    renderDataHealth(); renderHero(); renderGauge(); renderNews(); renderSpeakers(); renderModel(); renderLevels(); renderPressure(); renderCalendar(); renderSources(); renderCharts();
+    applyFilter("all");
+    $("#f1").textContent = "Retrieved " + (D.news || []).length + " news items and " + (D.speakers || []).length + " speaker items (last 24h).";
+    $("#f3").textContent = "Derived pressure model: " + sigLabel(D.sentiment.netSpeechSignal || "—") + ". Sourced facts remain separate from heuristic interpretation.";
+    $("#f4").textContent = "Snapshot written " + (D.updated || "—") + ".";
+  })();
+  </script>
+</body>
+</html>
