@@ -1,7 +1,7 @@
 # Phase 3.1 Official Event History Collector — Design
 
 Date: 2026-09-16
-Status: Approved design pending implementation plan
+Status: Design approved in chat; written spec pending user review
 Branch: `feature/phase3.1-official-history-collector`
 
 ## 1. Purpose
@@ -38,7 +38,7 @@ Phase 3.1 will not:
 ## 4. High-level architecture
 
 ```text
-BLS / DOL / Federal Reserve / BEA
+BLS / DOL / Federal Reserve / BEA-ready adapter boundary
         ↓
 Official-source adapters
         ↓
@@ -84,7 +84,7 @@ The first implementation covers:
 | FOMC decisions/statements | Federal Reserve | scheduled/released time, statement URL, meeting identity, statement/SEP/press-conference flags |
 | Federal Reserve speeches | Federal Reserve | speaker, role, title, scheduled/released time where supplied, official URL |
 
-BEA is included in the adapter architecture so GDP/PCE and similar official releases can be added later without restructuring the pipeline, but Phase 3.1 does not require BEA event families for the first production release.
+BEA is included only as an adapter boundary so GDP/PCE and similar official releases can be added later without restructuring the pipeline. Phase 3.1 does not require BEA event families for its first production release.
 
 ## 6. Time handling
 
@@ -122,7 +122,7 @@ Top-level shape:
 }
 ```
 
-Canonical event object:
+Illustrative canonical event object:
 
 ```json
 {
@@ -130,21 +130,21 @@ Canonical event object:
   "eventType": "CPI",
   "agency": "BLS",
   "referencePeriod": "2026-08",
-  "scheduledAtUtc": "2026-09-00T12:30:00Z",
+  "scheduledAtUtc": "2026-09-15T12:30:00Z",
   "releasedAtUtc": null,
   "timeSource": "OFFICIAL_RELEASE_CALENDAR",
   "timeConfidence": "HIGH",
   "actual": {},
   "previous": {},
   "consensus": null,
-  "sourceUrl": "official-source-url",
+  "sourceUrl": null,
   "sourceQuality": "OFFICIAL",
   "status": "SCHEDULED",
   "scheduleRevisions": []
 }
 ```
 
-The example timestamp is schematic only; implementation and tests must use valid dates.
+The date is illustrative rather than a claim about a specific CPI release. `sourceUrl` may be null while an event is only scheduled, but it must be populated with an official URL before the event can reach `EVENT_VERIFIED` and become eligible to create history samples.
 
 ### Consensus handling
 
@@ -235,6 +235,8 @@ Responsibilities:
 6. append/update verified history samples;
 7. quarantine invalid or unrecoverable samples;
 8. validate generated JSON before commit.
+
+GitHub Actions execution may be delayed relative to its nominal schedule. Correctness therefore depends on event timestamps and historical M1 bars, not on the workflow starting at the exact release minute.
 
 ### 9.3 Recovery horizon
 
@@ -340,7 +342,7 @@ Add:
 
 `data/event-history-state.json`
 
-This is operational state, not model training data.
+This is operational state, not model training data. It is stored in the repository for recovery/audit purposes but is not required to be copied into the public GitHub Pages artifact.
 
 It tracks:
 
@@ -357,7 +359,7 @@ The model must not consume this file as historical evidence.
 
 Missing data is never interpolated, copied, or guessed.
 
-Suggested retry progression:
+Retry progression:
 
 1. next normal five-minute collector run;
 2. +5 minutes;
@@ -397,9 +399,13 @@ No workflow may leave a partially written public dataset.
 
 The existing XAU daily updater and the new collector both write generated files to `main`.
 
-All generated-data writer workflows must share a compatible concurrency strategy, and every write workflow must synchronize against latest `origin/main` before push.
+All generated-data writer workflows must use the shared concurrency group:
 
-Required sequence before push:
+`macro-data-writers`
+
+The existing XAU daily workflow must be migrated from its separate writer group to this shared group as part of Phase 3.1.
+
+Every write workflow must synchronize against latest `origin/main` before push:
 
 ```text
 git fetch origin main
@@ -416,6 +422,7 @@ A reaction sample becomes model eligible only if all of the following are true:
 
 - stable event ID is verified;
 - official event timestamp is verified;
+- official source URL is present;
 - instrument is recognized;
 - PRE M1 bar exists and is completed before event release;
 - target market window exists;
@@ -612,7 +619,7 @@ Examples:
 
 API keys remain in GitHub Actions secrets and are never written to HTML, JavaScript, JSON, logs, or Pages artifacts.
 
-Generated public files may contain:
+Generated public Pages files may contain:
 
 - official source URLs;
 - release metadata;
@@ -644,11 +651,11 @@ Likely components include:
 
 The exact file split may be adjusted during implementation if repository conventions indicate a clearer boundary, but source adapters, normalization, market-window collection, validation, and persistence must remain independently testable units.
 
-### Public/generated data
+### Generated repository data
 
-- `data/event-catalog.json`
-- `data/event-history.json`
-- `data/event-history-state.json`
+- `data/event-catalog.json` — published to Pages;
+- `data/event-history.json` — published to Pages;
+- `data/event-history-state.json` — repository operational state, not required in Pages.
 
 ### Workflows
 
@@ -691,7 +698,7 @@ Required test groups:
 18. effective-sample support-state boundaries;
 19. Pivot provenance/hold behavior;
 20. ADVANCE/NOWCAST revision preservation;
-21. Pages artifact includes catalog and history outputs;
+21. Pages artifact includes catalog and history outputs but does not require operational state;
 22. production `index.html` regression protection unless a later separately approved change explicitly modifies it.
 
 External-source tests should use fixtures/mocks for deterministic CI. Live-source smoke checks, if added, must be separate from deterministic unit/acceptance tests and must fail safely when a provider is unavailable.
@@ -726,17 +733,18 @@ Phase 3.1 is ready to merge only when all of the following are demonstrated:
 - duplicate samples are not appended;
 - quarantine is auditable;
 - collector state survives interrupted runs;
+- all generated-data writer workflows use the `macro-data-writers` concurrency group;
 - workflows synchronize generated-data writes safely;
 - event-history eligibility and support-state thresholds are enforced;
 - Pivot provenance and hold controls remain intact;
 - ADVANCE and NOWCAST remain separate analytical states;
 - public files contain no secrets;
 - all automated tests and syntax checks pass;
-- Pages includes the intended public catalog/history files;
+- Pages includes the intended public catalog/history files and does not need the operational state file;
 - production `index.html` remains unchanged unless separately approved.
 
 ## 33. Design decision summary
 
-Phase 3.1 uses an official-first architecture with government/Federal Reserve event sources, Twelve Data or the configured market-data provider for aligned M1 observations, a six-hour catalog discovery schedule, a five-minute market-window collector, a 48-hour recovery horizon, deterministic PRE/+1m/+5m/+15m semantics, explicit quarantine, deterministic sample IDs, crash-safe writes, effective-sample support thresholds, previous-completed-period Classic Pivot provenance, and an auditable MYT-first UI.
+Phase 3.1 uses an official-first architecture with government/Federal Reserve event sources, Twelve Data or the configured market-data provider for aligned M1 observations, a six-hour catalog discovery schedule, a five-minute market-window collector, a 48-hour recovery horizon, deterministic PRE/+1m/+5m/+15m semantics, explicit quarantine, deterministic sample IDs, crash-safe writes, a shared `macro-data-writers` concurrency group, effective-sample support thresholds, previous-completed-period Classic Pivot provenance, and an auditable MYT-first UI.
 
 The governing principle is: **verified sparse data is preferable to fabricated complete data**.
