@@ -12,3 +12,4 @@ test('weighted effective sample size may be smaller than raw historical count',(
 test('historical raw count must be a finite nonnegative number',()=>{const p=buildTradePlan({...base,historical:{...base.historical,n:'bad'}});assert.equal(p.quality.label,'LOW');assert.ok(p.quality.reasons.includes('INVALID_HISTORY_SAMPLE_COUNT'));});
 test('invalid event timestamp is rejected',()=>{assert.throws(()=>buildTradePlan({...base,eventTimeUtc:'bad'}),/Invalid UTC timestamp/);});
 test('invalid current timestamp is rejected',()=>{assert.throws(()=>buildTradePlan({...base,nowUtc:'bad'}),/Invalid UTC timestamp/);});
+test('market-closed data holds pivot target reference',()=>{const p=buildTradePlan({...base,feedState:'MARKET CLOSED',priceBand:[1.179,1.181],pivotContext:{timeframe:'D1',source:'PREVIOUS_COMPLETED_PERIOD',levels:{pivot:1.1846,s1:1.18,s2:1.178,s3:1.176,r1:1.188,r2:1.19,r3:1.192}}});assert.equal(p.pivotConfluence.status,'MARKET_CLOSED_HOLD');});
