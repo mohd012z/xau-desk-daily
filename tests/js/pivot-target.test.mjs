@@ -1,20 +1,3 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import { classicPivots, findPivotConfluence } from '../../macro/core/pivot-target.mjs';
-
-test('classic pivots use previous completed period HLC',()=>{
- const p=classicPivots({high:1.12,low:1.10,close:1.115});
- assert.equal(p.pivot,1.111666666666667);
- assert.equal(p.r1,1.123333333333334);
- assert.equal(p.s1,1.103333333333334);
- assert.equal(p.r2,1.131666666666667);
- assert.equal(p.s2,1.091666666666667);
-});
-
-test('pivot target returns confluence only when a level overlaps historical band',()=>{
- const pivots={pivot:1.1846,r1:1.1873,r2:1.1895,r3:1.1922,s1:1.1819,s2:1.1797,s3:1.1770};
- const c=findPivotConfluence({pivots,band:[1.1810,1.1821],pressure:'DOWN_PRESSURE'});
- assert.equal(c.level,'S1'); assert.equal(c.price,1.1819); assert.equal(c.status,'CONFLUENCE');
- const none=findPivotConfluence({pivots,band:[1.1830,1.1840],pressure:'DOWN_PRESSURE'});
- assert.equal(none.status,'NO_PIVOT_CONFLUENCE');
-});
+import test from 'node:test';import assert from 'node:assert/strict';import{classicPivots,findPivotConfluence}from'../../macro/core/pivot-target.mjs';
+test('classic pivots use previous completed period HLC',()=>{const p=classicPivots({high:1.12,low:1.10,close:1.115});assert.equal(p.pivot,1.11166666666667);assert.equal(p.r1,1.12333333333333);assert.equal(p.s1,1.10333333333333);assert.equal(p.r2,1.13166666666667);assert.equal(p.s2,1.09166666666667);});
+test('pivot target returns directional confluence only when a level overlaps historical band',()=>{const pivots={pivot:1.1846,r1:1.1873,r2:1.1895,r3:1.1922,s1:1.1819,s2:1.1797,s3:1.177};const c=findPivotConfluence({pivots,band:[1.181,1.1821],pressure:'DOWN_PRESSURE',referencePrice:1.184});assert.equal(c.level,'S1');assert.equal(c.price,1.1819);assert.equal(c.status,'CONFLUENCE');const none=findPivotConfluence({pivots,band:[1.183,1.184],pressure:'DOWN_PRESSURE',referencePrice:1.184});assert.equal(none.status,'NO_PIVOT_CONFLUENCE');});
