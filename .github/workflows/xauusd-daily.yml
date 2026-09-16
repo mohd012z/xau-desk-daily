@@ -2,6 +2,7 @@ name: XAUUSD Daily Verified Snapshot
 
 on:
   workflow_dispatch:
+
   schedule:
     - cron: '10 7 * * *'
       timezone: 'Asia/Kuala_Lumpur'
@@ -15,11 +16,16 @@ concurrency:
 
 jobs:
   update:
+    name: Update XAUUSD Daily Data
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 1
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -27,24 +33,133 @@ jobs:
           python-version: '3.13'
           cache: 'pip'
 
-      - name: Install updater dependencies
-        run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Generate verified daily snapshot
         env:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
-        run: python scripts/update_xauusd.py
+        run: |
+          python scripts/update_xauusd.py
+
+      # SECURITY STEP
+      # Removes API keys from xauusd-data.js even if an API error URL
+      # accidentally contains the key.
+      - name: Remove secrets from generated public data
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os
+          import re
+          import sys
+
+          path = Path("xauusd-data.js")
+
+          if not path.exists():
+              print("ERROR: xauusd-data.js was not generated")
+              sys.exit(1)
+
+          text = path.read_text(encoding="utf-8")
+
+          secret_names = [
+              "TWELVE_DATA_API_KEY",
+              "FRED_API_KEY",
+              "NEWS_API_KEY",
+          ]
+
+          secrets = []
+
+          for name in secret_names:
+              value = os.getenv(name, "").strip()
+
+              if value:
+                  secrets.append(value)
+                  text = text.replace(value, "[REDACTED]")
+
+          # Redact common API-key query parameters.
+          text = re.sub(
+              r'(?i)(apikey|api_key|api-key|token|access_token)=([^&"\'\\\s]+)',
+              r'\1=[REDACTED]',
+              text
+          )
+
+          path.write_text(text, encoding="utf-8")
+
+          # Final safety verification.
+          cleaned = path.read_text(encoding="utf-8")
+
+          found = []
+
+          for value in secrets:
+              if value and value in cleaned:
+                  found.append(value)
+
+          if found:
+              print("ERROR: Secret value still detected in xauusd-data.js")
+              sys.exit(1)
+
+          print("Security check passed: no configured API secrets found in public data.")
+          PY
+
+      - name: Verify generated snapshot
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import sys
+
+          p = Path("xauusd-data.js")
+
+          if not p.exists():
+              print("ERROR: xauusd-data.js missing")
+              sys.exit(1)
+
+          text = p.read_text(encoding="utf-8")
+
+          required = [
+              "window.XAUUSD_DATA",
+              '"generatedAt"',
+              '"verified"',
+              '"sourceStatus"',
+          ]
+
+          missing = [item for item in required if item not in text]
+
+          if missing:
+              print("ERROR: Generated snapshot missing:", missing)
+              sys.exit(1)
+
+          print("Snapshot verification passed.")
+          PY
 
       - name: Commit snapshot if changed
         run: |
           git config user.name "xau-desk-bot"
           git config user.email "xau-desk-bot@users.noreply.github.com"
+
           git add xauusd-data.js
+
           if git diff --cached --quiet; then
             echo "No snapshot change to commit"
           else
             git commit -m "data: refresh XAUUSD daily snapshot"
-            git push
+            git push origin main
           fi
+
+      - name: Daily update summary
+        if: always()
+        run: |
+          echo "===================================="
+          echo "XAU DESK DAILY UPDATE"
+          echo "===================================="
+          echo "Time zone : Asia/Kuala_Lumpur"
+          echo "Schedule  : 07:10 MYT daily"
+          echo "Branch    : main"
+          echo "===================================="
