@@ -21,11 +21,19 @@ test('desktop navigation includes PLAN and mobile order is PLAN EVENTS FX METALS
   assert.deepEqual(views,['PLAN','EVENTS','FX','METALS','MORE']);
 });
 
-test('runtime app records append-only plan snapshots per event revision',()=>{
-  assert.match(app,/renderAndRecordTradePlan/);
-  assert.match(app,/planHistory/);
-  assert.match(app,/sourceRevisionNumber/);
-  assert.match(app,/onUpdate\(event,\s*change\)/);
+test('historical model has a real runtime host instead of a static placeholder',()=>{
+  assert.match(html,/id="history-model-host"/);
+  assert.match(html,/id="history-data-status"/);
+  assert.match(html,/Comparable event distribution/);
+  assert.match(html,/Advance scenarios/);
+});
+
+test('runtime loads history once and connects it to the advance model and Trade Plan',()=>{
+  assert.match(app,/loadHistory/);
+  assert.match(app,/buildAdvanceModel/);
+  assert.match(app,/renderAdvanceModelMarkup/);
+  assert.match(app,/mergeAdvanceModelOverrides/);
+  assert.match(app,/macrodesk:event-update/);
 });
 
 test('Phase 3 preview still declares production index unchanged',()=>{
