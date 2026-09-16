@@ -36,7 +36,7 @@ const MEDIUM = [/treasury yield|real yield|dollar index|\bdxy\b|oil price|brent|
 const IRRELEVANT = [/emmy|movie|celebrity|gadget|desktop pc|smartphone|sports|recipe|fashion|gaming review/];
 
 export function scoreMateriality(candidate = {}) {
-  const text = normalizeHeadline(`${candidate.title ?? ''} ${candidate.text ?? ''}`);
+  const text = normalizeHeadline(`${candidate.title ?? ''} ${candidate.text ?? ''} ${(candidate.entities ?? []).join(' ')}`);
   let score = 0;
   for (const rule of HIGH) if (rule.test(text)) score += 3;
   for (const rule of MEDIUM) if (rule.test(text)) score += 1;
