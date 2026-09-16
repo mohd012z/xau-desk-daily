@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { appendPlanRevision } from '../../macro/events/trade-plan-revisions.mjs';
+
+test('trade plan revisions are append-only and MYT stamped',()=>{
+ const old=[{id:'r1',createdAtUtc:'2026-09-16T18:00:00Z',pressure:'MIXED'}];
+ const next=appendPlanRevision(old,{id:'r2',createdAtUtc:'2026-09-16T18:08:00Z',pressure:'UP_PRESSURE',reason:'Q&A policy shift'});
+ assert.equal(old.length,1); assert.equal(next.length,2);
+ assert.equal(next[1].createdAtMyt,'17 Sep 2026 02:08:00 MYT');
+ assert.equal(next[1].reason,'Q&A policy shift');
+});
