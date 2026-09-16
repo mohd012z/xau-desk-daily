@@ -1,0 +1,50 @@
+name: XAUUSD Daily Verified Snapshot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '10 7 * * *'
+      timezone: 'Asia/Kuala_Lumpur'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: xauusd-daily-snapshot
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Install updater dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate verified daily snapshot
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+        run: python scripts/update_xauusd.py
+
+      - name: Commit snapshot if changed
+        run: |
+          git config user.name "xau-desk-bot"
+          git config user.email "xau-desk-bot@users.noreply.github.com"
+          git add xauusd-data.js
+          if git diff --cached --quiet; then
+            echo "No snapshot change to commit"
+          else
+            git commit -m "data: refresh XAUUSD daily snapshot"
+            git push
+          fi
