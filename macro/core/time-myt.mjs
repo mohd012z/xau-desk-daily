@@ -1,15 +1,16 @@
 const MYT_ZONE = 'Asia/Kuala_Lumpur';
-const MONTH = { Jan:'Jan',Feb:'Feb',Mar:'Mar',Apr:'Apr',May:'May',Jun:'Jun',Jul:'Jul',Aug:'Aug',Sep:'Sep',Oct:'Oct',Nov:'Nov',Dec:'Dec' };
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 export function formatMyt(isoUtc) {
   const date = new Date(isoUtc);
   if (Number.isNaN(date.getTime())) throw new TypeError('Invalid UTC timestamp');
   const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: MYT_ZONE, day:'2-digit', month:'short', year:'numeric',
+    timeZone: MYT_ZONE, day:'2-digit', month:'2-digit', year:'numeric',
     hour:'2-digit', minute:'2-digit', second:'2-digit', hourCycle:'h23'
   }).formatToParts(date);
   const p = Object.fromEntries(parts.filter(x => x.type !== 'literal').map(x => [x.type, x.value]));
-  return `${p.day} ${MONTH[p.month] || p.month} ${p.year} ${p.hour}:${p.minute}:${p.second} MYT`;
+  const month = MONTHS[Number(p.month) - 1];
+  return `${p.day} ${month} ${p.year} ${p.hour}:${p.minute}:${p.second} MYT`;
 }
 
 function clock(seconds) {
