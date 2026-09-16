@@ -2,76 +2,45 @@
 
 Date: 2026-09-16
 Repository: `mohd012z/xau-desk-daily`
-Status: Approved design direction in chat; written-spec review required before implementation.
+Status: Approved design, including MYT event Trade Plan layer.
 
-## 1. Goal
+## Goal
 
-Upgrade XAU//DESK into a multi-asset event-analysis desk covering:
+Upgrade XAU//DESK into a multi-asset event-analysis desk covering XAU/USD, major FX currencies and pairs, BTC/USD and ETH/USD, scheduled economic releases, central-bank decisions/speeches, and unplanned breaking news. The system estimates conditional ranges before planned events and continuously recalculates from actual event information and measured market reaction.
 
-- XAU/USD as the primary instrument
-- Major FX currencies: USD, EUR, GBP, JPY, CHF, CAD, AUD, NZD
-- Major FX pairs and selected crosses
-- BTC/USD and ETH/USD, with room for additional provider-supported crypto
-- Scheduled economic releases
-- Central-bank decisions, statements, speeches, press conferences, interviews and Q&A
-- Unplanned breaking news and unscheduled speech/comments
+The dashboard is an analysis tool. It must distinguish model context from measured reaction and must not present automatic order instructions.
 
-The system must estimate conditional price/pip ranges before planned events, detect and classify unplanned events, then continuously recalculate using actual news/speech content and observed market reaction.
+## Dashboard hierarchy
 
-The dashboard is an analysis tool. It must distinguish model context from measured price reaction and must not present automatic order instructions.
+1. Market/data status
+2. Next scheduled event or active unplanned event
+3. MYT Event Trade Plan
+4. Event surprise / speech shift
+5. Immediate observed reaction
+6. Currency-strength dashboard
+7. Forex pair matrix
+8. XAU/USD event analysis
+9. Crypto event analysis
+10. Cross-asset confirmation/divergence
+11. Historical comparable-event distribution
+12. Range/pip/volatility calculations
+13. Source/timestamp audit and short event summary
 
-## 2. Reading order / dashboard hierarchy
+Android uses bottom navigation: `PLAN | EVENTS | FX | METALS | MORE`. Desktop keeps the left rail plus command palette.
 
-The main dashboard must be reorganized in this order:
+## Event states
 
-1. Market / data status
-2. Next scheduled event OR active unplanned event
-3. Event surprise / speech hint
-4. Immediate observed reaction
-5. Currency-strength dashboard
-6. Forex pair matrix
-7. XAU/USD event analysis
-8. Crypto event analysis
-9. Cross-asset confirmation / divergence
-10. Historical comparable-event distribution
-11. Range / pip / volatility calculations
-12. Source and timestamp audit
-13. Short event summary
+Planned: `UPCOMING -> TRIGGERED -> LIVE -> SETTLING -> CLOSED`.
 
-On Android use a bottom navigation layout; on desktop use the left rail plus command palette.
+Unplanned: `DETECTED -> TRIGGERED -> LIVE -> SETTLING -> CLOSED`.
 
-## 3. Event state machine
+Unplanned events expose an `UNPLANNED` badge and timestamp-quality indicator.
 
-### Planned events
+## Event timestamps and Malaysia time
 
-`UPCOMING -> TRIGGERED -> LIVE -> SETTLING -> CLOSED`
+UTC is canonical for storage and computation. Every user-facing event, signal revision and reaction timestamp is displayed in `Asia/Kuala_Lumpur` and labeled `MYT`.
 
-### Unplanned events
-
-An unplanned event has no `UPCOMING` state. It enters:
-
-`DETECTED -> TRIGGERED -> LIVE -> SETTLING -> CLOSED`
-
-The dashboard must show an `UNPLANNED` badge and a timestamp-quality indicator.
-
-## 4. Unplanned-news auto-detection
-
-The Worker/news layer continuously watches supported official/news sources. A new item becomes an event candidate when it is sufficiently relevant to monitored assets/entities and materially different from already-seen items.
-
-### Detection inputs
-
-- publication/provider timestamp
-- official-source timestamp when available
-- article/statement text
-- named central bank / policymaker / government / geopolitical entity
-- impacted currency or asset terms
-- urgency / materiality terms
-- duplicate / near-duplicate detection
-
-### Event timestamp hierarchy
-
-Use the best available timestamp in this order:
-
+Timestamp hierarchy:
 1. official scheduled/release timestamp
 2. official transcript/statement timestamp
 3. official provider/event timestamp
@@ -79,512 +48,138 @@ Use the best available timestamp in this order:
 5. article `publishedAt`
 6. gateway `receivedAt`
 
-Store and expose `timeSource` and `timeConfidence`.
+Store `eventTimeUtc`, derived `eventTimeMyt`, `timeSource`, and `timeConfidence`. Do not hard-code SGT/GMT display strings.
 
-For unplanned news with only a received/publication timestamp, do not pretend the exact market-information arrival time is known. Label the event-time confidence accordingly.
+## Unplanned-news detection and affected assets
 
-## 5. Automatic affected-asset map
+The news layer detects materially new items using publication/provider time, official time where available, text, entities, impacted assets, urgency/materiality and duplicate suppression. Federal Reserve/US inflation/jobs map primarily to USD pairs, XAU, BTC/ETH and USD/yield context; ECB to EUR; BoE to GBP; BoJ to JPY; SNB to CHF; BoC to CAD; RBA to AUD; RBNZ to NZD; geopolitical shocks map to relevant safe-haven/risk/oil assets.
 
-When an event is detected, identify affected assets from entities/topic.
+## Planned-event Advance Mode
 
-Examples:
+Before a scheduled release, produce conditional scenario distributions using only pre-event information: event type, consensus, previous value, historical forecast-error distribution, pre-event spot, ATR/realized volatility, liquidity when available, trend, yield/rate differential, USD/real-yield context, session and comparable historical regimes.
 
-- Federal Reserve / US inflation / US jobs -> USD pairs, XAU, BTC, ETH, DXY/yields
-- ECB -> EUR pairs first; USD/XAU/crypto secondarily
-- BoE -> GBP pairs
-- BoJ -> JPY pairs and carry-sensitive assets
-- SNB -> CHF pairs
-- BoC -> CAD pairs, oil-sensitive FX
-- RBA -> AUD pairs
-- RBNZ -> NZD pairs
-- major geopolitical shock -> XAU, oil, USD, JPY, CHF, crypto and risk-sensitive FX
+Numeric scenarios: `-2σ`, `-1σ`, `near consensus`, `+1σ`, `+2σ`. Each scenario exposes signed center, 50% interval, 80% interval, implied price band and confidence. No post-event values are allowed in Advance Mode.
 
-This map determines which instruments receive immediate reaction tracking.
+For numeric releases: `rawSurprise = actual - forecast` and `surpriseZ = (actual - forecast) / historicalStdForecastError`. Interpretation is event-series aware.
 
-## 6. Planned-event Advance Mode
+## Speech engine
 
-Before a scheduled release, do not guess one deterministic pip number. Produce a conditional distribution based only on information available before the event.
+Score communication separately across policy/rate path, inflation, labour, growth, financial conditions and balance-sheet/liquidity. Compare `currentSpeechScore` with pre-event `expectedSpeechScore`; `speechSurprise = currentSpeechScore - expectedSpeechScore`.
 
-### Advance-mode inputs
+Prepared remarks, policy statement, press conference, Q&A and interviews/unscheduled comments remain separate when timestamps permit. Live speeches update on materially new text with debounce and preserve revision history. A reversal in Q&A must be visible rather than overwriting the prepared-remarks state.
 
-- event type
-- consensus forecast
-- previous value
-- historical forecast-error distribution
-- pre-event spot price
-- pre-event ATR / realized volatility
-- pre-event spread/liquidity if available
-- recent trend
-- yield/rate differential
-- DXY / real-yield context
-- session
-- comparable historical regimes
-- carry/positioning proxy when available
+## Event baseline and measured reaction
 
-No post-event values are allowed in Advance Mode.
+For an event at `18:30:35Z`, the completed-minute baseline is the `18:29` close, never the partially contaminated `18:30` candle. When tick/second data exist, also save the last valid quote immediately before the event timestamp.
 
-### Surprise scenarios
+Track +10s/+30s where supported and +1m/+5m/+15m/+30m/+60m/+4h as data permits. Preserve each model revision and measured reaction for audit.
 
-For numeric data releases produce scenario rows such as:
+## FX, XAU and crypto measurements
 
-- `-2 sigma`
-- `-1 sigma`
-- `near consensus`
-- `+1 sigma`
-- `+2 sigma`
+FX pip size comes from instrument metadata/provider configuration; typical defaults are 0.0001 and 0.01 for conventional JPY pairs. `pipMove = (priceAfter - priceBefore) / pipSize`. Save start/end prices, signed pips, max up/down excursions, event range, retracement and timing-to-threshold where meaningful.
 
-For each scenario estimate:
+XAU reports from/to price, dollar move, percentage move, provider points/ticks, max excursions, event range, ATR utilization and abnormal return. Never hard-code one universal gold-pip definition.
 
-- signed pip/price center
-- 50% historical interval
-- 80% historical interval
-- estimated resulting price range
-- model confidence
+BTC/ETH report from/to price, dollar move, percentage return, max excursions and, where available, realized-volatility, volume and liquidity changes.
 
-## 7. Numeric news-surprise calculation
+## Historical comparable-event and model layer
 
-For a release:
+Similarity considers event type, central bank/speaker/role, topic, communication shift, inflation/rate regime, pre-event volatility/trend, session, rate differential, USD/yield context, positioning proxy when available and recency. Report all-event, similar-regime and very-close-match medians, effective sample size and 10/25/50/75/90 percentiles.
 
-`rawSurprise = actual - forecast`
+Models may include weighted historical similarity, regularized regression and conditional quantile estimates. Ensemble weights come from walk-forward historical accuracy. Direction frequency, absolute magnitude and signed median remain separate. Material disagreement reduces confidence and displays `MODEL DISAGREEMENT`.
 
-Standardize it:
+## MYT Event Trade Plan
 
-`surpriseZ = (actual - forecast) / historicalStdForecastError`
+The Trade Plan is an event-centered analytical summary, not an order ticket. It consumes event state, historical distributions, volatility, affected-asset mapping, communication context and observed reaction.
 
-Direction must be event-aware. For example, a positive unemployment surprise and a positive CPI surprise do not imply the same macro interpretation.
+Each card shows:
+- event name
+- full MYT date/time and `Asia/Kuala_Lumpur`
+- countdown or elapsed event time
+- event/model state (`ADVANCE`, `NOWCAST`, `LIVE REACTION`, `SETTLING`, `CLOSED`)
+- timestamp source/confidence
+- affected instruments
+- model pressure (`UP_PRESSURE`, `DOWN_PRESSURE`, `MIXED`)
+- observed reaction (`UP`, `DOWN`, `MIXED`, `NOT YET MEASURED`)
+- confirmation (`CONFIRMED`, `PARTIAL`, `DIVERGENCE`, `PENDING`)
+- historical comparable count/effective sample size
+- signed median and 50%/80% range in instrument-appropriate units
+- from price and conditional/observed to-price band
+- data/model quality reasons
 
-Historical distributions must therefore be stored per event series.
+### Pre-event
 
-## 8. Speech / communication surprise engine
+Show scenario distributions and the frozen pre-event reference without choosing a deterministic direction. A live MYT clock shows now, event time and countdown.
 
-Speech is not treated as simply `hawkish = price down` or `dovish = price up`.
+### Live event
 
-Score speech in separate dimensions:
+As actual release values or meaningful speech segments arrive, recalculate the model and append a revision. Show actual reaction separately at each measurement window.
 
-- policy/rate path
-- inflation
-- labour/employment
-- growth
-- financial conditions
-- balance-sheet/liquidity
+### Post-event
 
-Create:
+Compare observed reaction with historical center/bands and label whether reaction is within, stronger than, weaker than, or divergent from the historical distribution.
 
-`currentSpeechScore`
+### Quality gate
 
-and compare with an expected/prior stance:
+Low sample size, poor timestamp confidence, stale quote, unavailable live source or model disagreement reduces plan confidence. The UI must expose the reason and may show `LOW CONFIDENCE / INSUFFICIENT DATA`; it must not fabricate a precise level.
 
-`speechSurprise = currentSpeechScore - expectedSpeechScore`
+## Signal architecture
 
-### Expected speech stance
+Signal context has four auditable layers:
+1. news/speech context
+2. historical conditional distribution
+3. cross-asset confirmation
+4. observed price reaction
 
-May use only information available before the statement/speech:
+Expected communication pressure and observed market movement are always separate. Do not convert a hawkish/dovish label directly into BUY/SELL.
 
-- previous speech
-- latest policy statement
-- recent official remarks
-- current policy path expectations
+Cross-asset descriptive states: `CONFIRMED`, `PARTIAL`, `DIVERGENCE`.
 
-### Speech modes
+## Currency-strength dashboard
 
-Separate where possible:
+Orient each FX pair consistently to the currency being scored, normalize event return by pre-event volatility, and calculate a weighted mean. Display USD, EUR, GBP, JPY, CHF, CAD, AUD and NZD for +1m/+5m/+15m/+60m.
 
-- prepared remarks
-- policy statement
-- press conference
-- Q&A
-- interview / unscheduled comments
+## Truthful data and model states
 
-Do not merge them into one event if separate timestamps are available.
+Market feed: `STREAMING`, `DELAYED`, `STALE`, `SNAPSHOT`, `OFFLINE`, and `MARKET CLOSED` only when supportable.
 
-## 9. Live rolling speech mode
+News timestamp: `OFFICIAL`, `PROVIDER`, `ARTICLE TIME`, `RECEIVED TIME`.
 
-If a speech/press conference/transcript is updating live, the event remains active.
+Model: `ADVANCE`, `NOWCAST`, `LIVE REACTION`, `SETTLING`, `CLOSED`.
 
-Each new meaningful text segment can update:
+Confidence uses effective sample size, regime similarity, model agreement, walk-forward error, interval calibration and data/timestamp quality. Display reasons, not only a score.
 
-- topic score
-- hawkish/dovish shift
-- policy-path score
-- affected assets
-- historical comparable-event match
-- conditional price/pip distribution
+## Anti-leakage and validation
 
-Use a short debounce so repeated text fragments do not create noisy recalculation loops.
+Advance features must be timestamped strictly before the event. Never use actual release values, speech text, post-event yields/USD movement or first-minute price in pre-event backtests. Use chronological walk-forward validation and evaluate MAE, RMSE, sign accuracy as a descriptive model metric, quantile pinball loss, interval coverage/calibration and error by event/regime.
 
-If the latest remarks reverse earlier guidance, the dashboard must show the change, for example:
+## UI and useful uploaded-file features
 
-`Prepared remarks: mildly dovish`
+Retain useful ideas from the supplied dashboard: persistent theme/settings, chart focus, range calculator, News Incoming, Speaker Watch, Cross-Asset panel and source/audit display. Replace hard-coded SGT labels with derived MYT. Replace static BUY/SELL order-summary presentation with the event-centered analytical Trade Plan described above. The supplied Trade Plan file already separates ATR-derived geometry from fundamental context, but production v4.2 must not turn that geometry into automatic order instructions.
 
-`Q&A: strongly hawkish`
+## Security
 
-`Net communication shift: hawkish`
+API keys remain server-side/secret only. Public GitHub files/logs must not contain provider secrets. Validate external URL protocols, restrict Worker CORS to approved origins, escape public text, and redact sensitive query parameters.
 
-## 10. Unplanned-news recalculation behavior
+## Testing requirements
 
-When an unplanned event is detected:
+Automated tests must cover pip size/signed pips, JPY pip handling, completed-minute baseline, unplanned timestamp fallback, duplicate suppression, incremental speech recalculation, prepared remarks vs Q&A, scenario-to-price bands, currency-strength orientation, stale quote cannot report live, fallback order, MYT formatting/countdown, Trade Plan pressure-vs-observed separation, low-confidence quality gate, revision preservation, no secret leakage, browser syntax, mobile PLAN navigation and command palette.
 
-1. Create an event record immediately.
-2. Determine the best available event timestamp and `timeSource`.
-3. Identify affected currencies/assets.
-4. Freeze the pre-event baseline using the last fully completed period before the event timestamp when possible.
-5. Load comparable historical events.
-6. Produce an initial `NOWCAST` distribution.
-7. Start +10s/+30s/+1m/+5m/+15m/+30m/+60m/+4h measurement windows where provider resolution allows.
-8. Recalculate whenever materially new article/speech text arrives.
-9. Recalculate when market evidence materially changes.
-10. Preserve each model revision for audit; do not overwrite the history of what the model knew at each time.
+## Acceptance criteria
 
-For unplanned events there is no pre-event forecast using unknown content. The first model output is a `NOWCAST` after detection.
-
-## 11. Event baseline rules
-
-For minute data, an event at `18:30:35` must not use the `18:30` candle as the pre-event baseline because that bar may already contain the reaction.
-
-Use the last fully completed minute before the event minute, e.g. `18:29`.
-
-Where tick/second data exist, also record the last valid quote immediately before the detected event timestamp.
-
-Store both when available:
-
-- `preEventTick`
-- `preEventCompletedMinuteClose`
-
-## 12. FX pip calculations
-
-Default pip size must come from instrument metadata/provider configuration.
-
-Typical defaults:
-
-- most FX pairs: `0.0001`
-- conventional JPY pairs: `0.01`
-
-Calculate:
-
-`pipMove = (priceAfter - priceBefore) / pipSize`
-
-For every event window save:
-
-- start price
-- end price
-- signed pips
-- maximum favourable/upward excursion
-- maximum adverse/downward excursion
-- high-low event range in pips
-- time to first 5/10/20 pips where meaningful
-- time to max up/down
-- retracement after initial move
-
-Do not use pip terminology for crypto. For XAU/USD use provider point/tick metadata plus dollar and percentage movement.
-
-## 13. XAU/USD calculations
-
-Primary reporting:
-
-- from price
-- to price
-- dollar move
-- percentage move
-- provider points/ticks
-- max up/down excursion
-- event range
-- ATR utilization
-- abnormal return
-
-Never hard-code one universal gold-pip definition. Read provider instrument metadata.
-
-## 14. Crypto calculations
-
-For BTC/ETH use:
-
-`returnPct = (priceAfter / priceBefore - 1) * 100`
-
-Also track where available:
-
-- dollar move
-- absolute return
-- realized volatility change
-- volume change
-- spread/liquidity change
-- max up/down excursion
-
-## 15. Currency-strength event dashboard
-
-Calculate relative currency strength from multiple pairs, after orienting every pair consistently to the currency being scored.
-
-Normalize pair movement by recent volatility:
-
-`normalizedMove = eventReturn / preEventVolatility`
-
-Currency score:
-
-`currencyStrength = weightedMean(orientedNormalizedPairMoves)`
-
-Display USD, EUR, GBP, JPY, CHF, CAD, AUD, NZD for +1m/+5m/+15m/+60m.
-
-## 16. Historical comparable-event engine
-
-Store historical event features and reactions.
-
-Similarity should consider:
-
-- event type
-- central bank / speaker / speaker role
-- speech topic
-- hawkish/dovish shift magnitude
-- inflation/rate regime
-- pre-event volatility
-- pre-event trend
-- session
-- rate differential
-- DXY/yield context
-- carry/positioning proxy if available
-- recency
-
-Weight comparable events by both similarity and recency.
-
-Report:
-
-- all-event median
-- similar-regime median
-- very-close-match median
-- effective sample size
-- 25/50/75 percentiles
-- 10/90 percentiles
-
-## 17. Advanced pip/price estimation
-
-### Model A — Historical similarity
-
-Weighted empirical distribution from comparable historical events.
-
-### Model B — Regularized regression
-
-Example form:
-
-`pipMove = alpha + beta1*surprise + beta2*volatility + beta3*preTrend + beta4*spread + beta5*rateDifferential + beta6*session + beta7*policyPath + error`
-
-### Model C — Quantile model
-
-Estimate 10%, 25%, 50%, 75%, 90% conditional pip/price quantiles.
-
-### Ensemble
-
-Combine model outputs using weights derived from walk-forward historical accuracy.
-
-If models disagree materially, reduce confidence and display `MODEL DISAGREEMENT`.
-
-## 18. Direction and magnitude are separate
-
-The model must separately estimate:
-
-- probability/frequency of positive vs negative reaction
-- expected absolute movement
-- signed median reaction
-
-Do not collapse all three into one misleading signal.
-
-## 19. Price-range conversion
-
-For FX:
-
-`conditionalPrice = preEventPrice + predictedPips * pipSize`
-
-Display both predicted pips and the implied price range.
-
-For XAU/crypto, convert percentage/dollar distribution to price bands.
-
-## 20. Abnormal event return
-
-Estimate market-specific background return and calculate:
-
-`abnormalReturn = actualReturn - expectedBackgroundReturn`
-
-For FX this may also be represented in abnormal pips.
-
-The first implementation may use a simpler background model; the interface must allow upgrading it without changing dashboard consumers.
-
-## 21. Cross-asset confirmation / divergence
-
-Compare event reaction across:
-
-- DXY / USD strength
-- Treasury nominal yields
-- real yields when available
-- XAU/USD
-- major FX
-- BTC/ETH
-- oil when relevant
-
-Display:
-
-- `CONFIRMED`
-- `PARTIAL`
-- `DIVERGENCE`
-
-as descriptive reaction states, not order instructions.
-
-Expected communication pressure and observed reaction must be separate fields.
-
-## 22. Truthful data states
-
-Market feed status:
-
-- `STREAMING`
-- `DELAYED`
-- `STALE`
-- `SNAPSHOT`
-- `OFFLINE`
-- `MARKET CLOSED` only when supportable
-
-News/event status:
-
-- `OFFICIAL`
-- `PROVIDER`
-- `ARTICLE TIME`
-- `RECEIVED TIME`
-
-Model state:
-
-- `ADVANCE`
-- `NOWCAST`
-- `LIVE REACTION`
-- `SETTLING`
-- `CLOSED`
-
-## 23. Model confidence
-
-Internal confidence should use:
-
-- effective historical sample size
-- regime similarity
-- model agreement
-- historical walk-forward error
-- interval calibration
-- data/timestamp quality
-
-Display the reasons behind confidence rather than a naked score.
-
-## 24. Walk-forward validation / anti-leakage
-
-Advance-mode features must have timestamps strictly before the event.
-
-Never use actual release values, speech text, post-event yields, DXY movement or first-minute price in a pre-event backtest feature set.
-
-Use chronological walk-forward validation.
-
-Evaluate:
-
-- pip/price MAE
-- RMSE
-- sign accuracy as a descriptive model metric
-- quantile pinball loss
-- interval coverage
-- calibration by event type
-- error by regime
-
-## 25. UI additions from uploaded dashboard
-
-Merge useful features from the uploaded HTML/JS:
-
-- `/` command palette
-- persistent theme/settings
-- chart focus/fullscreen interaction
-- range calculator
-- News Incoming panel
-- Speaker Watch
-- Cross-Asset panel
-- source/audit display
-
-Improve them with:
-
-- Android bottom navigation
-- touch/pointer chart interaction
-- actual price/time crosshair instead of x/y percentages
-- data-driven KPI cards
-- truthful live state
-
-Do not use the uploaded polling module as the primary XAU live feed.
-
-## 26. Suggested main tabs
-
-### GOLD
-
-Primary XAU/USD desk with event reaction, DXY/yields/oil context and historical event distribution.
-
-### FOREX
-
-Currency dashboard plus major/cross pair matrix, affected-pair ranking and exact pip/from-to-price event reaction.
-
-### CRYPTO
-
-BTC/ETH price/percentage/volatility/volume event reaction.
-
-### EVENTS
-
-Scheduled and unplanned active events with countdown, timestamp quality, historical analogues and rolling event-state history.
-
-### SUMMARY
-
-Compact explanation of:
-
-- what happened
-- what was expected
-- surprise / speech shift
-- affected currencies/assets
-- actual reaction
-- strongest/weakest currencies
-- XAU and crypto reaction
-- cross-asset confirmation/divergence
-- historical comparison
-- data quality
-
-## 27. Security
-
-- API keys remain server-side/secret only.
-- Public GitHub files must never contain provider secrets.
-- External links are protocol-validated.
-- Worker CORS restricted to approved site origins.
-- Public event/news text is escaped/sanitized.
-- Public logs must redact keys and sensitive query parameters.
-
-## 28. Testing requirements
-
-Add automated tests for at least:
-
-- pip size and signed pip calculation
-- JPY pip handling
-- event baseline minute-floor rule
-- unplanned-event timestamp fallback
-- duplicate news suppression
-- speech incremental recalculation
-- prepared-speech vs Q&A separation
-- scenario distribution conversion to price bands
-- currency-strength pair orientation
-- stale quote cannot report streaming/live
-- fallback order WebSocket -> REST -> snapshot
-- no secret leakage
-- HTML/JS syntax
-- mobile navigation state
-- command palette
-
-## 29. Acceptance criteria
-
-v4.2 is acceptable when:
-
-1. Gold, Forex and Crypto are accessible as working dashboard areas.
-2. Planned events show Advance scenario distributions before the release.
-3. Unplanned news automatically creates a live event and recalculates affected assets.
-4. Live/rolling speeches update classification and model output as materially new remarks arrive.
-5. FX displays exact pre/post prices, signed pips, max excursions and event ranges.
-6. XAU displays exact prices, dollar/percent/provider-point movement.
-7. BTC/ETH display exact price and percentage event reactions.
+1. Gold, Forex and Crypto are working dashboard areas.
+2. Planned events show Advance distributions before release.
+3. Unplanned news creates a live event and recalculates affected assets.
+4. Live speeches update model output as materially new remarks arrive.
+5. FX shows exact pre/post prices and signed pip reactions; XAU and crypto use appropriate units.
+6. Every user-facing event and signal timestamp is MYT; UTC stays canonical internally.
+7. The Trade Plan shows event countdown/state, conditional distribution, from/to price context, model pressure, observed reaction, confirmation/divergence and quality reasons.
 8. Expected pressure and observed movement are never conflated.
-9. All user-facing timestamps display in `Asia/Kuala_Lumpur` while UTC remains canonical internally.
-10. Every event exposes timestamp/source quality.
-11. Pre-event models pass anti-leakage tests.
-12. No API secret is exposed in GitHub Pages or public logs.
+9. Every event exposes timestamp/source quality.
+10. Pre-event models pass anti-leakage tests.
+11. No API secret is exposed in GitHub Pages or public logs.
+12. No automatic order placement or deterministic BUY/SELL recommendation is produced by the event engine.
 
-## 30. Implementation boundary
+## Implementation boundary
 
-The first production implementation should prioritize a correct, auditable event engine and truthful data state over adding more instruments or decorative analytics. Historical-model sophistication may grow incrementally once reliable event-aligned data has accumulated.
+Prioritize a correct, auditable event engine and truthful data state over decorative analytics or additional instruments. Historical-model sophistication grows incrementally once reliable event-aligned data accumulates.
