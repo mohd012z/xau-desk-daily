@@ -12,6 +12,7 @@ on:
       - 'xauusd-data.js'
       - 'macro-preview.html'
       - 'macro/**'
+      - 'data/**'
       - '.nojekyll'
       - '.github/workflows/pages.yml'
 
@@ -76,6 +77,10 @@ jobs:
             cp -R macro _site/macro
           fi
 
+          if [ -d "data" ]; then
+            cp -R data _site/data
+          fi
+
           if [ -f ".nojekyll" ]; then
             cp .nojekyll _site/.nojekyll
           else
@@ -102,5 +107,5 @@ jobs:
           echo "Branch : main"
           echo "Home   : index.html"
           echo "Preview: macro-preview.html"
-          echo "Data   : xauusd-data.js"
+          echo "Data   : xauusd-data.js + data/event-history.json"
           echo "===================================="
