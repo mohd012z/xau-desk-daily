@@ -1,0 +1,3 @@
+import { buildTradePlan } from '../events/trade-plan.mjs'; import { renderTradePlanMarkup } from './trade-plan-view.mjs';
+export function renderTradePlanInto(host,input){if(!host)return null;const plan=buildTradePlan(input);host.innerHTML=renderTradePlanMarkup(plan);return plan;}
+export function installPlanNavigation({button,host}){if(!button||!host)return()=>{};const show=()=>host.scrollIntoView({behavior:'smooth',block:'start'});button.addEventListener('click',show);return()=>button.removeEventListener('click',show);}
