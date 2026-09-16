@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-16T11:45:02+08:00",
+    "generatedAt": "2026-09-16T12:01:54+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -14,37 +14,37 @@ window.XAUUSD_DATA = {
         "ok": true,
         "label": "Twelve Data XAU/USD",
         "detail": "latest daily bar 2026-09-16",
-        "timestamp": "2026-09-16T11:45:03+08:00"
+        "timestamp": "2026-09-16T12:01:54+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-16T11:45:03+08:00"
+        "timestamp": "2026-09-16T12:01:55+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
-        "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=6c8d081decdb4af99bf262642bcbabcb",
-        "timestamp": "2026-09-16T11:45:11+08:00"
+        "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
+        "timestamp": "2026-09-16T12:02:04+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
         "detail": "latest 2026-09-14",
-        "timestamp": "2026-09-16T11:45:11+08:00"
+        "timestamp": "2026-09-16T12:02:08+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
         "detail": "8 recent items",
-        "timestamp": "2026-09-16T11:45:11+08:00"
+        "timestamp": "2026-09-16T12:02:08+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-16T11:45:11+08:00"
+        "timestamp": "2026-09-16T12:02:08+08:00"
       }
     },
     "warnings": [
@@ -52,12 +52,12 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-16 11:45 MYT",
+  "updated": "2026-09-16 12:01 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4327.04,
-    "change": 33.25,
-    "changePct": 0.77,
+    "spot": 4327.23,
+    "change": 33.44,
+    "changePct": 0.78,
     "dayRange": "4,275.88 - 4,339.71",
     "monthPct": -5.82,
     "yearPct": 0.28,
@@ -134,6 +134,36 @@ window.XAUUSD_DATA = {
   },
   "news": [
     {
+      "time": "2026-09-15 04:01 UTC",
+      "title": "‘Grow Our Way Out of Debt’ Is Code for Inflation",
+      "summary": "Last week, Treasury Secretary Scott Bessent sat down for a fireside chat at Southern Methodist University in Dallas and told the room what the plan is for the national debt. “We don’t have a revenue problem,” he said. “We have a spending problem.” Contain the…",
+      "source": "Lewrockwell.com",
+      "url": "https://www.lewrockwell.com/2026/09/no_author/grow-our-way-out-of-debt-is-code-for-inflation/",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-15 04:00 UTC",
+      "title": "HP OmniDesk Mini Shrinks a Windows Desktop Into a Mac mini-Sized Box",
+      "summary": "A full-size desktop still makes sense when you need a powerful GPU, lots of expansion, or room for future upgrades. But if most of your day involves browser tabs, Office apps, video calls, streaming, and general productivity, a tower can feel like a lot of co…",
+      "source": "The Gadgeteer",
+      "url": "https://the-gadgeteer.com/2026/09/14/hp-omnidesk-mini-mac-mini-sized-windows-pc/",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-15 03:56 UTC",
+      "title": "What a Fed rate hike could mean for gold and silver prices",
+      "summary": "Gold and silver investors have had to contend with some so far in 2026. Gold, for example, surpassed $5,500 per ounce early this year, but has since retreated significantly from that record high, with sitting closer to $4,275 per ounce as of mid-September. Si…",
+      "source": "Biztoc.com",
+      "url": "https://biztoc.com/x/d04d550ea955f3ba",
+      "impact": "bearish",
+      "signal": "DOWN",
+      "impactPct": null
+    },
+    {
       "time": "2026-09-15 03:39 UTC",
       "title": "Emmys 2026 review: ‘Widow’s Bay’ sweeps an uneven night with over-the-top host Mariska Hargitay",
       "summary": "\"Widow's Bay\" swept, \"The Pitt\" won big, but not as big as expected, and Mariska Hargitay was an over-the-top host of the 2026 Emmys.",
@@ -179,36 +209,6 @@ window.XAUUSD_DATA = {
       "summary": "Oil and 10-year Treasury yields are moving in near lockstep, with their correlation at its strongest since 2019.",
       "source": "CNBC",
       "url": "https://www.cnbc.com/2026/09/15/oil-us-treasurys-stocks-pressure.html",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-15 02:43 UTC",
-      "title": "Asian shares waver as oil and yields rise ahead of Fed, BOJ meetings",
-      "summary": "TOKYO: Asian shares struggled on Tuesday (Sep 15) as investors weighed Middle East tensions and calls by industry figures for a",
-      "source": "CNA",
-      "url": "https://www.channelnewsasia.com/business/asian-shares-kospi-bank-japan-6384761",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-15 02:26 UTC",
-      "title": "Stock Market LIVE: GIFT Nifty signals positive open; Asian markets fall as firm oil prices weigh",
-      "summary": "Sensex Today | Stock Market LIVE Updates Tuesday: The GIFT Nifty indicated a positive open for the Nifty50 index, while its Asian peers logged losses in inflation concerns",
-      "source": "Business Standard",
-      "url": "https://www.business-standard.com/markets/news/stock-market-live-september-15-nse-bse-sensex-today-nifty-gift-nifty-crude-oil-price-today-pranav-construction-ipo-listing-126091500075_1.html",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-15 02:15 UTC",
-      "title": "Economic Digest: A Snapshot of Nepal’s Business News",
-      "summary": "KATHMANDU: Economic Digest presents a brief yet comprehensive roundup of major business developments in Nepal, delivered in clear and accessible summaries. Nepal’s economic landscape on Monday reflected a mix of market optimism, external pressures and the mou…",
-      "source": "Khabarhub.com",
-      "url": "https://english.khabarhub.com/2026/15/567808/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
@@ -331,7 +331,7 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "Observed XAU momentum",
-      "level": "+0.77%",
+      "level": "+0.78%",
       "w": 51,
       "dir": "up"
     }
@@ -396,7 +396,7 @@ window.XAUUSD_DATA = {
       },
       {
         "x": "2026-09-16",
-        "y": 4327.04
+        "y": 4327.23
       }
     ]
   },
