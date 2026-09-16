@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildTradePlanInput, normalizeMarketFeedState } from '../../macro/ui/trade-plan-integration.mjs';
+import { buildTradePlanInput, normalizeMarketFeedState, mergeAdvanceModelOverrides } from '../../macro/ui/trade-plan-integration.mjs';
 
 test('no active timed event produces no trade plan input',()=>{
   assert.equal(buildTradePlanInput({event:null}),null);
@@ -33,4 +33,27 @@ test('market feed state normalization fails closed',()=>{
   assert.equal(normalizeMarketFeedState('streaming'),'STREAMING');
   assert.equal(normalizeMarketFeedState('SNAPSHOT • GATEWAY ERROR'),'SNAPSHOT');
   assert.equal(normalizeMarketFeedState('GATEWAY'),'UNKNOWN');
+});
+
+test('ready advance model becomes descriptive Trade Plan history and pressure without order geometry',()=>{
+  const merged=mergeAdvanceModelOverrides({
+    state:'READY', comparableCount:12, effectiveN:8.5, signedMedian:-7,
+    distribution:{p10:-25,p25:-15,p50:-7,p75:3,p90:12},
+    priceBand:{p10:1.179,p25:1.1805,p50:1.1813,p75:1.1825,p90:1.184},
+    confidence:{label:'MODERATE',score:68}
+  }, {prices:{from:1.184},pivotContext:{timeframe:'D1',source:'PREVIOUS_COMPLETED_PERIOD',levels:{pivot:1.1845,s1:1.181}}});
+  assert.equal(merged.pressure,'DOWN_PRESSURE');
+  assert.equal(merged.historical.n,12);
+  assert.equal(merged.historical.median,-7);
+  assert.equal(merged.effectiveSampleSize,8.5);
+  assert.deepEqual(merged.priceBand,[1.1805,1.1825]);
+  assert.equal(merged.prices.from,1.184);
+  for(const key of ['entry','stopLoss','takeProfit','buy','sell']) assert.equal(Object.hasOwn(merged,key),false);
+});
+
+test('insufficient advance model does not fabricate Trade Plan distributions',()=>{
+  const merged=mergeAdvanceModelOverrides({state:'INSUFFICIENT_DATA',reason:'NO_EVENT_ALIGNED_HISTORY'}, {pivotContext:{timeframe:'D1'}});
+  assert.equal(merged.historical,null);
+  assert.equal(merged.pressure,'MIXED');
+  assert.equal(merged.pivotContext.timeframe,'D1');
 });
