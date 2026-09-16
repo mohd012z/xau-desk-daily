@@ -1,27 +1,5 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import { buildTradePlan } from '../../macro/events/trade-plan.mjs';
-
-const base={ eventId:'cpi-1',eventName:'US CPI',eventTimeUtc:'2026-09-16T18:00:00Z',nowUtc:'2026-09-16T17:55:00Z',modelState:'ADVANCE',timeSource:'OFFICIAL',timeConfidence:'HIGH',affectedAssets:['XAU/USD','EUR/USD'],pressure:'DOWN_PRESSURE',effectiveSampleSize:60,feedState:'STREAMING',modelAgreement:'AGREE',historical:{median:-8,p25:-18,p75:5,p10:-30,p90:20},prices:{from:1.18},revisions:[] };
-
-test('upcoming plan is MYT-first and keeps expected pressure separate from observation',()=>{
-  const p=buildTradePlan(base);
-  assert.equal(p.eventTimeMyt,'17 Sep 2026 02:00:00 MYT');
-  assert.equal(p.pressure,'DOWN_PRESSURE');
-  assert.equal(p.observed,'NOT_YET_MEASURED');
-  assert.equal(p.confirmation,'PENDING');
-  assert.equal(p.countdown.text,'T-00:05:00');
-});
-
-test('opposite observed reaction is divergence and revisions are preserved',()=>{
-  const revisions=[{id:1},{id:2}];
-  const p=buildTradePlan({...base,modelState:'LIVE REACTION',observed:'UP',revisions});
-  assert.equal(p.confirmation,'DIVERGENCE');
-  assert.deepEqual(p.revisions,revisions);
-  assert.notEqual(p.revisions,revisions);
-});
-
-test('composer never emits automatic order fields',()=>{
-  const p=buildTradePlan(base);
-  for(const key of ['buy','sell','entry','stopLoss','takeProfit']) assert.equal(Object.hasOwn(p,key),false);
-});
+import test from'node:test';import assert from'node:assert/strict';import{buildTradePlan}from'../../macro/events/trade-plan.mjs';const base={eventId:'cpi-1',eventName:'US CPI',eventTimeUtc:'2026-09-16T18:00:00Z',nowUtc:'2026-09-16T17:55:00Z',modelState:'ADVANCE',timeSource:'OFFICIAL',timeConfidence:'HIGH',affectedAssets:['XAU/USD','EUR/USD'],pressure:'DOWN_PRESSURE',effectiveSampleSize:60,feedState:'STREAMING',modelAgreement:'AGREE',historical:{n:60,median:-8,p25:-18,p75:5,p10:-30,p90:20},prices:{from:1.18},revisions:[]};
+test('upcoming plan is MYT-first and keeps expected pressure separate from observation',()=>{const p=buildTradePlan(base);assert.equal(p.eventTimeMyt,'17 Sep 2026 02:00:00 MYT');assert.equal(p.pressure,'DOWN_PRESSURE');assert.equal(p.observed,'NOT_YET_MEASURED');assert.equal(p.confirmation,'PENDING');assert.equal(p.countdown.text,'T-00:05:00');});
+test('opposite observed reaction is divergence and revisions are preserved',()=>{const revisions=[{id:1},{id:2}],p=buildTradePlan({...base,modelState:'LIVE REACTION',observed:'UP',revisions});assert.equal(p.confirmation,'DIVERGENCE');assert.deepEqual(p.revisions,revisions);assert.notEqual(p.revisions,revisions);});
+test('composer never emits automatic order fields',()=>{const p=buildTradePlan(base);for(const key of['buy','sell','entry','stopLoss','takeProfit'])assert.equal(Object.hasOwn(p,key),false);});
+test('historical sample count is consistent with effective sample size input',()=>{const p=buildTradePlan({...base,historical:{n:5,median:-8,p25:-18,p75:5,p10:-30,p90:20},effectiveSampleSize:60});assert.equal(p.quality.label,'LOW');assert.ok(p.quality.reasons.includes('HISTORY_SAMPLE_MISMATCH'));});
