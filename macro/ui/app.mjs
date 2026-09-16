@@ -4,7 +4,7 @@ import { calcFxReaction, calcMetalReaction, calcDigitalReaction } from '../core/
 import { createEventStore } from '../events/event-store.mjs';
 import { ingestSnapshotEvents, startGatewayPolling } from '../adapters/event-feed-adapter.mjs';
 import { dispatchRecalculation } from '../events/recalculate.mjs';
-import { renderTradePlanInto } from './trade-plan-controller.mjs';
+import { renderAndRecordTradePlan } from './trade-plan-controller.mjs';
 import { buildTradePlanInput, normalizeMarketFeedState } from './trade-plan-integration.mjs';
 
 const browser = typeof window !== 'undefined' && typeof document !== 'undefined';
@@ -112,32 +112,41 @@ function renderSnapshot(data) {
   else list.innerHTML='<div class="empty-state">No source metadata in this snapshot.</div>';
 }
 
-function renderTradePlan(active, marketFeedState) {
+function renderTradePlan(active, marketFeedState, planHistory, reason = 'SYNC', createdAtUtc = new Date().toISOString()) {
   const host = $('#trade-plan-host');
-  if (!host) return;
+  if (!host) return null;
   const input = buildTradePlanInput({
     event: active,
     marketFeedState,
     overrides: window.MACRO_TRADE_PLAN ?? {},
-    nowUtc: new Date().toISOString()
+    nowUtc: createdAtUtc
   });
   if (!input) {
     host.className = 'empty-state';
     host.textContent = 'No active timed event available for the MYT Trade Plan.';
-    return;
+    return null;
   }
   host.className = '';
-  renderTradePlanInto(host, input);
+  const history = planHistory.get(active.id) ?? [];
+  const sourceRevisionNumber = active.revisions?.at(-1)?.revisionNumber ?? 0;
+  const result = renderAndRecordTradePlan(host, input, {
+    history,
+    createdAtUtc,
+    reason,
+    sourceRevisionNumber
+  });
+  planHistory.set(active.id, result.history);
+  return result.plan;
 }
 
-function renderEventStore(store, eventFeedState = 'SNAPSHOT', marketFeedState = 'SNAPSHOT') {
+function renderEventStore(store, eventFeedState = 'SNAPSHOT', marketFeedState = 'SNAPSHOT', planHistory = new Map(), reason = 'SYNC', createdAtUtc = new Date().toISOString()) {
   const events = store.list();
   const active = events[0] ?? null;
   const view = formatEventView(active);
   $('#active-event').textContent = view.title;
   $('#active-event-meta').textContent = active ? `${view.badge} • ${view.time} • ${view.provenance}` : 'No active material event in the current feed.';
   $('#event-feed-state').textContent = eventFeedState;
-  renderTradePlan(active, marketFeedState);
+  renderTradePlan(active, marketFeedState, planHistory, reason, createdAtUtc);
 
   const eventList = $('#event-list'); eventList.innerHTML = '';
   if (!events.length) eventList.innerHTML = '<div class="empty-state">No material event detected from the current snapshot.</div>';
@@ -180,10 +189,16 @@ function boot() {
   renderSnapshot(data); renderReactionCards(); bindNavigation(); bindTheme();
   let eventFeedState = 'SNAPSHOT';
   const marketFeedState = normalizeMarketFeedState(window.MACRO_MARKET_FEED_STATE ?? data.status);
-  const store = createEventStore({ onUpdate(event){ dispatchRecalculation(event,{feedStatus:eventFeedState,requestedAt:new Date().toISOString()},window); renderEventStore(store,eventFeedState,marketFeedState); } });
-  store.ingestMany(ingestSnapshotEvents(raw)); renderEventStore(store,eventFeedState,marketFeedState);
+  const planHistory = new Map();
+  const store = createEventStore({ onUpdate(event, change){
+    const requestedAt = new Date().toISOString();
+    dispatchRecalculation(event,{feedStatus:eventFeedState,requestedAt},window);
+    renderEventStore(store,eventFeedState,marketFeedState,planHistory,String(change ?? 'SYNC').toUpperCase(),requestedAt);
+  } });
+  store.ingestMany(ingestSnapshotEvents(raw));
+  renderEventStore(store,eventFeedState,marketFeedState,planHistory,'SYNC',new Date().toISOString());
   const gatewayUrl = window.MACRO_DESK_CONFIG?.eventGatewayUrl ?? null;
-  startGatewayPolling({ url: gatewayUrl, intervalMs: window.MACRO_DESK_CONFIG?.eventPollMs ?? 60000, onUpdate(candidates){ eventFeedState='GATEWAY'; store.ingestMany(candidates); renderEventStore(store,eventFeedState,marketFeedState); }, onError(){ eventFeedState='SNAPSHOT • GATEWAY ERROR'; renderEventStore(store,eventFeedState,marketFeedState); } });
+  startGatewayPolling({ url: gatewayUrl, intervalMs: window.MACRO_DESK_CONFIG?.eventPollMs ?? 60000, onUpdate(candidates){ eventFeedState='GATEWAY'; store.ingestMany(candidates); renderEventStore(store,eventFeedState,marketFeedState,planHistory,'SYNC',new Date().toISOString()); }, onError(){ eventFeedState='SNAPSHOT • GATEWAY ERROR'; renderEventStore(store,eventFeedState,marketFeedState,planHistory,'GATEWAY_ERROR',new Date().toISOString()); } });
   showView('BRIEF');
 }
 
