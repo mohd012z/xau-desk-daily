@@ -14,9 +14,24 @@ export function appendPlanRevision(existing = [], revision = {}) {
   return copy;
 }
 
+function clonePivotContext(value) {
+  if (!value) return null;
+  return {
+    timeframe: value.timeframe ?? null,
+    source: value.source ?? null,
+    levels: value.levels ? {...value.levels} : null
+  };
+}
+
 function snapshotOf(plan = {}, sourceRevisionNumber = 0, reason = 'UPDATE') {
   const snapshot = {
     eventId: plan.eventId ?? null,
+    eventName: plan.eventName ?? null,
+    eventTimeUtc: plan.eventTimeUtc ?? null,
+    eventTimeMyt: plan.eventTimeMyt ?? null,
+    timeSource: plan.timeSource ?? 'UNKNOWN',
+    timeConfidence: plan.timeConfidence ?? 'LOW',
+    affectedAssets: [...(plan.affectedAssets ?? [])],
     sourceRevisionNumber: Number.isFinite(Number(sourceRevisionNumber)) ? Number(sourceRevisionNumber) : 0,
     reason,
     modelState: plan.modelState ?? 'ADVANCE',
@@ -24,19 +39,24 @@ function snapshotOf(plan = {}, sourceRevisionNumber = 0, reason = 'UPDATE') {
     observed: plan.observed ?? 'NOT_YET_MEASURED',
     confirmation: plan.confirmation ?? 'PENDING',
     quality: plan.quality ? { label:plan.quality.label ?? 'LOW', reasons:[...(plan.quality.reasons ?? [])] } : null,
+    historical: plan.historical ? {...plan.historical} : null,
+    prices: plan.prices ? {...plan.prices} : null,
+    priceBand: Array.isArray(plan.priceBand) ? [...plan.priceBand] : null,
+    atrContext: plan.atrContext ? {...plan.atrContext} : null,
+    pivotContext: clonePivotContext(plan.pivotContext),
     pivotConfluence: plan.pivotConfluence ? {
       status: plan.pivotConfluence.status ?? 'INSUFFICIENT_DATA',
       level: plan.pivotConfluence.level ?? null,
       price: plan.pivotConfluence.price ?? null
-    } : null,
-    historical: plan.historical ? {...plan.historical} : null,
-    prices: plan.prices ? {...plan.prices} : null
+    } : null
   };
   snapshot.signature = JSON.stringify([
-    snapshot.eventId, snapshot.sourceRevisionNumber, snapshot.modelState,
+    snapshot.eventId, snapshot.eventTimeUtc, snapshot.timeSource, snapshot.timeConfidence,
+    snapshot.affectedAssets, snapshot.sourceRevisionNumber, snapshot.modelState,
     snapshot.pressure, snapshot.observed, snapshot.confirmation,
     snapshot.quality?.label, snapshot.quality?.reasons,
-    snapshot.pivotConfluence, snapshot.historical, snapshot.prices
+    snapshot.historical, snapshot.prices, snapshot.priceBand, snapshot.atrContext,
+    snapshot.pivotContext, snapshot.pivotConfluence
   ]);
   return snapshot;
 }
