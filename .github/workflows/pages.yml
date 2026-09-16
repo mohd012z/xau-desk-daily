@@ -2,13 +2,27 @@ name: Deploy XAU DESK to GitHub Pages
 
 on:
   workflow_dispatch:
+
+  # Deploy when you manually edit the website/data.
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
       - 'index.html'
       - 'xauusd-data.js'
       - '.nojekyll'
       - '.github/workflows/pages.yml'
+
+  # IMPORTANT:
+  # GITHUB_TOKEN commits from the daily updater do not normally
+  # start another push workflow.
+  #
+  # workflow_run solves that problem.
+  workflow_run:
+    workflows:
+      - "XAUUSD Daily Verified Snapshot"
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -16,32 +30,65 @@ permissions:
   id-token: write
 
 concurrency:
-  group: github-pages
-  cancel-in-progress: true
+  group: github-pages-xau-desk
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    name: Deploy XAU DESK
+
+    # For workflow_run, deploy only when the updater succeeded.
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
 
-      - name: Configure Pages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout latest main branch
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Prepare static site
+      - name: Prepare website
         run: |
+          rm -rf _site
           mkdir -p _site
-          cp index.html xauusd-data.js .nojekyll _site/
 
-      - name: Upload Pages artifact
+          cp index.html _site/index.html
+          cp xauusd-data.js _site/xauusd-data.js
+
+          if [ -f ".nojekyll" ]; then
+            cp .nojekyll _site/.nojekyll
+          else
+            touch _site/.nojekyll
+          fi
+
+          echo "Files prepared:"
+          ls -la _site
+
+      - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: '_site'
+          path: ./_site
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Deployment summary
+        run: |
+          echo "===================================="
+          echo "XAU DESK DEPLOYED"
+          echo "===================================="
+          echo "Branch: main"
+          echo "Data  : xauusd-data.js"
+          echo "===================================="
