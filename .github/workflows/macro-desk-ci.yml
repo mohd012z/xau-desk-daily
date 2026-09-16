@@ -1,4 +1,4 @@
-name: MACRO DESK Phase 1 CI
+name: MACRO DESK CI
 
 on:
   push:
@@ -40,4 +40,11 @@ jobs:
           node --check macro/core/reaction.mjs
           node --check macro/core/feed-status.mjs
           node --check macro/adapters/snapshot-adapter.mjs
+          node --check macro/adapters/event-feed-adapter.mjs
+          node --check macro/events/event-record.mjs
+          node --check macro/events/affected-assets.mjs
+          node --check macro/events/detector.mjs
+          node --check macro/events/speech.mjs
+          node --check macro/events/event-store.mjs
+          node --check macro/events/recalculate.mjs
           node --check macro/ui/app.mjs
