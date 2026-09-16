@@ -1,9 +1,14 @@
 import { BRAND, getInstrument } from '../core/instruments.mjs';
 import { adaptSnapshot } from '../adapters/snapshot-adapter.mjs';
+import { loadHistory } from '../adapters/history-adapter.mjs';
 import { calcFxReaction, calcMetalReaction, calcDigitalReaction } from '../core/reaction.mjs';
+import { buildAdvanceModel } from '../history/advance-model.mjs';
 import { createEventStore } from '../events/event-store.mjs';
 import { ingestSnapshotEvents, startGatewayPolling } from '../adapters/event-feed-adapter.mjs';
 import { dispatchRecalculation } from '../events/recalculate.mjs';
+import { renderAndRecordTradePlan } from './trade-plan-controller.mjs';
+import { buildTradePlanInput, normalizeMarketFeedState, mergeAdvanceModelOverrides } from './trade-plan-integration.mjs';
+import { renderAdvanceModelMarkup } from './advance-model-view.mjs';
 
 const browser = typeof window !== 'undefined' && typeof document !== 'undefined';
 const $ = (s, p = document) => p.querySelector(s);
@@ -110,13 +115,71 @@ function renderSnapshot(data) {
   else list.innerHTML='<div class="empty-state">No source metadata in this snapshot.</div>';
 }
 
-function renderEventStore(store, feedState = 'SNAPSHOT') {
+function eventCandidates(event = {}) {
+  return [...new Set([
+    ...(event.affectedAssets?.primary ?? []),
+    ...(event.affectedAssets?.secondary ?? []),
+    ...(event.affectedAssets?.context ?? [])
+  ].filter(Boolean))];
+}
+
+function buildHistoricalBundle(active, data, historyState, nowUtc) {
+  if (!active) return null;
+  const overrides = window.MACRO_TRADE_PLAN ?? {};
+  const explicitSymbol = getInstrument(overrides.modelSymbol) ? overrides.modelSymbol : null;
+  const candidates = explicitSymbol ? [explicitSymbol] : eventCandidates(active).filter(symbol => getInstrument(symbol));
+  let symbol = candidates.find(candidate => data.instruments?.[candidate]?.price != null) ?? candidates[0] ?? null;
+  if (!symbol && data.instruments?.['XAU/USD']?.price != null && eventCandidates(active).includes('XAU/USD')) symbol = 'XAU/USD';
+  const explicitPrice = Number(overrides.prices?.from);
+  const snapshotPrice = symbol ? Number(data.instruments?.[symbol]?.price) : NaN;
+  const preEventPrice = Number.isFinite(explicitPrice) && explicitPrice > 0 ? explicitPrice : (Number.isFinite(snapshotPrice) && snapshotPrice > 0 ? snapshotPrice : null);
+  if (!symbol || preEventPrice == null) return { model:{state:'INSUFFICIENT_DATA',reason:'MISSING_EVENT_OR_PRICE'}, symbol, preEventPrice };
+  const features = Array.isArray(overrides.advanceFeatures) ? overrides.advanceFeatures : [];
+  const event = {...active, window:overrides.historyWindow ?? '5m'};
+  const model = buildAdvanceModel({event,symbol,preEventPrice,features,history:historyState.samples ?? [],asOfUtc:nowUtc});
+  return {model,symbol,preEventPrice};
+}
+
+function renderHistoricalModel(bundle, historyState) {
+  const host = $('#history-model-host');
+  const status = $('#history-data-status');
+  if (status) status.textContent = `${historyState.status ?? 'UNKNOWN'}${historyState.rejectedCount ? ` • ${historyState.rejectedCount} rejected` : ''}`;
+  if (!host) return;
+  host.className = '';
+  host.innerHTML = renderAdvanceModelMarkup(bundle?.model ?? {state:'INSUFFICIENT_DATA',reason:'NO_ACTIVE_EVENT'});
+}
+
+function renderTradePlan(active, marketFeedState, planHistory, overrides, reason = 'SYNC', createdAtUtc = new Date().toISOString()) {
+  const host = $('#trade-plan-host');
+  if (!host) return null;
+  const input = buildTradePlanInput({event:active,marketFeedState,overrides,nowUtc:createdAtUtc});
+  if (!input) {
+    host.className = 'empty-state';
+    host.textContent = 'No active timed event available for the MYT Trade Plan.';
+    return null;
+  }
+  host.className = '';
+  const history = planHistory.get(active.id) ?? [];
+  const sourceRevisionNumber = active.revisions?.at(-1)?.revisionNumber ?? 0;
+  const result = renderAndRecordTradePlan(host, input, {history,createdAtUtc,reason,sourceRevisionNumber});
+  planHistory.set(active.id, result.history);
+  return result.plan;
+}
+
+function renderEventStore(store, data, historyState, eventFeedState = 'SNAPSHOT', marketFeedState = 'SNAPSHOT', planHistory = new Map(), reason = 'SYNC', createdAtUtc = new Date().toISOString()) {
   const events = store.list();
   const active = events[0] ?? null;
   const view = formatEventView(active);
   $('#active-event').textContent = view.title;
   $('#active-event-meta').textContent = active ? `${view.badge} • ${view.time} • ${view.provenance}` : 'No active material event in the current feed.';
-  $('#event-feed-state').textContent = feedState;
+  $('#event-feed-state').textContent = eventFeedState;
+
+  const bundle = buildHistoricalBundle(active, data, historyState, createdAtUtc);
+  renderHistoricalModel(bundle, historyState);
+  const baseOverrides = {...(window.MACRO_TRADE_PLAN ?? {})};
+  if (bundle?.preEventPrice != null && !baseOverrides.prices) baseOverrides.prices = {from:bundle.preEventPrice};
+  const planOverrides = bundle?.model && ['READY','LOW_SAMPLE'].includes(bundle.model.state) ? mergeAdvanceModelOverrides(bundle.model, baseOverrides) : baseOverrides;
+  renderTradePlan(active, marketFeedState, planHistory, planOverrides, reason, createdAtUtc);
 
   const eventList = $('#event-list'); eventList.innerHTML = '';
   if (!events.length) eventList.innerHTML = '<div class="empty-state">No material event detected from the current snapshot.</div>';
@@ -145,8 +208,10 @@ function renderEventStore(store, feedState = 'SNAPSHOT') {
 }
 
 function showView(view) {
-  const normalized = view === 'DIGITAL' ? 'DIGITAL ASSETS' : view;
-  $$('.nav-item, .bottom-nav button').forEach(button => button.classList.toggle('active', button.dataset.view === normalized));
+  const requested = view === 'DIGITAL' ? 'DIGITAL ASSETS' : view;
+  const normalized = requested === 'MORE' ? 'BRIEF' : requested;
+  $$('.nav-item').forEach(button => button.classList.toggle('active', button.dataset.view === normalized));
+  $$('.bottom-nav button').forEach(button => button.classList.toggle('active', button.dataset.view === requested || (normalized === 'BRIEF' && button.dataset.view === 'MORE')));
   $$('[data-view-section]').forEach(section => { const tags=section.dataset.viewSection.split(/\s+/); section.classList.toggle('hidden', normalized !== 'BRIEF' && !tags.includes(normalized)); });
 }
 function bindNavigation(){ $$('.nav-item, .bottom-nav button').forEach(button => button.addEventListener('click',()=>showView(button.dataset.view))); }
@@ -155,11 +220,32 @@ function bindTheme(){ const key='macro-desk-theme'; let saved=null; try{saved=lo
 function boot() {
   const raw = window.XAUUSD_DATA ?? {}, data = adaptSnapshot(raw);
   renderSnapshot(data); renderReactionCards(); bindNavigation(); bindTheme();
-  let feedState = 'SNAPSHOT';
-  const store = createEventStore({ onUpdate(event){ dispatchRecalculation(event,{feedStatus:feedState,requestedAt:new Date().toISOString()},window); renderEventStore(store,feedState); } });
-  store.ingestMany(ingestSnapshotEvents(raw)); renderEventStore(store,feedState);
+  let eventFeedState = 'SNAPSHOT';
+  const marketFeedState = normalizeMarketFeedState(window.MACRO_MARKET_FEED_STATE ?? data.status);
+  const planHistory = new Map();
+  let historyState = {schemaVersion:'1.0',generatedAt:null,samples:[],rejectedCount:0,status:'LOADING'};
+  let store;
+  const renderCurrent = (reason='SYNC', at=new Date().toISOString()) => renderEventStore(store,data,historyState,eventFeedState,marketFeedState,planHistory,reason,at);
+  const onRecalculation = event => renderCurrent(`RECALC_${event.detail?.modelMode ?? 'UPDATE'}`, event.detail?.requestedAt ?? new Date().toISOString());
+  window.addEventListener('macrodesk:event-update', onRecalculation);
+  store = createEventStore({ onUpdate(event){
+    dispatchRecalculation(event,{feedStatus:eventFeedState,requestedAt:new Date().toISOString()},window);
+  } });
+  store.ingestMany(ingestSnapshotEvents(raw));
+  renderCurrent('SYNC');
+
+  loadHistory({url:'./data/event-history.json'}).then(result => {
+    historyState = result;
+    renderCurrent('HISTORY_LOADED');
+  });
+
   const gatewayUrl = window.MACRO_DESK_CONFIG?.eventGatewayUrl ?? null;
-  startGatewayPolling({ url: gatewayUrl, intervalMs: window.MACRO_DESK_CONFIG?.eventPollMs ?? 60000, onUpdate(candidates){ feedState='GATEWAY'; store.ingestMany(candidates); renderEventStore(store,feedState); }, onError(){ feedState='SNAPSHOT • GATEWAY ERROR'; renderEventStore(store,feedState); } });
+  startGatewayPolling({
+    url: gatewayUrl,
+    intervalMs: window.MACRO_DESK_CONFIG?.eventPollMs ?? 60000,
+    onUpdate(candidates){ eventFeedState='GATEWAY'; store.ingestMany(candidates); renderCurrent('GATEWAY_SYNC'); },
+    onError(){ eventFeedState='SNAPSHOT • GATEWAY ERROR'; renderCurrent('GATEWAY_ERROR'); }
+  });
   showView('BRIEF');
 }
 

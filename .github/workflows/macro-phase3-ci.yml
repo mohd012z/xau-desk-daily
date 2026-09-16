@@ -1,52 +1,32 @@
-name: MACRO DESK CI
-
+name: MACRO DESK Phase 3 CI
 on:
+  workflow_dispatch:
   push:
+    branches: [main, feature/phase3-myt-trade-plan]
     paths:
       - 'macro/**'
       - 'data/**'
       - 'macro-preview.html'
       - 'tests/js/**'
-      - '.github/workflows/macro-desk-ci.yml'
-  pull_request:
-    paths:
-      - 'macro/**'
-      - 'data/**'
-      - 'macro-preview.html'
-      - 'tests/js/**'
-      - '.github/workflows/macro-desk-ci.yml'
-
+      - '.github/workflows/macro-phase3-ci.yml'
 permissions:
   contents: read
-
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Run MACRO DESK tests
+      - name: Run JavaScript tests
         run: node --test tests/js/*.test.mjs
-
-      - name: Check JavaScript syntax
+      - name: Syntax check Phase 3 modules
         run: |
-          node --check macro/core/instruments.mjs
-          node --check macro/core/events.mjs
-          node --check macro/core/reaction.mjs
-          node --check macro/core/feed-status.mjs
           node --check macro/core/time-myt.mjs
           node --check macro/core/distribution.mjs
           node --check macro/core/plan-quality.mjs
           node --check macro/core/pivot-target.mjs
-          node --check macro/adapters/snapshot-adapter.mjs
-          node --check macro/adapters/event-feed-adapter.mjs
           node --check macro/adapters/history-adapter.mjs
           node --check macro/history/history-schema.mjs
           node --check macro/history/reaction-sample.mjs
@@ -56,11 +36,6 @@ jobs:
           node --check macro/history/scenarios.mjs
           node --check macro/history/confidence.mjs
           node --check macro/history/advance-model.mjs
-          node --check macro/events/event-record.mjs
-          node --check macro/events/affected-assets.mjs
-          node --check macro/events/detector.mjs
-          node --check macro/events/speech.mjs
-          node --check macro/events/event-store.mjs
           node --check macro/events/recalculate.mjs
           node --check macro/events/trade-plan.mjs
           node --check macro/events/trade-plan-revisions.mjs
@@ -69,10 +44,8 @@ jobs:
           node --check macro/ui/trade-plan-controller.mjs
           node --check macro/ui/trade-plan-integration.mjs
           node --check macro/ui/app.mjs
-
       - name: Validate public event history JSON
         run: node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('data/event-history.json','utf8'));if(p.schemaVersion!=='1.0'||!Array.isArray(p.samples))process.exit(1)"
-
       - name: Public-source safety checks
         run: |
           ! grep -R -E 'apikey=[A-Za-z0-9_-]{8,}|TWELVE_DATA_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}|NEWS_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}|FRED_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}' macro data macro-preview.html

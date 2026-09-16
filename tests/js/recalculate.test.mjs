@@ -9,3 +9,15 @@ test('recalculation contract contains event revision and affected assets without
   assert.deepEqual(req.affectedAssets.primary, ['EUR/USD']);
   assert.equal('predictedPips' in req, false);
 });
+
+test('scheduled upcoming events request ADVANCE mode', () => {
+  const req = buildRecalculationRequest({id:'evt_2', kind:'scheduled', state:'UPCOMING', eventTimeUtc:'2026-09-17T00:00:00Z', revisions:[]}, {requestedAt:'2026-09-16T12:00:00Z'});
+  assert.equal(req.modelMode, 'ADVANCE');
+});
+
+test('live or unplanned events request NOWCAST mode', () => {
+  const live = buildRecalculationRequest({id:'evt_3', kind:'scheduled', state:'LIVE', eventTimeUtc:'2026-09-16T12:00:00Z', revisions:[]}, {requestedAt:'2026-09-16T12:01:00Z'});
+  const unplanned = buildRecalculationRequest({id:'evt_4', kind:'unplanned', state:'DETECTED', eventTimeUtc:'2026-09-16T12:00:00Z', revisions:[]}, {requestedAt:'2026-09-16T12:01:00Z'});
+  assert.equal(live.modelMode, 'NOWCAST');
+  assert.equal(unplanned.modelMode, 'NOWCAST');
+});

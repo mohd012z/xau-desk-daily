@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validateAdvanceFeatures} from '../../macro/history/anti-leakage.mjs';
+test('accepts strictly pre event features',()=>{const r=validateAdvanceFeatures({eventTimeUtc:'2026-01-01T10:00:00Z',features:[{name:'atr',value:1,observedAt:'2026-01-01T09:59:59Z'}]});assert.equal(r.valid,true)});
+test('blocks exact event and post event features',()=>{const r=validateAdvanceFeatures({eventTimeUtc:'2026-01-01T10:00:00Z',features:[{name:'actual',value:3.2,observedAt:'2026-01-01T10:00:00Z'},{name:'dxyPost',value:1,observedAt:'2026-01-01T10:01:00Z'}]});assert.equal(r.valid,false);assert.equal(r.rejected.length,2);assert.ok(r.rejected.every(x=>x.reason==='NOT_PRE_EVENT'))});
