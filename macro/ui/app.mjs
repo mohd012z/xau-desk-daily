@@ -4,6 +4,8 @@ import { calcFxReaction, calcMetalReaction, calcDigitalReaction } from '../core/
 import { createEventStore } from '../events/event-store.mjs';
 import { ingestSnapshotEvents, startGatewayPolling } from '../adapters/event-feed-adapter.mjs';
 import { dispatchRecalculation } from '../events/recalculate.mjs';
+import { renderTradePlanInto } from './trade-plan-controller.mjs';
+import { buildTradePlanInput, normalizeMarketFeedState } from './trade-plan-integration.mjs';
 
 const browser = typeof window !== 'undefined' && typeof document !== 'undefined';
 const $ = (s, p = document) => p.querySelector(s);
@@ -110,13 +112,32 @@ function renderSnapshot(data) {
   else list.innerHTML='<div class="empty-state">No source metadata in this snapshot.</div>';
 }
 
-function renderEventStore(store, feedState = 'SNAPSHOT') {
+function renderTradePlan(active, marketFeedState) {
+  const host = $('#trade-plan-host');
+  if (!host) return;
+  const input = buildTradePlanInput({
+    event: active,
+    marketFeedState,
+    overrides: window.MACRO_TRADE_PLAN ?? {},
+    nowUtc: new Date().toISOString()
+  });
+  if (!input) {
+    host.className = 'empty-state';
+    host.textContent = 'No active timed event available for the MYT Trade Plan.';
+    return;
+  }
+  host.className = '';
+  renderTradePlanInto(host, input);
+}
+
+function renderEventStore(store, eventFeedState = 'SNAPSHOT', marketFeedState = 'SNAPSHOT') {
   const events = store.list();
   const active = events[0] ?? null;
   const view = formatEventView(active);
   $('#active-event').textContent = view.title;
   $('#active-event-meta').textContent = active ? `${view.badge} • ${view.time} • ${view.provenance}` : 'No active material event in the current feed.';
-  $('#event-feed-state').textContent = feedState;
+  $('#event-feed-state').textContent = eventFeedState;
+  renderTradePlan(active, marketFeedState);
 
   const eventList = $('#event-list'); eventList.innerHTML = '';
   if (!events.length) eventList.innerHTML = '<div class="empty-state">No material event detected from the current snapshot.</div>';
@@ -145,8 +166,10 @@ function renderEventStore(store, feedState = 'SNAPSHOT') {
 }
 
 function showView(view) {
-  const normalized = view === 'DIGITAL' ? 'DIGITAL ASSETS' : view;
-  $$('.nav-item, .bottom-nav button').forEach(button => button.classList.toggle('active', button.dataset.view === normalized));
+  const requested = view === 'DIGITAL' ? 'DIGITAL ASSETS' : view;
+  const normalized = requested === 'MORE' ? 'BRIEF' : requested;
+  $$('.nav-item').forEach(button => button.classList.toggle('active', button.dataset.view === normalized));
+  $$('.bottom-nav button').forEach(button => button.classList.toggle('active', button.dataset.view === requested || (normalized === 'BRIEF' && button.dataset.view === 'MORE')));
   $$('[data-view-section]').forEach(section => { const tags=section.dataset.viewSection.split(/\s+/); section.classList.toggle('hidden', normalized !== 'BRIEF' && !tags.includes(normalized)); });
 }
 function bindNavigation(){ $$('.nav-item, .bottom-nav button').forEach(button => button.addEventListener('click',()=>showView(button.dataset.view))); }
@@ -155,11 +178,12 @@ function bindTheme(){ const key='macro-desk-theme'; let saved=null; try{saved=lo
 function boot() {
   const raw = window.XAUUSD_DATA ?? {}, data = adaptSnapshot(raw);
   renderSnapshot(data); renderReactionCards(); bindNavigation(); bindTheme();
-  let feedState = 'SNAPSHOT';
-  const store = createEventStore({ onUpdate(event){ dispatchRecalculation(event,{feedStatus:feedState,requestedAt:new Date().toISOString()},window); renderEventStore(store,feedState); } });
-  store.ingestMany(ingestSnapshotEvents(raw)); renderEventStore(store,feedState);
+  let eventFeedState = 'SNAPSHOT';
+  const marketFeedState = normalizeMarketFeedState(window.MACRO_MARKET_FEED_STATE ?? data.status);
+  const store = createEventStore({ onUpdate(event){ dispatchRecalculation(event,{feedStatus:eventFeedState,requestedAt:new Date().toISOString()},window); renderEventStore(store,eventFeedState,marketFeedState); } });
+  store.ingestMany(ingestSnapshotEvents(raw)); renderEventStore(store,eventFeedState,marketFeedState);
   const gatewayUrl = window.MACRO_DESK_CONFIG?.eventGatewayUrl ?? null;
-  startGatewayPolling({ url: gatewayUrl, intervalMs: window.MACRO_DESK_CONFIG?.eventPollMs ?? 60000, onUpdate(candidates){ feedState='GATEWAY'; store.ingestMany(candidates); renderEventStore(store,feedState); }, onError(){ feedState='SNAPSHOT • GATEWAY ERROR'; renderEventStore(store,feedState); } });
+  startGatewayPolling({ url: gatewayUrl, intervalMs: window.MACRO_DESK_CONFIG?.eventPollMs ?? 60000, onUpdate(candidates){ eventFeedState='GATEWAY'; store.ingestMany(candidates); renderEventStore(store,eventFeedState,marketFeedState); }, onError(){ eventFeedState='SNAPSHOT • GATEWAY ERROR'; renderEventStore(store,eventFeedState,marketFeedState); } });
   showView('BRIEF');
 }
 
