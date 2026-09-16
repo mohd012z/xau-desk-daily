@@ -1,36 +1,10 @@
 import { formatMyt, countdownTo } from '../core/time-myt.mjs';
 import { assessPlanQuality } from '../core/plan-quality.mjs';
-
-const PRESSURE=new Set(['UP_PRESSURE','DOWN_PRESSURE','MIXED']);
-const OBSERVED=new Set(['UP','DOWN','MIXED','NOT_YET_MEASURED']);
-
-function confirmation(pressure, observed) {
-  if (observed === 'NOT_YET_MEASURED') return 'PENDING';
-  if (pressure === 'MIXED' || observed === 'MIXED') return 'PARTIAL';
-  if (pressure === 'UP_PRESSURE') return observed === 'UP' ? 'CONFIRMED' : 'DIVERGENCE';
-  if (pressure === 'DOWN_PRESSURE') return observed === 'DOWN' ? 'CONFIRMED' : 'DIVERGENCE';
-  return 'PENDING';
-}
-
-export function buildTradePlan(input={}) {
-  const pressure=PRESSURE.has(input.pressure) ? input.pressure : 'MIXED';
-  const observed=OBSERVED.has(input.observed) ? input.observed : 'NOT_YET_MEASURED';
-  return {
-    eventId:input.eventId ?? null,
-    eventName:input.eventName ?? 'Event',
-    eventTimeUtc:input.eventTimeUtc,
-    eventTimeMyt:formatMyt(input.eventTimeUtc),
-    countdown:countdownTo(input.eventTimeUtc,input.nowUtc),
-    modelState:input.modelState ?? 'ADVANCE',
-    timeSource:input.timeSource ?? 'UNKNOWN',
-    timeConfidence:input.timeConfidence ?? 'LOW',
-    affectedAssets:[...(input.affectedAssets || [])],
-    pressure,
-    observed,
-    confirmation:confirmation(pressure,observed),
-    historical:input.historical ? {...input.historical} : null,
-    prices:input.prices ? {...input.prices} : null,
-    quality:assessPlanQuality(input),
-    revisions:(input.revisions || []).map(r=>({...r}))
-  };
+import { findPivotConfluence } from '../core/pivot-target.mjs';
+const PRESSURE=new Set(['UP_PRESSURE','DOWN_PRESSURE','MIXED']); const OBSERVED=new Set(['UP','DOWN','MIXED','NOT_YET_MEASURED']);
+function confirmation(p,o){if(o==='NOT_YET_MEASURED')return'PENDING';if(p==='MIXED'||o==='MIXED')return'PARTIAL';if(p==='UP_PRESSURE')return o==='UP'?'CONFIRMED':'DIVERGENCE';if(p==='DOWN_PRESSURE')return o==='DOWN'?'CONFIRMED':'DIVERGENCE';return'PENDING';}
+export function buildTradePlan(input={}){
+ const pressure=PRESSURE.has(input.pressure)?input.pressure:'MIXED',observed=OBSERVED.has(input.observed)?input.observed:'NOT_YET_MEASURED';
+ const pivotConfluence=input.pivotContext?.levels&&input.priceBand?findPivotConfluence({pivots:input.pivotContext.levels,band:input.priceBand,pressure}):{status:'INSUFFICIENT_DATA',level:null,price:null};
+ return {eventId:input.eventId??null,eventName:input.eventName??'Event',eventTimeUtc:input.eventTimeUtc,eventTimeMyt:formatMyt(input.eventTimeUtc),countdown:countdownTo(input.eventTimeUtc,input.nowUtc),modelState:input.modelState??'ADVANCE',timeSource:input.timeSource??'UNKNOWN',timeConfidence:input.timeConfidence??'LOW',affectedAssets:[...(input.affectedAssets||[])],pressure,observed,confirmation:confirmation(pressure,observed),historical:input.historical?{...input.historical}:null,prices:input.prices?{...input.prices}:null,priceBand:input.priceBand?[...input.priceBand]:null,atrContext:input.atrContext?{...input.atrContext}:null,pivotContext:input.pivotContext?{...input.pivotContext,levels:input.pivotContext.levels?{...input.pivotContext.levels}:null}:null,pivotConfluence,quality:assessPlanQuality(input),revisions:(input.revisions||[]).map(r=>({...r}))};
 }
