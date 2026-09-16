@@ -2,6 +2,7 @@ import { detectEvent } from './detector.mjs';
 import { classifySpeechSegment, mergeSpeechRevision } from './speech.mjs';
 
 function revisionText(revision) { return revision?.rawText ?? ''; }
+function sortEvents(items) { return [...items].sort((a,b) => Date.parse(b.eventTimeUtc ?? 0) - Date.parse(a.eventTimeUtc ?? 0)); }
 
 export function createEventStore({ detectorOptions = {}, onUpdate = () => {} } = {}) {
   const map = new Map();
@@ -50,7 +51,8 @@ export function createEventStore({ detectorOptions = {}, onUpdate = () => {} } =
   return {
     ingest,
     ingestMany(candidates = []) { return candidates.map(ingest); },
-    list() { return [...map.values()].sort((a,b) => Date.parse(b.eventTimeUtc ?? 0) - Date.parse(a.eventTimeUtc ?? 0)); },
+    list() { return sortEvents([...map.values()].filter(event => event.state !== 'CLOSED')); },
+    listAll() { return sortEvents(map.values()); },
     get(id) { return map.get(id) ?? null; },
     subscribe(fn) { listeners.add(fn); return () => listeners.delete(fn); },
     clear() { map.clear(); }
