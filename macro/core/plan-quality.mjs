@@ -1,12 +1,1 @@
-export function assessPlanQuality({ effectiveSampleSize=0, timeConfidence='LOW', feedState='OFFLINE', modelAgreement='UNKNOWN' }={}) {
-  const reasons=[];
-  if (effectiveSampleSize < 20) reasons.push('LOW_SAMPLE_SIZE');
-  else if (effectiveSampleSize < 40) reasons.push('LIMITED_SAMPLE_SIZE');
-  if (String(timeConfidence).toUpperCase() === 'LOW') reasons.push('LOW_TIMESTAMP_CONFIDENCE');
-  const feed=String(feedState).toUpperCase();
-  if (feed === 'STALE') reasons.push('STALE_FEED');
-  if (feed === 'OFFLINE') reasons.push('OFFLINE_FEED');
-  if (String(modelAgreement).toUpperCase() === 'DISAGREE') reasons.push('MODEL_DISAGREEMENT');
-  const severe = reasons.some(r => ['LOW_SAMPLE_SIZE','LOW_TIMESTAMP_CONFIDENCE','STALE_FEED','OFFLINE_FEED','MODEL_DISAGREEMENT'].includes(r));
-  return { label: severe ? 'LOW' : reasons.length ? 'MODERATE' : 'HIGH', reasons };
-}
+export function assessPlanQuality({effectiveSampleSize=0,timeConfidence='LOW',feedState='OFFLINE',modelAgreement='UNKNOWN'}={}){const reasons=[],ess=Number(effectiveSampleSize);if(!Number.isFinite(ess)||ess<0)reasons.push('INVALID_EFFECTIVE_SAMPLE_SIZE');else if(ess<20)reasons.push('LOW_SAMPLE_SIZE');else if(ess<40)reasons.push('LIMITED_SAMPLE_SIZE');const tc=String(timeConfidence).toUpperCase();if(tc==='LOW')reasons.push('LOW_TIMESTAMP_CONFIDENCE');else if(!['HIGH','MEDIUM'].includes(tc))reasons.push('UNKNOWN_TIMESTAMP_CONFIDENCE');const feed=String(feedState).toUpperCase();if(feed==='SNAPSHOT')reasons.push('SNAPSHOT_FEED');else if(feed==='DELAYED')reasons.push('DELAYED_FEED');else if(feed==='MARKET CLOSED')reasons.push('MARKET_CLOSED');else if(feed==='STALE')reasons.push('STALE_FEED');else if(feed==='OFFLINE')reasons.push('OFFLINE_FEED');else if(feed!=='STREAMING')reasons.push('UNKNOWN_FEED_STATE');const agreement=String(modelAgreement).toUpperCase();if(agreement==='DISAGREE')reasons.push('MODEL_DISAGREEMENT');else if(agreement!=='AGREE')reasons.push('UNKNOWN_MODEL_AGREEMENT');const severe=reasons.some(r=>['INVALID_EFFECTIVE_SAMPLE_SIZE','LOW_SAMPLE_SIZE','LOW_TIMESTAMP_CONFIDENCE','STALE_FEED','OFFLINE_FEED','MODEL_DISAGREEMENT'].includes(r));return{label:severe?'LOW':reasons.length?'MODERATE':'HIGH',reasons};}
