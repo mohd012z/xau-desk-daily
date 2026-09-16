@@ -1,0 +1,43 @@
+name: MACRO DESK Phase 1 CI
+
+on:
+  push:
+    paths:
+      - 'macro/**'
+      - 'macro-preview.html'
+      - 'tests/js/**'
+      - '.github/workflows/macro-desk-ci.yml'
+  pull_request:
+    paths:
+      - 'macro/**'
+      - 'macro-preview.html'
+      - 'tests/js/**'
+      - '.github/workflows/macro-desk-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run MACRO DESK tests
+        run: node --test tests/js/*.test.mjs
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check macro/core/instruments.mjs
+          node --check macro/core/events.mjs
+          node --check macro/core/reaction.mjs
+          node --check macro/core/feed-status.mjs
+          node --check macro/adapters/snapshot-adapter.mjs
+          node --check macro/ui/app.mjs
