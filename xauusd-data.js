@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-16T12:01:54+08:00",
+    "generatedAt": "2026-09-17T09:22:02+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -13,38 +13,38 @@ window.XAUUSD_DATA = {
       "xau": {
         "ok": true,
         "label": "Twelve Data XAU/USD",
-        "detail": "latest daily bar 2026-09-16",
-        "timestamp": "2026-09-16T12:01:54+08:00"
+        "detail": "latest daily bar 2026-09-17",
+        "timestamp": "2026-09-17T09:22:03+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-16T12:01:55+08:00"
+        "timestamp": "2026-09-17T09:22:03+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
         "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
-        "timestamp": "2026-09-16T12:02:04+08:00"
+        "timestamp": "2026-09-17T09:22:11+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
-        "detail": "latest 2026-09-14",
-        "timestamp": "2026-09-16T12:02:08+08:00"
+        "detail": "latest 2026-09-15",
+        "timestamp": "2026-09-17T09:22:12+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
         "detail": "8 recent items",
-        "timestamp": "2026-09-16T12:02:08+08:00"
+        "timestamp": "2026-09-17T09:22:12+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-16T12:02:08+08:00"
+        "timestamp": "2026-09-17T09:22:12+08:00"
       }
     },
     "warnings": [
@@ -52,17 +52,17 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-16 12:01 MYT",
+  "updated": "2026-09-17 09:22 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4327.23,
-    "change": 33.44,
-    "changePct": 0.78,
-    "dayRange": "4,275.88 - 4,339.71",
-    "monthPct": -5.82,
-    "yearPct": 0.28,
+    "spot": 4305.74,
+    "change": 41.68,
+    "changePct": 0.98,
+    "dayRange": "4,256.66 - 4,309.42",
+    "monthPct": -6.43,
+    "yearPct": -0.22,
     "ath": 5597.23,
-    "note": "Latest provider daily bar: 2026-09-16; rolling history used: 370 bars"
+    "note": "Latest provider daily bar: 2026-09-17; rolling history used: 370 bars"
   },
   "macro": [
     {
@@ -74,10 +74,10 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "US 10Y",
-      "value": "4.970%",
-      "delta": "+1.0 bp",
+      "value": "5.000%",
+      "delta": "+3.0 bp",
       "tone": "bad",
-      "note": "FRED DGS10 · 2026-09-14"
+      "note": "FRED DGS10 · 2026-09-15"
     },
     {
       "label": "Brent",
@@ -90,7 +90,7 @@ window.XAUUSD_DATA = {
   "sentiment": {
     "bias": "MIXED",
     "goldTone": "NEUTRAL",
-    "score": 0.026,
+    "score": -0.086,
     "confidence": 69,
     "summary": "Mechanical daily pressure model using sourced USD/yield moves plus a small observed XAU-momentum term. It is not a forecast or trade instruction.",
     "netSpeechSignal": "NEUTRAL",
@@ -134,81 +134,81 @@ window.XAUUSD_DATA = {
   },
   "news": [
     {
-      "time": "2026-09-15 04:01 UTC",
-      "title": "‘Grow Our Way Out of Debt’ Is Code for Inflation",
-      "summary": "Last week, Treasury Secretary Scott Bessent sat down for a fireside chat at Southern Methodist University in Dallas and told the room what the plan is for the national debt. “We don’t have a revenue problem,” he said. “We have a spending problem.” Contain the…",
-      "source": "Lewrockwell.com",
-      "url": "https://www.lewrockwell.com/2026/09/no_author/grow-our-way-out-of-debt-is-code-for-inflation/",
+      "time": "2026-09-16 01:00 UTC",
+      "title": "Is an affordable style “winter” coming?",
+      "summary": "Is the era of finding affordable, good looking clothes, shoes and watches coming to an end?",
+      "source": "Dappered.com",
+      "url": "https://dappered.com/2026/09/is-an-affordable-style-winter-coming/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-15 04:00 UTC",
-      "title": "HP OmniDesk Mini Shrinks a Windows Desktop Into a Mac mini-Sized Box",
-      "summary": "A full-size desktop still makes sense when you need a powerful GPU, lots of expansion, or room for future upgrades. But if most of your day involves browser tabs, Office apps, video calls, streaming, and general productivity, a tower can feel like a lot of co…",
-      "source": "The Gadgeteer",
-      "url": "https://the-gadgeteer.com/2026/09/14/hp-omnidesk-mini-mac-mini-sized-windows-pc/",
+      "time": "2026-09-16 01:00 UTC",
+      "title": "Wo Long 2: Wings of Ember Hides New Mechanics Under Layers of Familiarity (Preview)",
+      "summary": "Image Courtesy of Koei Tecmo\n\nTeam Ninja can’t stop or won’t stop — it’s not clear — but, regardless of the impetus, the result is an onslaught of Soulslikes. With each new release and the expansions that trickle out in the follwow, something from this side o…",
+      "source": "ComicBook.com",
+      "url": "http://comicbook.com/gaming/feature/wo-long-2-wings-of-ember-hides-new-mechanics-under-layers-of-familiarity-preview/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-15 03:56 UTC",
-      "title": "What a Fed rate hike could mean for gold and silver prices",
-      "summary": "Gold and silver investors have had to contend with some so far in 2026. Gold, for example, surpassed $5,500 per ounce early this year, but has since retreated significantly from that record high, with sitting closer to $4,275 per ounce as of mid-September. Si…",
-      "source": "Biztoc.com",
-      "url": "https://biztoc.com/x/d04d550ea955f3ba",
+      "time": "2026-09-16 00:55 UTC",
+      "title": "Turkish habit of stashing gold \"under the pillow' hurts economy, government says",
+      "summary": "For years, Turks have stashed their gold at home against a raining day, mistrustful of banks. Now the government says that tradition hurts the economy",
+      "source": "NPR",
+      "url": "https://www.npr.org/2026/09/15/g-s1-143414/turkey-gold-economy",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-16 00:46 UTC",
+      "title": "Treasury Rethinks AML Rules for Banks That Know Their Customers",
+      "summary": "Treasury may raise longstanding bank reporting thresholds and take into account how long financial institutions have known their customers, Treasury Secretary Scott Bessent told lawmakers Tuesday (Sept. 15). House Financial Services Committee Chairman French …",
+      "source": "pymnts.com",
+      "url": "https://www.pymnts.com/legal/bank-regulation/2026/treasury-rethinks-aml-rules-for-banks-that-know-their-customers/",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-16 00:45 UTC",
+      "title": "Hundreds of tons of gold moved from NY Fed to Bank of England amid China buying spree",
+      "summary": "The gold transfer may signal shifting economic power dynamics, influencing global market stability and central bank strategies.\nThe post Hundreds of tons of gold moved from NY Fed to Bank of England amid China buying spree appeared first on Crypto Briefing.",
+      "source": "Crypto Briefing",
+      "url": "https://cryptobriefing.com/hundreds-of-tons-of-gold-moved-from-ny-fed-to-bank-of-england-amid-china-buying/",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-16 00:00 UTC",
+      "title": "Gold Steadies Below $4,300 as Markets Await Fed Rate Decision",
+      "summary": "Gold was steady as high oil prices continued to fuel inflation concerns and keep interest-rate hike bets a near-certainty ahead of the Federal Reserve's poli...",
+      "source": "Yahoo Entertainment",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-steadies-below-4-300-000015450.html",
       "impact": "bearish",
       "signal": "DOWN",
       "impactPct": null
     },
     {
-      "time": "2026-09-15 03:39 UTC",
-      "title": "Emmys 2026 review: ‘Widow’s Bay’ sweeps an uneven night with over-the-top host Mariska Hargitay",
-      "summary": "\"Widow's Bay\" swept, \"The Pitt\" won big, but not as big as expected, and Mariska Hargitay was an over-the-top host of the 2026 Emmys.",
-      "source": "Page Six",
-      "url": "https://pagesix.com/2026/09/14/entertainment/emmys-2026-review-widows-bay-sweeps-an-uneven-night-with-over-the-top-host-mariska-hargitay/",
+      "time": "2026-09-16 00:00 UTC",
+      "title": "Nvidia RTX 5090 GPU prices skyrocket to $9,000 — as fresh RTX 6000 rumor suggests a 2027 launch that fills me with dread",
+      "summary": "The RTX 5090 keeps getting pricier somehow, so who knows how much the next-gen flagship will cost.",
+      "source": "TechRadar",
+      "url": "https://www.techradar.com/computing/gpu/nvidia-rtx-5090-gpu-prices-skyrocket-to-usd9-000-as-fresh-rtx-6000-rumor-suggests-a-2027-launch-that-fills-me-with-dread",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-15 03:00 UTC",
-      "title": "48 Legal Excuses So Ridiculous Even Lawyers Could Barely Believe Them",
-      "summary": "Being a lawyer can be incredibly stressful. Going before a judge and defending important clients comes with a lot of pressure. But sometimes, the hardest part is just keeping your client from saying something stupid. Lawyers have been recalling the most absur…",
-      "source": "Boredpanda.com",
-      "url": "https://www.boredpanda.com/most-absurd-legal-justifications/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-15 03:00 UTC",
-      "title": "China buying twice more gold than officially reported amid surge in central bank purchases",
-      "summary": "China's undisclosed gold purchases may signal a strategic reserve shift, potentially impacting global gold prices and market dynamics.\nThe post China buying twice more gold than officially reported amid surge in central bank purchases appeared first on Crypto…",
-      "source": "Crypto Briefing",
-      "url": "https://cryptobriefing.com/china-buying-twice-more-gold-than-officially-reported-amid-surge-in-central/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-15 02:57 UTC",
-      "title": "Asian shares slip as oil and yields rise ahead of Fed, BOJ meetings",
-      "summary": "Asian equities struggled as investors assessed rising oil prices, West Asia tensions and concerns over AI development ahead of key US and Japan central bank meetings",
-      "source": "Business Standard",
-      "url": "https://www.business-standard.com/markets/news/asian-shares-slip-as-oil-and-yields-rise-ahead-of-fed-boj-meetings-126091500073_1.html",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-15 02:53 UTC",
-      "title": "Oil and Treasury yields haven’t moved this closely in seven years. That’s bad news for markets",
-      "summary": "Oil and 10-year Treasury yields are moving in near lockstep, with their correlation at its strongest since 2019.",
-      "source": "CNBC",
-      "url": "https://www.cnbc.com/2026/09/15/oil-us-treasurys-stocks-pressure.html",
+      "time": "2026-09-16 00:00 UTC",
+      "title": "Reimagining research papers as interactive and reliable AI agents",
+      "summary": "Paper2Agent converts research papers into interactive artificial intelligence agents by turning manuscripts, code and data into model context protocol-based tool-invoking systems that reproduce original results, answer new scientific queries and collaborate t…",
+      "source": "Nature.com",
+      "url": "https://www.nature.com/articles/s41586-026-11044-y",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
@@ -308,16 +308,16 @@ window.XAUUSD_DATA = {
   ],
   "levels": {
     "resistance": [
-      4320.92,
-      4348.05,
-      4378.49,
-      4637.17
+      4336.31,
+      4408.55,
+      4457.52,
+      4514.11
     ],
     "support": [
-      4263.35,
-      4253.79,
-      4232.91,
-      4205.78
+      4238.37,
+      4215.1,
+      4166.12,
+      4093.88
     ],
     "note": "Classic pivot levels from previous daily OHLC plus recent 20-day extreme; mechanical, not guarantees."
   },
@@ -325,27 +325,23 @@ window.XAUUSD_DATA = {
   "pressure": [
     {
       "label": "US 10Y daily move",
-      "level": "+1.0 bp",
-      "w": 8,
+      "level": "+3.0 bp",
+      "w": 25,
       "dir": "down"
     },
     {
       "label": "Observed XAU momentum",
-      "level": "+0.78%",
-      "w": 51,
+      "level": "+0.98%",
+      "w": 65,
       "dir": "up"
     }
   ],
   "priceSeries": {
     "label": "XAU/USD daily close (Twelve Data)",
     "unit": "USD / troy oz",
-    "yMin": 4272.2,
-    "yMax": 4495.39,
+    "yMin": 4244.15,
+    "yMax": 4449.98,
     "points": [
-      {
-        "x": "2026-09-03",
-        "y": 4473.79
-      },
       {
         "x": "2026-09-04",
         "y": 4430.06
@@ -396,7 +392,11 @@ window.XAUUSD_DATA = {
       },
       {
         "x": "2026-09-16",
-        "y": 4327.23
+        "y": 4264.07
+      },
+      {
+        "x": "2026-09-17",
+        "y": 4305.74
       }
     ]
   },
@@ -407,7 +407,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-16",
+        "x": "2026-09-17",
         "y": 0
       }
     ]
@@ -419,7 +419,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-16",
+        "x": "2026-09-17",
         "y": 0
       }
     ]
