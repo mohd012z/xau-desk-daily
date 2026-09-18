@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-17T09:22:02+08:00",
+    "generatedAt": "2026-09-18T09:15:58+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -13,38 +13,38 @@ window.XAUUSD_DATA = {
       "xau": {
         "ok": true,
         "label": "Twelve Data XAU/USD",
-        "detail": "latest daily bar 2026-09-17",
-        "timestamp": "2026-09-17T09:22:03+08:00"
+        "detail": "latest daily bar 2026-09-18",
+        "timestamp": "2026-09-18T09:15:58+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-17T09:22:03+08:00"
+        "timestamp": "2026-09-18T09:15:58+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
         "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
-        "timestamp": "2026-09-17T09:22:11+08:00"
+        "timestamp": "2026-09-18T09:16:07+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
-        "detail": "latest 2026-09-15",
-        "timestamp": "2026-09-17T09:22:12+08:00"
+        "detail": "latest 2026-09-16",
+        "timestamp": "2026-09-18T09:16:07+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
-        "detail": "8 recent items",
-        "timestamp": "2026-09-17T09:22:12+08:00"
+        "detail": "6 recent items",
+        "timestamp": "2026-09-18T09:16:07+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-17T09:22:12+08:00"
+        "timestamp": "2026-09-18T09:16:07+08:00"
       }
     },
     "warnings": [
@@ -52,17 +52,17 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-17 09:22 MYT",
+  "updated": "2026-09-18 09:15 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4305.74,
-    "change": 41.68,
-    "changePct": 0.98,
-    "dayRange": "4,256.66 - 4,309.42",
-    "monthPct": -6.43,
-    "yearPct": -0.22,
+    "spot": 4358.78,
+    "change": 16.87,
+    "changePct": 0.39,
+    "dayRange": "4,340.89 - 4,365.43",
+    "monthPct": -2.19,
+    "yearPct": 1.01,
     "ath": 5597.23,
-    "note": "Latest provider daily bar: 2026-09-17; rolling history used: 370 bars"
+    "note": "Latest provider daily bar: 2026-09-18; rolling history used: 370 bars"
   },
   "macro": [
     {
@@ -74,10 +74,10 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "US 10Y",
-      "value": "5.000%",
-      "delta": "+3.0 bp",
+      "value": "5.010%",
+      "delta": "+1.0 bp",
       "tone": "bad",
-      "note": "FRED DGS10 · 2026-09-15"
+      "note": "FRED DGS10 · 2026-09-16"
     },
     {
       "label": "Brent",
@@ -90,7 +90,7 @@ window.XAUUSD_DATA = {
   "sentiment": {
     "bias": "MIXED",
     "goldTone": "NEUTRAL",
-    "score": -0.086,
+    "score": -0.021,
     "confidence": 69,
     "summary": "Mechanical daily pressure model using sourced USD/yield moves plus a small observed XAU-momentum term. It is not a forecast or trade instruction.",
     "netSpeechSignal": "NEUTRAL",
@@ -134,81 +134,61 @@ window.XAUUSD_DATA = {
   },
   "news": [
     {
-      "time": "2026-09-16 01:00 UTC",
-      "title": "Is an affordable style “winter” coming?",
-      "summary": "Is the era of finding affordable, good looking clothes, shoes and watches coming to an end?",
-      "source": "Dappered.com",
-      "url": "https://dappered.com/2026/09/is-an-affordable-style-winter-coming/",
+      "time": "2026-09-17 01:00 UTC",
+      "title": "Global Market Today: Asian stocks tick higher as markets weigh further Fed hikes",
+      "summary": "In a strategic shift, the Federal Reserve raised interest rates by 0.25%, aiming to address ongoing inflation challenges. This decision led to a dip in Asian sovereign bonds and the dollar, while gold maintained its losses. Interestingly, Asian stock markets …",
+      "source": "The Times of India",
+      "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/global-market-today-asian-stocks-tick-higher-as-markets-weigh-further-fed-hikes/articleshow/134297050.cms",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-16 01:00 UTC",
-      "title": "Wo Long 2: Wings of Ember Hides New Mechanics Under Layers of Familiarity (Preview)",
-      "summary": "Image Courtesy of Koei Tecmo\n\nTeam Ninja can’t stop or won’t stop — it’s not clear — but, regardless of the impetus, the result is an onslaught of Soulslikes. With each new release and the expansions that trickle out in the follwow, something from this side o…",
-      "source": "ComicBook.com",
-      "url": "http://comicbook.com/gaming/feature/wo-long-2-wings-of-ember-hides-new-mechanics-under-layers-of-familiarity-preview/",
+      "time": "2026-09-16 21:06 UTC",
+      "title": "Trading Day: Lift off!",
+      "summary": "ORLANDO, Florida, Sept 16 : The U.S. Federal Reserve raised interest rates on Wednesday for the first time in more than three years and signaled more tightening lies ahead, triggering a sharp rise in the dollar, a slump in the Dow and S&P 500, and a significa…",
+      "source": "CNA",
+      "url": "https://www.channelnewsasia.com/business/trading-day-lift-6390266",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-16 00:55 UTC",
-      "title": "Turkish habit of stashing gold \"under the pillow' hurts economy, government says",
-      "summary": "For years, Turks have stashed their gold at home against a raining day, mistrustful of banks. Now the government says that tradition hurts the economy",
-      "source": "NPR",
-      "url": "https://www.npr.org/2026/09/15/g-s1-143414/turkey-gold-economy",
+      "time": "2026-09-16 20:50 UTC",
+      "title": "Biden Pardoned Maduro's Fixer. He Just Pleaded Guilty to New Charges and Agreed To Forfeit $195 Million.",
+      "summary": "Alex Saab admitted to profiting from food and medicine contracts and agreed to cooperate with prosecutors.",
+      "source": "Reason",
+      "url": "https://reason.com/2026/09/16/biden-pardoned-maduros-fixer-he-just-pleaded-guilty-to-new-charges-and-agreed-to-forfeit-195-million/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-16 00:46 UTC",
-      "title": "Treasury Rethinks AML Rules for Banks That Know Their Customers",
-      "summary": "Treasury may raise longstanding bank reporting thresholds and take into account how long financial institutions have known their customers, Treasury Secretary Scott Bessent told lawmakers Tuesday (Sept. 15). House Financial Services Committee Chairman French …",
-      "source": "pymnts.com",
-      "url": "https://www.pymnts.com/legal/bank-regulation/2026/treasury-rethinks-aml-rules-for-banks-that-know-their-customers/",
+      "time": "2026-09-16 20:09 UTC",
+      "title": "Gold falls more than 1% after Fed hikes interest rates",
+      "summary": "Gold prices fall more than 1% after the US Federal Reserve raises interest rates and signals further hikes, pushing the dollar higher and weighing on non-yielding bullion. Spot gold drops to $4,240.10 an ounce after hitting a session high of $4,365.57, while …",
+      "source": "The Times of India",
+      "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/gold-falls-more-than-1-after-fed-hikes-interest-rates/articleshow/134296279.cms",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-16 00:45 UTC",
-      "title": "Hundreds of tons of gold moved from NY Fed to Bank of England amid China buying spree",
-      "summary": "The gold transfer may signal shifting economic power dynamics, influencing global market stability and central bank strategies.\nThe post Hundreds of tons of gold moved from NY Fed to Bank of England amid China buying spree appeared first on Crypto Briefing.",
-      "source": "Crypto Briefing",
-      "url": "https://cryptobriefing.com/hundreds-of-tons-of-gold-moved-from-ny-fed-to-bank-of-england-amid-china-buying/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-16 00:00 UTC",
-      "title": "Gold Steadies Below $4,300 as Markets Await Fed Rate Decision",
-      "summary": "Gold was steady as high oil prices continued to fuel inflation concerns and keep interest-rate hike bets a near-certainty ahead of the Federal Reserve's poli...",
-      "source": "Yahoo Entertainment",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-steadies-below-4-300-000015450.html",
+      "time": "2026-09-16 19:43 UTC",
+      "title": "Fed Chair Implies Trump Is Only Half Right on the Economy Following Rate Hike",
+      "summary": "Chair Kevin Warsh credited Trump's economy, then ignored his rate-cut wishes entirely.",
+      "source": "Decrypt",
+      "url": "https://decrypt.co/378433/fed-hikes-rates-warsh-implies-trump-only-half-right",
       "impact": "bearish",
       "signal": "DOWN",
       "impactPct": null
     },
     {
-      "time": "2026-09-16 00:00 UTC",
-      "title": "Nvidia RTX 5090 GPU prices skyrocket to $9,000 — as fresh RTX 6000 rumor suggests a 2027 launch that fills me with dread",
-      "summary": "The RTX 5090 keeps getting pricier somehow, so who knows how much the next-gen flagship will cost.",
-      "source": "TechRadar",
-      "url": "https://www.techradar.com/computing/gpu/nvidia-rtx-5090-gpu-prices-skyrocket-to-usd9-000-as-fresh-rtx-6000-rumor-suggests-a-2027-launch-that-fills-me-with-dread",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-16 00:00 UTC",
-      "title": "Reimagining research papers as interactive and reliable AI agents",
-      "summary": "Paper2Agent converts research papers into interactive artificial intelligence agents by turning manuscripts, code and data into model context protocol-based tool-invoking systems that reproduce original results, answer new scientific queries and collaborate t…",
-      "source": "Nature.com",
-      "url": "https://www.nature.com/articles/s41586-026-11044-y",
+      "time": "2026-09-16 19:40 UTC",
+      "title": "Tether emerges as major bullion lender with $1.5 billion Gold.com financing",
+      "summary": "Tether's strategic moves in gold financing and accumulation could reshape market dynamics, influencing both stablecoin reserves and gold trade.\nThe post Tether emerges as major bullion lender with $1.5 billion Gold.com financing appeared first on Crypto Brief…",
+      "source": "Crypto Briefing",
+      "url": "https://cryptobriefing.com/tether-2-billion-financing-gold-dealer/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
@@ -308,16 +288,16 @@ window.XAUUSD_DATA = {
   ],
   "levels": {
     "resistance": [
-      4336.31,
-      4408.55,
-      4457.52,
-      4514.11
+      4395.91,
+      4449.91,
+      4514.11,
+      4519.54
     ],
     "support": [
+      4272.28,
       4238.37,
-      4215.1,
-      4166.12,
-      4093.88
+      4202.66,
+      4148.65
     ],
     "note": "Classic pivot levels from previous daily OHLC plus recent 20-day extreme; mechanical, not guarantees."
   },
@@ -325,27 +305,23 @@ window.XAUUSD_DATA = {
   "pressure": [
     {
       "label": "US 10Y daily move",
-      "level": "+3.0 bp",
-      "w": 25,
+      "level": "+1.0 bp",
+      "w": 8,
       "dir": "down"
     },
     {
       "label": "Observed XAU momentum",
-      "level": "+0.98%",
-      "w": 65,
+      "level": "+0.39%",
+      "w": 25,
       "dir": "up"
     }
   ],
   "priceSeries": {
     "label": "XAU/USD daily close (Twelve Data)",
     "unit": "USD / troy oz",
-    "yMin": 4244.15,
-    "yMax": 4449.98,
+    "yMin": 4244.27,
+    "yMax": 4448.83,
     "points": [
-      {
-        "x": "2026-09-04",
-        "y": 4430.06
-      },
       {
         "x": "2026-09-05",
         "y": 4429.03
@@ -396,7 +372,11 @@ window.XAUUSD_DATA = {
       },
       {
         "x": "2026-09-17",
-        "y": 4305.74
+        "y": 4341.9
+      },
+      {
+        "x": "2026-09-18",
+        "y": 4358.78
       }
     ]
   },
@@ -407,7 +387,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-17",
+        "x": "2026-09-18",
         "y": 0
       }
     ]
@@ -419,7 +399,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-17",
+        "x": "2026-09-18",
         "y": 0
       }
     ]
