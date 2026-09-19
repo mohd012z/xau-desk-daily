@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-18T09:15:58+08:00",
+    "generatedAt": "2026-09-19T09:09:04+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -13,38 +13,38 @@ window.XAUUSD_DATA = {
       "xau": {
         "ok": true,
         "label": "Twelve Data XAU/USD",
-        "detail": "latest daily bar 2026-09-18",
-        "timestamp": "2026-09-18T09:15:58+08:00"
+        "detail": "latest daily bar 2026-09-19",
+        "timestamp": "2026-09-19T09:09:04+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-18T09:15:58+08:00"
+        "timestamp": "2026-09-19T09:09:04+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
         "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
-        "timestamp": "2026-09-18T09:16:07+08:00"
+        "timestamp": "2026-09-19T09:09:13+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
-        "detail": "latest 2026-09-16",
-        "timestamp": "2026-09-18T09:16:07+08:00"
+        "detail": "latest 2026-09-17",
+        "timestamp": "2026-09-19T09:09:13+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
-        "detail": "6 recent items",
-        "timestamp": "2026-09-18T09:16:07+08:00"
+        "detail": "8 recent items",
+        "timestamp": "2026-09-19T09:09:13+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-18T09:16:07+08:00"
+        "timestamp": "2026-09-19T09:09:13+08:00"
       }
     },
     "warnings": [
@@ -52,17 +52,17 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-18 09:15 MYT",
+  "updated": "2026-09-19 09:09 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4358.78,
-    "change": 16.87,
-    "changePct": 0.39,
-    "dayRange": "4,340.89 - 4,365.43",
-    "monthPct": -2.19,
-    "yearPct": 1.01,
+    "spot": 4380.13,
+    "change": 2.88,
+    "changePct": 0.07,
+    "dayRange": "4,377.84 - 4,380.25",
+    "monthPct": -1.77,
+    "yearPct": 1.51,
     "ath": 5597.23,
-    "note": "Latest provider daily bar: 2026-09-18; rolling history used: 370 bars"
+    "note": "Latest provider daily bar: 2026-09-19; rolling history used: 370 bars"
   },
   "macro": [
     {
@@ -74,10 +74,10 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "US 10Y",
-      "value": "5.010%",
-      "delta": "+1.0 bp",
-      "tone": "bad",
-      "note": "FRED DGS10 · 2026-09-16"
+      "value": "4.940%",
+      "delta": "-7.0 bp",
+      "tone": "good",
+      "note": "FRED DGS10 · 2026-09-17"
     },
     {
       "label": "Brent",
@@ -88,12 +88,12 @@ window.XAUUSD_DATA = {
     }
   ],
   "sentiment": {
-    "bias": "MIXED",
-    "goldTone": "NEUTRAL",
-    "score": -0.021,
+    "bias": "UPWARD",
+    "goldTone": "BULLISH",
+    "score": 0.485,
     "confidence": 69,
     "summary": "Mechanical daily pressure model using sourced USD/yield moves plus a small observed XAU-momentum term. It is not a forecast or trade instruction.",
-    "netSpeechSignal": "NEUTRAL",
+    "netSpeechSignal": "UP",
     "netSpeechPct": 0.0,
     "netNote": "Direction only. No fabricated percentage impact is assigned to headlines or speeches."
   },
@@ -134,67 +134,117 @@ window.XAUUSD_DATA = {
   },
   "news": [
     {
-      "time": "2026-09-17 01:00 UTC",
-      "title": "Global Market Today: Asian stocks tick higher as markets weigh further Fed hikes",
-      "summary": "In a strategic shift, the Federal Reserve raised interest rates by 0.25%, aiming to address ongoing inflation challenges. This decision led to a dip in Asian sovereign bonds and the dollar, while gold maintained its losses. Interestingly, Asian stock markets …",
+      "time": "2026-09-18 00:54 UTC",
+      "title": "Global Market Today: Asian stocks, bonds gain as oil extends decline",
+      "summary": "MSCI’s regional equities gauge advanced 0.3% with South Korea’s Kospi index leading gains. That came after the S&P 500 Index rose 1.1% on Thursday, its biggest advance since early August. The tech-heavy Nasdaq 100 Index climbed 1.7%, while a key gauge of chip…",
       "source": "The Times of India",
-      "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/global-market-today-asian-stocks-tick-higher-as-markets-weigh-further-fed-hikes/articleshow/134297050.cms",
+      "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/global-market-today-asian-stocks-bonds-gain-as-oil-extends-decline/articleshow/134323537.cms",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-16 21:06 UTC",
-      "title": "Trading Day: Lift off!",
-      "summary": "ORLANDO, Florida, Sept 16 : The U.S. Federal Reserve raised interest rates on Wednesday for the first time in more than three years and signaled more tightening lies ahead, triggering a sharp rise in the dollar, a slump in the Dow and S&P 500, and a significa…",
-      "source": "CNA",
-      "url": "https://www.channelnewsasia.com/business/trading-day-lift-6390266",
+      "time": "2026-09-18 00:37 UTC",
+      "title": "YouTube Canada reveals new creator slate, touts exclusivity as talent war heats up",
+      "summary": "YouTube Canada has unveiled a slate of nine creator-led shows spanning comedy, food, sport, lifestyle and culture at a YouTube Features presentation in Toronto. The slate includes projects from Olympic...",
+      "source": "C21media.net",
+      "url": "https://www.c21media.net/news/youtube-canada-reveals-new-creator-slate-touts-exclusivity-as-talent-war-heats-up/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-16 20:50 UTC",
-      "title": "Biden Pardoned Maduro's Fixer. He Just Pleaded Guilty to New Charges and Agreed To Forfeit $195 Million.",
-      "summary": "Alex Saab admitted to profiting from food and medicine contracts and agreed to cooperate with prosecutors.",
-      "source": "Reason",
-      "url": "https://reason.com/2026/09/16/biden-pardoned-maduros-fixer-he-just-pleaded-guilty-to-new-charges-and-agreed-to-forfeit-195-million/",
+      "time": "2026-09-18 00:01 UTC",
+      "title": "Trump seen looking at plans for Kennedy Center demolition",
+      "summary": "A judge has blocked any immediate efforts to destroy the Kennedy Center, after Donald Trump was photographed through the windows of Air Force One appearing to look at plans for the building's demolition.",
+      "source": "ABC News (AU)",
+      "url": "https://www.abc.net.au/news/2026-09-18/donald-trump-kennedy-center-demolition-plan-photo/107167248",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-16 20:09 UTC",
-      "title": "Gold falls more than 1% after Fed hikes interest rates",
-      "summary": "Gold prices fall more than 1% after the US Federal Reserve raises interest rates and signals further hikes, pushing the dollar higher and weighing on non-yielding bullion. Spot gold drops to $4,240.10 an ounce after hitting a session high of $4,365.57, while …",
-      "source": "The Times of India",
-      "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/gold-falls-more-than-1-after-fed-hikes-interest-rates/articleshow/134296279.cms",
+      "time": "2026-09-17 23:18 UTC",
+      "title": "Breitbart Business Digest: The Dollar Is Still King",
+      "summary": "The New York Times imagines that Trump has abdicated global economic leadership or that the rest of the world is staging a coup. Nothing like that is happening. The dollar remains king.\nThe post Breitbart Business Digest: The Dollar Is Still King appeared fir…",
+      "source": "Breitbart News",
+      "url": "https://www.breitbart.com/economy/2026/09/17/breitbart-business-digest-the-dollar-is-still-king/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-16 19:43 UTC",
-      "title": "Fed Chair Implies Trump Is Only Half Right on the Economy Following Rate Hike",
-      "summary": "Chair Kevin Warsh credited Trump's economy, then ignored his rate-cut wishes entirely.",
-      "source": "Decrypt",
-      "url": "https://decrypt.co/378433/fed-hikes-rates-warsh-implies-trump-only-half-right",
-      "impact": "bearish",
-      "signal": "DOWN",
+      "time": "2026-09-17 23:05 UTC",
+      "title": "RTX 5090s are going for as much as $9000, as AI server builders reportedly buy Nvidia's flagship by the pallet, but the photos behind the story may be AI-generated",
+      "summary": "AI firms are reportedly buying RTX 5090s by the pallet, which Nvidia's own driver license has prohibited since 2017.",
+      "source": "TechRadar",
+      "url": "https://www.techradar.com/pro/rtx-5090s-are-going-for-as-much-as-usd9000-as-ai-server-builders-reportedly-buy-nvidias-flagship-by-the-pallet-but-the-photos-behind-the-story-may-be-ai-generated",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-16 19:40 UTC",
-      "title": "Tether emerges as major bullion lender with $1.5 billion Gold.com financing",
-      "summary": "Tether's strategic moves in gold financing and accumulation could reshape market dynamics, influencing both stablecoin reserves and gold trade.\nThe post Tether emerges as major bullion lender with $1.5 billion Gold.com financing appeared first on Crypto Brief…",
-      "source": "Crypto Briefing",
-      "url": "https://cryptobriefing.com/tether-2-billion-financing-gold-dealer/",
+      "time": "2026-09-17 22:31 UTC",
+      "title": "Which New Apple Watch Is Worth the Upgrade?",
+      "summary": "Big updates to health tracking are pushing Apple to challenge for the wearable crown.",
+      "source": "esquire.com",
+      "url": "https://www.esquire.com/lifestyle/tech/a73773598/apple-watch-2026-review/",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-17 22:28 UTC",
+      "title": "Crypto Options Approach Half of Bitcoin Derivatives Market as Bybit Captures 28% of Tracked Volume, Glassnode Report Finds",
+      "summary": "New Glassnode x Bybit research highlights structural shift toward options, with Bybit leading tracked Ether options for 143 consecutive days and tokenized gold perpetuals for 476 days DUBAI, UAE, Sept. 17, 2026 /PRNewswire/ -- Crypto derivatives markets are b…",
+      "source": "PRNewswire",
+      "url": "https://www.prnewswire.com/news-releases/crypto-options-approach-half-of-bitcoin-derivatives-market-as-bybit-captures-28-of-tracked-volume-glassnode-report-finds-302882690.html",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-17 21:48 UTC",
+      "title": "How to Write with an LLM",
+      "summary": "Two rules keep an LLM from pasteurizing your writing: never take a word it suggests, and never let it encourage you. Then hand it all the tedious work.",
+      "source": "Sockpuppet.org",
+      "url": "https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     }
   ],
   "speakers": [
+    {
+      "name": "The Final Chapter on Modernizing Bank Regulatory Stress Testing",
+      "role": "Federal Reserve speaker",
+      "side": "neutral",
+      "signal": "NEUTRAL",
+      "quote": "The Final Chapter on Modernizing Bank Regulatory Stress Testing Watch Live Vice Chair for Supervision Michelle W. Bowman At the Luncheon of the Lord Mayor City of London at Mansion House, London, United Kingdom",
+      "impact": "Official Fed speech listing; stance is not automatically inferred.",
+      "date": "2026",
+      "source": "Federal Reserve",
+      "url": "https://www.federalreserve.gov/newsevents/speech/bowman20260918a.htm",
+      "w": 0.0,
+      "s": 0.0,
+      "f": 0.0,
+      "impactPct": 0.0
+    },
+    {
+      "name": "Initial Findings from Independent Review of Silicon Valley Bank",
+      "role": "Federal Reserve speaker",
+      "side": "neutral",
+      "signal": "NEUTRAL",
+      "quote": "Initial Findings from Independent Review of Silicon Valley Bank Watch Live Vice Chair for Supervision Michelle W. Bowman At the Luncheon of the Lord Mayor City of London at Mansion House, London, United Kingdom",
+      "impact": "Official Fed speech listing; stance is not automatically inferred.",
+      "date": "2026",
+      "source": "Federal Reserve",
+      "url": "https://www.federalreserve.gov/newsevents/speech/bowman20260918b.htm",
+      "w": 0.0,
+      "s": 0.0,
+      "f": 0.0,
+      "impactPct": 0.0
+    },
     {
       "name": "The Economic Outlook and Some Comments on My Policy Communication",
       "role": "Federal Reserve speaker",
@@ -254,50 +304,20 @@ window.XAUUSD_DATA = {
       "s": 0.0,
       "f": 0.0,
       "impactPct": 0.0
-    },
-    {
-      "name": "Navigating Economic Shocks: A Monetary Policymakerâs Perspective",
-      "role": "Federal Reserve speaker",
-      "side": "neutral",
-      "signal": "NEUTRAL",
-      "quote": "Navigating Economic Shocks: A Monetary Policymakerâs Perspective Watch Live Vice Chair Philip N. Jefferson At the Stanford Institute for Economic Policy Research, Stanford University, Stanford, California",
-      "impact": "Official Fed speech listing; stance is not automatically inferred.",
-      "date": "2026",
-      "source": "Federal Reserve",
-      "url": "https://www.federalreserve.gov/newsevents/speech/jefferson20260716a.htm",
-      "w": 0.0,
-      "s": 0.0,
-      "f": 0.0,
-      "impactPct": 0.0
-    },
-    {
-      "name": "Economic Outlook",
-      "role": "Federal Reserve speaker",
-      "side": "neutral",
-      "signal": "NEUTRAL",
-      "quote": "Economic Outlook Governor Lisa D. Cook At The Exchequer Club of Washington D.C., Washington, D.C.",
-      "impact": "Official Fed speech listing; stance is not automatically inferred.",
-      "date": "2026",
-      "source": "Federal Reserve",
-      "url": "https://www.federalreserve.gov/newsevents/speech/cook20260715a.htm",
-      "w": 0.0,
-      "s": 0.0,
-      "f": 0.0,
-      "impactPct": 0.0
     }
   ],
   "levels": {
     "resistance": [
-      4395.91,
-      4449.91,
-      4514.11,
-      4519.54
+      4405.97,
+      4434.7,
+      4470.18,
+      4514.11
     ],
     "support": [
-      4272.28,
-      4238.37,
-      4202.66,
-      4148.65
+      4341.76,
+      4306.28,
+      4277.55,
+      4238.37
     ],
     "note": "Classic pivot levels from previous daily OHLC plus recent 20-day extreme; mechanical, not guarantees."
   },
@@ -305,27 +325,23 @@ window.XAUUSD_DATA = {
   "pressure": [
     {
       "label": "US 10Y daily move",
-      "level": "+1.0 bp",
-      "w": 8,
-      "dir": "down"
+      "level": "-7.0 bp",
+      "w": 58,
+      "dir": "up"
     },
     {
       "label": "Observed XAU momentum",
-      "level": "+0.39%",
-      "w": 25,
+      "level": "+0.07%",
+      "w": 4,
       "dir": "up"
     }
   ],
   "priceSeries": {
     "label": "XAU/USD daily close (Twelve Data)",
     "unit": "USD / troy oz",
-    "yMin": 4244.27,
-    "yMax": 4448.83,
+    "yMin": 4244.28,
+    "yMax": 4448.8,
     "points": [
-      {
-        "x": "2026-09-05",
-        "y": 4429.03
-      },
       {
         "x": "2026-09-06",
         "y": 4429.01
@@ -376,7 +392,11 @@ window.XAUUSD_DATA = {
       },
       {
         "x": "2026-09-18",
-        "y": 4358.78
+        "y": 4377.25
+      },
+      {
+        "x": "2026-09-19",
+        "y": 4380.13
       }
     ]
   },
@@ -387,7 +407,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-18",
+        "x": "2026-09-19",
         "y": 0
       }
     ]
@@ -399,7 +419,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-18",
+        "x": "2026-09-19",
         "y": 0
       }
     ]
