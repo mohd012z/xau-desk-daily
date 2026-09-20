@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-19T09:09:04+08:00",
+    "generatedAt": "2026-09-20T09:04:52+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -13,38 +13,38 @@ window.XAUUSD_DATA = {
       "xau": {
         "ok": true,
         "label": "Twelve Data XAU/USD",
-        "detail": "latest daily bar 2026-09-19",
-        "timestamp": "2026-09-19T09:09:04+08:00"
+        "detail": "latest daily bar 2026-09-20",
+        "timestamp": "2026-09-20T09:04:53+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-19T09:09:04+08:00"
+        "timestamp": "2026-09-20T09:04:53+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
         "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
-        "timestamp": "2026-09-19T09:09:13+08:00"
+        "timestamp": "2026-09-20T09:05:01+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
         "detail": "latest 2026-09-17",
-        "timestamp": "2026-09-19T09:09:13+08:00"
+        "timestamp": "2026-09-20T09:05:02+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
-        "detail": "8 recent items",
-        "timestamp": "2026-09-19T09:09:13+08:00"
+        "detail": "4 recent items",
+        "timestamp": "2026-09-20T09:05:02+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-19T09:09:13+08:00"
+        "timestamp": "2026-09-20T09:05:02+08:00"
       }
     },
     "warnings": [
@@ -52,17 +52,17 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-19 09:09 MYT",
+  "updated": "2026-09-20 09:04 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4380.13,
-    "change": 2.88,
-    "changePct": 0.07,
-    "dayRange": "4,377.84 - 4,380.25",
-    "monthPct": -1.77,
+    "spot": 4380.14,
+    "change": 0.01,
+    "changePct": 0.0,
+    "dayRange": "4,379.98 - 4,380.24",
+    "monthPct": -1.71,
     "yearPct": 1.51,
     "ath": 5597.23,
-    "note": "Latest provider daily bar: 2026-09-19; rolling history used: 370 bars"
+    "note": "Latest provider daily bar: 2026-09-20; rolling history used: 370 bars"
   },
   "macro": [
     {
@@ -90,7 +90,7 @@ window.XAUUSD_DATA = {
   "sentiment": {
     "bias": "UPWARD",
     "goldTone": "BULLISH",
-    "score": 0.485,
+    "score": 0.477,
     "confidence": 69,
     "summary": "Mechanical daily pressure model using sourced USD/yield moves plus a small observed XAU-momentum term. It is not a forecast or trade instruction.",
     "netSpeechSignal": "UP",
@@ -134,81 +134,41 @@ window.XAUUSD_DATA = {
   },
   "news": [
     {
-      "time": "2026-09-18 00:54 UTC",
-      "title": "Global Market Today: Asian stocks, bonds gain as oil extends decline",
-      "summary": "MSCI’s regional equities gauge advanced 0.3% with South Korea’s Kospi index leading gains. That came after the S&P 500 Index rose 1.1% on Thursday, its biggest advance since early August. The tech-heavy Nasdaq 100 Index climbed 1.7%, while a key gauge of chip…",
-      "source": "The Times of India",
-      "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/global-market-today-asian-stocks-bonds-gain-as-oil-extends-decline/articleshow/134323537.cms",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
+      "time": "2026-09-18 22:07 UTC",
+      "title": "Ottawa’s ‘mega deduction’ tax write-off could boost these TSX stocks, analysts say",
+      "summary": "The Week in Stocks: How David Rosenberg is reducing stock market risk, which sector's shares could get hit from rate hikes and more. Read on",
+      "source": "Financial Post",
+      "url": "https://financialpost.com/investing/tax-write-off-boost-tsx-stocks",
+      "impact": "bearish",
+      "signal": "DOWN",
       "impactPct": null
     },
     {
-      "time": "2026-09-18 00:37 UTC",
-      "title": "YouTube Canada reveals new creator slate, touts exclusivity as talent war heats up",
-      "summary": "YouTube Canada has unveiled a slate of nine creator-led shows spanning comedy, food, sport, lifestyle and culture at a YouTube Features presentation in Toronto. The slate includes projects from Olympic...",
-      "source": "C21media.net",
-      "url": "https://www.c21media.net/news/youtube-canada-reveals-new-creator-slate-touts-exclusivity-as-talent-war-heats-up/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-18 00:01 UTC",
-      "title": "Trump seen looking at plans for Kennedy Center demolition",
-      "summary": "A judge has blocked any immediate efforts to destroy the Kennedy Center, after Donald Trump was photographed through the windows of Air Force One appearing to look at plans for the building's demolition.",
-      "source": "ABC News (AU)",
-      "url": "https://www.abc.net.au/news/2026-09-18/donald-trump-kennedy-center-demolition-plan-photo/107167248",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-17 23:18 UTC",
-      "title": "Breitbart Business Digest: The Dollar Is Still King",
-      "summary": "The New York Times imagines that Trump has abdicated global economic leadership or that the rest of the world is staging a coup. Nothing like that is happening. The dollar remains king.\nThe post Breitbart Business Digest: The Dollar Is Still King appeared fir…",
-      "source": "Breitbart News",
-      "url": "https://www.breitbart.com/economy/2026/09/17/breitbart-business-digest-the-dollar-is-still-king/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-17 23:05 UTC",
-      "title": "RTX 5090s are going for as much as $9000, as AI server builders reportedly buy Nvidia's flagship by the pallet, but the photos behind the story may be AI-generated",
-      "summary": "AI firms are reportedly buying RTX 5090s by the pallet, which Nvidia's own driver license has prohibited since 2017.",
-      "source": "TechRadar",
-      "url": "https://www.techradar.com/pro/rtx-5090s-are-going-for-as-much-as-usd9000-as-ai-server-builders-reportedly-buy-nvidias-flagship-by-the-pallet-but-the-photos-behind-the-story-may-be-ai-generated",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-17 22:31 UTC",
-      "title": "Which New Apple Watch Is Worth the Upgrade?",
-      "summary": "Big updates to health tracking are pushing Apple to challenge for the wearable crown.",
+      "time": "2026-09-18 21:49 UTC",
+      "title": "RFK Jr., Who Should Be Running Out of Terrible Ideas By Now, Has Managed to Think Up Another Terrible Idea",
+      "summary": "Remind me why we gave this moron carte blanche to let his freak flag fly?",
       "source": "esquire.com",
-      "url": "https://www.esquire.com/lifestyle/tech/a73773598/apple-watch-2026-review/",
+      "url": "https://www.esquire.com/news-politics/politics/a73794923/rfk-jr-speech-chemtrails/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-17 22:28 UTC",
-      "title": "Crypto Options Approach Half of Bitcoin Derivatives Market as Bybit Captures 28% of Tracked Volume, Glassnode Report Finds",
-      "summary": "New Glassnode x Bybit research highlights structural shift toward options, with Bybit leading tracked Ether options for 143 consecutive days and tokenized gold perpetuals for 476 days DUBAI, UAE, Sept. 17, 2026 /PRNewswire/ -- Crypto derivatives markets are b…",
-      "source": "PRNewswire",
-      "url": "https://www.prnewswire.com/news-releases/crypto-options-approach-half-of-bitcoin-derivatives-market-as-bybit-captures-28-of-tracked-volume-glassnode-report-finds-302882690.html",
+      "time": "2026-09-18 20:45 UTC",
+      "title": "The Federal Tax Credit Isn’t Just for Hollywood",
+      "summary": "When most people hear the words “federal film tax credit,” their mind probably goes to Hollywood studios, movie stars and hundred million dollar productions getting a handout that they can use to buy their next mansion or their second yacht. The reality is th…",
+      "source": "Provideocoalition.com",
+      "url": "https://www.provideocoalition.com/the-federal-tax-credit-isnt-just-for-hollywood/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-17 21:48 UTC",
-      "title": "How to Write with an LLM",
-      "summary": "Two rules keep an LLM from pasteurizing your writing: never take a word it suggests, and never let it encourage you. Then hand it all the tedious work.",
-      "source": "Sockpuppet.org",
-      "url": "https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/",
+      "time": "2026-09-18 19:27 UTC",
+      "title": "Snatchers target elderly woman, leave her injured",
+      "summary": "Chandigarh Sector 15-B: 68-year-old woman injured as two men snatch gold chain attached to earrings; Sector 11 police file case, scan CCTV; no arrests.",
+      "source": "The Times of India",
+      "url": "https://timesofindia.indiatimes.com/city/chandigarh/snatchers-target-elderly-woman-leave-her-injured/articleshow/134343427.cms",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
@@ -308,15 +268,15 @@ window.XAUUSD_DATA = {
   ],
   "levels": {
     "resistance": [
-      4405.97,
-      4434.7,
-      4470.18,
+      4380.98,
+      4381.82,
+      4383.39,
       4514.11
     ],
     "support": [
-      4341.76,
-      4306.28,
-      4277.55,
+      4378.56,
+      4376.99,
+      4376.14,
       4238.37
     ],
     "note": "Classic pivot levels from previous daily OHLC plus recent 20-day extreme; mechanical, not guarantees."
@@ -331,21 +291,17 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "Observed XAU momentum",
-      "level": "+0.07%",
-      "w": 4,
+      "level": "+0.00%",
+      "w": 0,
       "dir": "up"
     }
   ],
   "priceSeries": {
     "label": "XAU/USD daily close (Twelve Data)",
     "unit": "USD / troy oz",
-    "yMin": 4244.28,
-    "yMax": 4448.8,
+    "yMin": 4247.14,
+    "yMax": 4422.11,
     "points": [
-      {
-        "x": "2026-09-06",
-        "y": 4429.01
-      },
       {
         "x": "2026-09-07",
         "y": 4405.18
@@ -397,6 +353,10 @@ window.XAUUSD_DATA = {
       {
         "x": "2026-09-19",
         "y": 4380.13
+      },
+      {
+        "x": "2026-09-20",
+        "y": 4380.14
       }
     ]
   },
@@ -407,7 +367,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-19",
+        "x": "2026-09-20",
         "y": 0
       }
     ]
@@ -419,7 +379,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-19",
+        "x": "2026-09-20",
         "y": 0
       }
     ]
