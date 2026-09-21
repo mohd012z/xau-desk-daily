@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-20T09:04:52+08:00",
+    "generatedAt": "2026-09-21T09:02:57+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -13,38 +13,38 @@ window.XAUUSD_DATA = {
       "xau": {
         "ok": true,
         "label": "Twelve Data XAU/USD",
-        "detail": "latest daily bar 2026-09-20",
-        "timestamp": "2026-09-20T09:04:53+08:00"
+        "detail": "latest daily bar 2026-09-21",
+        "timestamp": "2026-09-21T09:02:57+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-20T09:04:53+08:00"
+        "timestamp": "2026-09-21T09:02:57+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
         "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
-        "timestamp": "2026-09-20T09:05:01+08:00"
+        "timestamp": "2026-09-21T09:03:06+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
         "detail": "latest 2026-09-17",
-        "timestamp": "2026-09-20T09:05:02+08:00"
+        "timestamp": "2026-09-21T09:03:06+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
-        "detail": "4 recent items",
-        "timestamp": "2026-09-20T09:05:02+08:00"
+        "detail": "3 recent items",
+        "timestamp": "2026-09-21T09:03:06+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-20T09:05:02+08:00"
+        "timestamp": "2026-09-21T09:03:07+08:00"
       }
     },
     "warnings": [
@@ -52,17 +52,17 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-20 09:04 MYT",
+  "updated": "2026-09-21 09:02 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4380.14,
-    "change": 0.01,
-    "changePct": 0.0,
-    "dayRange": "4,379.98 - 4,380.24",
-    "monthPct": -1.71,
-    "yearPct": 1.51,
+    "spot": 4374.32,
+    "change": -5.82,
+    "changePct": -0.13,
+    "dayRange": "4,359.97 - 4,382.31",
+    "monthPct": -1.67,
+    "yearPct": 1.37,
     "ath": 5597.23,
-    "note": "Latest provider daily bar: 2026-09-20; rolling history used: 370 bars"
+    "note": "Latest provider daily bar: 2026-09-21; rolling history used: 370 bars"
   },
   "macro": [
     {
@@ -90,7 +90,7 @@ window.XAUUSD_DATA = {
   "sentiment": {
     "bias": "UPWARD",
     "goldTone": "BULLISH",
-    "score": 0.477,
+    "score": 0.461,
     "confidence": 69,
     "summary": "Mechanical daily pressure model using sourced USD/yield moves plus a small observed XAU-momentum term. It is not a forecast or trade instruction.",
     "netSpeechSignal": "UP",
@@ -134,41 +134,31 @@ window.XAUUSD_DATA = {
   },
   "news": [
     {
-      "time": "2026-09-18 22:07 UTC",
-      "title": "Ottawa’s ‘mega deduction’ tax write-off could boost these TSX stocks, analysts say",
-      "summary": "The Week in Stocks: How David Rosenberg is reducing stock market risk, which sector's shares could get hit from rate hikes and more. Read on",
-      "source": "Financial Post",
-      "url": "https://financialpost.com/investing/tax-write-off-boost-tsx-stocks",
+      "time": "2026-09-19 23:18 UTC",
+      "title": "Goldman Sachs gold price target takes a turn after Fed rate hike",
+      "summary": "The textbook response to a Federal Reserve rate hike is simple enough: bond yields climb, the dollar strengthens, and gold, which pays no interest to holders, becomes less attractive by comparison. \nThat is exactly what happened, and yet one of Wall Street’s …",
+      "source": "Biztoc.com",
+      "url": "https://biztoc.com/x/a4f69fdec1acad96",
       "impact": "bearish",
       "signal": "DOWN",
       "impactPct": null
     },
     {
-      "time": "2026-09-18 21:49 UTC",
-      "title": "RFK Jr., Who Should Be Running Out of Terrible Ideas By Now, Has Managed to Think Up Another Terrible Idea",
-      "summary": "Remind me why we gave this moron carte blanche to let his freak flag fly?",
-      "source": "esquire.com",
-      "url": "https://www.esquire.com/news-politics/politics/a73794923/rfk-jr-speech-chemtrails/",
+      "time": "2026-09-19 23:00 UTC",
+      "title": "REA Group vs CAR Group: Which is best for income investors?",
+      "summary": "Head to head: REA Group and CAR Group compared for income, dividend franking and value—my verdict for Australian investors.\nThe post REA Group vs CAR Group: Which is best for income investors? appeared first on The Motley Fool Australia.",
+      "source": "Motley Fool Australia",
+      "url": "https://www.fool.com.au/2026/09/20/rea-group-vs-car-group-which-is-best-for-income-investors/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-18 20:45 UTC",
-      "title": "The Federal Tax Credit Isn’t Just for Hollywood",
-      "summary": "When most people hear the words “federal film tax credit,” their mind probably goes to Hollywood studios, movie stars and hundred million dollar productions getting a handout that they can use to buy their next mansion or their second yacht. The reality is th…",
-      "source": "Provideocoalition.com",
-      "url": "https://www.provideocoalition.com/the-federal-tax-credit-isnt-just-for-hollywood/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-18 19:27 UTC",
-      "title": "Snatchers target elderly woman, leave her injured",
-      "summary": "Chandigarh Sector 15-B: 68-year-old woman injured as two men snatch gold chain attached to earrings; Sector 11 police file case, scan CCTV; no arrests.",
-      "source": "The Times of India",
-      "url": "https://timesofindia.indiatimes.com/city/chandigarh/snatchers-target-elderly-woman-leave-her-injured/articleshow/134343427.cms",
+      "time": "2026-09-19 19:50 UTC",
+      "title": "Belmont Park is back: inside New York’s $555m bet on horse racing",
+      "summary": "The storied Long Island racetrack, rebuilt with a $455m state loan, is smaller, sleeker and designed for a changing audience. Can it create the public needed to sustain it?",
+      "source": "Yahoo Entertainment",
+      "url": "https://sports.yahoo.com/articles/belmont-park-back-inside-york-195019581.html",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
@@ -268,15 +258,15 @@ window.XAUUSD_DATA = {
   ],
   "levels": {
     "resistance": [
-      4380.98,
-      4381.82,
-      4383.39,
+      4380.45,
+      4380.77,
+      4381.05,
       4514.11
     ],
     "support": [
-      4378.56,
-      4376.99,
-      4376.14,
+      4379.85,
+      4379.56,
+      4379.24,
       4238.37
     ],
     "note": "Classic pivot levels from previous daily OHLC plus recent 20-day extreme; mechanical, not guarantees."
@@ -291,21 +281,17 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "Observed XAU momentum",
-      "level": "+0.00%",
-      "w": 0,
-      "dir": "up"
+      "level": "-0.13%",
+      "w": 8,
+      "dir": "down"
     }
   ],
   "priceSeries": {
     "label": "XAU/USD daily close (Twelve Data)",
     "unit": "USD / troy oz",
-    "yMin": 4247.14,
-    "yMax": 4422.11,
+    "yMin": 4247.55,
+    "yMax": 4418.22,
     "points": [
-      {
-        "x": "2026-09-07",
-        "y": 4405.18
-      },
       {
         "x": "2026-09-08",
         "y": 4356.03
@@ -356,7 +342,11 @@ window.XAUUSD_DATA = {
       },
       {
         "x": "2026-09-20",
-        "y": 4380.14
+        "y": 4380.13
+      },
+      {
+        "x": "2026-09-21",
+        "y": 4374.32
       }
     ]
   },
@@ -367,7 +357,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-20",
+        "x": "2026-09-21",
         "y": 0
       }
     ]
@@ -379,7 +369,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-20",
+        "x": "2026-09-21",
         "y": 0
       }
     ]
