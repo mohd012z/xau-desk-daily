@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-21T09:02:57+08:00",
+    "generatedAt": "2026-09-22T09:35:29+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -13,38 +13,38 @@ window.XAUUSD_DATA = {
       "xau": {
         "ok": true,
         "label": "Twelve Data XAU/USD",
-        "detail": "latest daily bar 2026-09-21",
-        "timestamp": "2026-09-21T09:02:57+08:00"
+        "detail": "latest daily bar 2026-09-22",
+        "timestamp": "2026-09-22T09:35:30+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-21T09:02:57+08:00"
+        "timestamp": "2026-09-22T09:35:30+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
         "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
-        "timestamp": "2026-09-21T09:03:06+08:00"
+        "timestamp": "2026-09-22T09:35:37+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
-        "detail": "latest 2026-09-17",
-        "timestamp": "2026-09-21T09:03:06+08:00"
+        "detail": "latest 2026-09-18",
+        "timestamp": "2026-09-22T09:35:38+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
-        "detail": "3 recent items",
-        "timestamp": "2026-09-21T09:03:06+08:00"
+        "detail": "8 recent items",
+        "timestamp": "2026-09-22T09:35:38+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-21T09:03:07+08:00"
+        "timestamp": "2026-09-22T09:35:38+08:00"
       }
     },
     "warnings": [
@@ -52,17 +52,17 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-21 09:02 MYT",
+  "updated": "2026-09-22 09:35 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4374.32,
-    "change": -5.82,
-    "changePct": -0.13,
-    "dayRange": "4,359.97 - 4,382.31",
-    "monthPct": -1.67,
-    "yearPct": 1.37,
+    "spot": 4352.72,
+    "change": 8.91,
+    "changePct": 0.21,
+    "dayRange": "4,338.55 - 4,375.41",
+    "monthPct": 0.56,
+    "yearPct": 0.87,
     "ath": 5597.23,
-    "note": "Latest provider daily bar: 2026-09-21; rolling history used: 370 bars"
+    "note": "Latest provider daily bar: 2026-09-22; rolling history used: 370 bars"
   },
   "macro": [
     {
@@ -74,10 +74,10 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "US 10Y",
-      "value": "4.940%",
-      "delta": "-7.0 bp",
-      "tone": "good",
-      "note": "FRED DGS10 · 2026-09-17"
+      "value": "5.010%",
+      "delta": "+7.0 bp",
+      "tone": "bad",
+      "note": "FRED DGS10 · 2026-09-18"
     },
     {
       "label": "Brent",
@@ -88,12 +88,12 @@ window.XAUUSD_DATA = {
     }
   ],
   "sentiment": {
-    "bias": "UPWARD",
-    "goldTone": "BULLISH",
-    "score": 0.461,
+    "bias": "DOWNWARD",
+    "goldTone": "BEARISH",
+    "score": -0.452,
     "confidence": 69,
     "summary": "Mechanical daily pressure model using sourced USD/yield moves plus a small observed XAU-momentum term. It is not a forecast or trade instruction.",
-    "netSpeechSignal": "UP",
+    "netSpeechSignal": "DOWN",
     "netSpeechPct": 0.0,
     "netNote": "Direction only. No fabricated percentage impact is assigned to headlines or speeches."
   },
@@ -134,31 +134,81 @@ window.XAUUSD_DATA = {
   },
   "news": [
     {
-      "time": "2026-09-19 23:18 UTC",
-      "title": "Goldman Sachs gold price target takes a turn after Fed rate hike",
-      "summary": "The textbook response to a Federal Reserve rate hike is simple enough: bond yields climb, the dollar strengthens, and gold, which pays no interest to holders, becomes less attractive by comparison. \nThat is exactly what happened, and yet one of Wall Street’s …",
-      "source": "Biztoc.com",
-      "url": "https://biztoc.com/x/a4f69fdec1acad96",
-      "impact": "bearish",
-      "signal": "DOWN",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-19 23:00 UTC",
-      "title": "REA Group vs CAR Group: Which is best for income investors?",
-      "summary": "Head to head: REA Group and CAR Group compared for income, dividend franking and value—my verdict for Australian investors.\nThe post REA Group vs CAR Group: Which is best for income investors? appeared first on The Motley Fool Australia.",
-      "source": "Motley Fool Australia",
-      "url": "https://www.fool.com.au/2026/09/20/rea-group-vs-car-group-which-is-best-for-income-investors/",
+      "time": "2026-09-21 00:43 UTC",
+      "title": "Global Market Today: Asian stocks edge higher, oil extends losses",
+      "summary": "MSCI’s Asia Pacific equities gauge advanced 0.2% with Japan shut for a public holiday. S&P 500 futures rose 0.3% after the underlying gauge eked out a gain Friday, while contracts on the Nasdaq 100 Index climbed 0.4%.",
+      "source": "The Times of India",
+      "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/global-market-today-asian-stocks-edge-higher-oil-extends-losses/articleshow/134377413.cms",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-19 19:50 UTC",
-      "title": "Belmont Park is back: inside New York’s $555m bet on horse racing",
-      "summary": "The storied Long Island racetrack, rebuilt with a $455m state loan, is smaller, sleeker and designed for a changing audience. Can it create the public needed to sustain it?",
-      "source": "Yahoo Entertainment",
-      "url": "https://sports.yahoo.com/articles/belmont-park-back-inside-york-195019581.html",
+      "time": "2026-09-21 00:40 UTC",
+      "title": "Tech leads shares higher in Asia, oil eases",
+      "summary": "SYDNEY, Sept 21 : Share markets edged higher in Asia on Monday as AI's insatiable demand for data buoyed chipmakers, and oil eased as hopes Saudi Arabia could boost supplies offset news of a Houthi attack on Riyadh.Trade was thin with Japan on its Silver Week…",
+      "source": "CNA",
+      "url": "https://www.channelnewsasia.com/business/tech-leads-shares-higher-in-asia-oil-eases-6398351",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-21 00:40 UTC",
+      "title": "Tech leads shares higher in Asia as oil slips",
+      "summary": "SYDNEY, Sept 21 : Share markets edged higher in Asia on Monday as AI's insatiable demand for data buoyed chipmakers, and oil eased on reports more oil was finding its way out of the Middle East than previously thought despite the ongoing conflict in the Gulf.…",
+      "source": "CNA",
+      "url": "https://www.channelnewsasia.com/business/tech-leads-shares-higher-in-asia-oil-slips-6398351",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-21 00:03 UTC",
+      "title": "Gold steadies as traders weigh inflation risks against Fed rate hike fallout",
+      "summary": "Gold's volatility amid inflation and Fed rate hikes highlights economic uncertainty, impacting investor strategies and market stability.\nThe post Gold steadies as traders weigh inflation risks against Fed rate hike fallout appeared first on Crypto Briefing.",
+      "source": "Crypto Briefing",
+      "url": "https://cryptobriefing.com/gold-steadies-inflation-risks-fed-rate-hike/",
+      "impact": "bearish",
+      "signal": "DOWN",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-21 00:01 UTC",
+      "title": "Gold steadies as traders weigh inflation, Fed rate hike outlook",
+      "summary": "Market caution persists as inflation and Fed rate hikes shape gold's outlook, impacting confidence in its year-end price potential.\nThe post Gold steadies as traders weigh inflation, Fed rate hike outlook appeared first on Crypto Briefing.",
+      "source": "Crypto Briefing",
+      "url": "https://cryptobriefing.com/gold-steadies-as-traders-weigh-inflation-fed-rate-hike-outlook/",
+      "impact": "bearish",
+      "signal": "DOWN",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-20 23:45 UTC",
+      "title": "Binance Announces 24/7 FX Perpetuals With USD/BRL Contract Set For September 21",
+      "summary": "Read the latest update on Binance Announces 24/7 FX Perpetuals With USD/BRL Contract Set For September 21.",
+      "source": "newsBTC",
+      "url": "http://www.newsbtc.com/news/binance-announces-247-fx-perpetuals-with-usdbrl-contract-set-for-september-21/",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-20 23:19 UTC",
+      "title": "Ethan Hawke's HBO Max Batman Series Is Back With New Episodes At The Perfect Time",
+      "summary": "Ethan Hawke returns as Batman again in his DC series on HBO Max, and the show's new episodes could not have arrived at a better time for Bruce Wayne.",
+      "source": "Screen Rant",
+      "url": "https://screenrant.com/ethan-hawke-batwheels-hbo-max-batman-tv-show-september-2026-episodes/",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-20 22:09 UTC",
+      "title": "Banyan Announces $50 Million LIFE Offering and Concurrent $8 Million Private Placement",
+      "summary": "Not for distribution to United States newswire services or for dissemination in the United States VANCOUVER, British Columbia, Sept. 20, 2026 (GLOBE NEWSWIRE) — Banyan Gold Corp. (TSXV:BYN) (OTCQB: BYAGF) (“Banyan” or the “Company”) announces today that it ha…",
+      "source": "Financial Post",
+      "url": "https://financialpost.com/globe-newswire/banyan-announces-50-million-life-offering-and-concurrent-8-million-private-placement",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
@@ -258,15 +308,15 @@ window.XAUUSD_DATA = {
   ],
   "levels": {
     "resistance": [
-      4380.45,
-      4380.77,
-      4381.05,
+      4378.48,
+      4413.15,
+      4441.77,
       4514.11
     ],
     "support": [
-      4379.85,
-      4379.56,
-      4379.24,
+      4315.19,
+      4286.56,
+      4251.89,
       4238.37
     ],
     "note": "Classic pivot levels from previous daily OHLC plus recent 20-day extreme; mechanical, not guarantees."
@@ -275,15 +325,15 @@ window.XAUUSD_DATA = {
   "pressure": [
     {
       "label": "US 10Y daily move",
-      "level": "-7.0 bp",
+      "level": "+7.0 bp",
       "w": 58,
-      "dir": "up"
+      "dir": "down"
     },
     {
       "label": "Observed XAU momentum",
-      "level": "-0.13%",
-      "w": 8,
-      "dir": "down"
+      "level": "+0.21%",
+      "w": 13,
+      "dir": "up"
     }
   ],
   "priceSeries": {
@@ -292,10 +342,6 @@ window.XAUUSD_DATA = {
     "yMin": 4247.55,
     "yMax": 4418.22,
     "points": [
-      {
-        "x": "2026-09-08",
-        "y": 4356.03
-      },
       {
         "x": "2026-09-09",
         "y": 4401.7
@@ -346,7 +392,11 @@ window.XAUUSD_DATA = {
       },
       {
         "x": "2026-09-21",
-        "y": 4374.32
+        "y": 4343.81
+      },
+      {
+        "x": "2026-09-22",
+        "y": 4352.72
       }
     ]
   },
@@ -357,7 +407,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-21",
+        "x": "2026-09-22",
         "y": 0
       }
     ]
@@ -369,7 +419,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-21",
+        "x": "2026-09-22",
         "y": 0
       }
     ]
