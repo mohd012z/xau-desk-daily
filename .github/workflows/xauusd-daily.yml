@@ -3,6 +3,17 @@ name: XAUUSD Daily Verified Snapshot
 on:
   workflow_dispatch:
 
+  # Refresh immediately when trusted data-pipeline code changes on main.
+  # Generated snapshot commits are intentionally excluded to prevent loops.
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/update_xauusd.py'
+      - 'scripts/normalize_snapshot_semantics.py'
+      - 'scripts/redact_public_data.py'
+      - 'requirements.txt'
+      - '.github/workflows/xauusd-daily.yml'
+
   schedule:
     - cron: '10 7 * * *'
       timezone: 'Asia/Kuala_Lumpur'
@@ -76,7 +87,7 @@ jobs:
           echo "XAU DESK DAILY UPDATE"
           echo "===================================="
           echo "Time zone : Asia/Kuala_Lumpur"
-          echo "Schedule  : 07:10 MYT daily"
+          echo "Schedule  : 07:10 MYT daily + trusted pipeline changes"
           echo "Branch    : main"
           echo "Schema    : DAILY_CLOSE + rollingHigh normalized before publish"
           echo "===================================="
