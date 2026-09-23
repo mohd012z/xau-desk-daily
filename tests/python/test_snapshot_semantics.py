@@ -56,6 +56,7 @@ class SnapshotSemanticsTest(unittest.TestCase):
             "scripts/update_xauusd.py",
             "scripts/normalize_snapshot_semantics.py",
             "scripts/redact_public_data.py",
+            "scripts/news_relevance.py",
             "requirements.txt",
             ".github/workflows/xauusd-daily.yml",
         ):

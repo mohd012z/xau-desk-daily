@@ -11,6 +11,7 @@ on:
       - 'scripts/update_xauusd.py'
       - 'scripts/normalize_snapshot_semantics.py'
       - 'scripts/redact_public_data.py'
+      - 'scripts/news_relevance.py'
       - 'requirements.txt'
       - '.github/workflows/xauusd-daily.yml'
 
@@ -90,4 +91,5 @@ jobs:
           echo "Schedule  : 07:10 MYT daily + trusted pipeline changes"
           echo "Branch    : main"
           echo "Schema    : DAILY_CLOSE + rollingHigh normalized before publish"
+          echo "News      : XAU/gold + macro relevance gate before publish"
           echo "===================================="

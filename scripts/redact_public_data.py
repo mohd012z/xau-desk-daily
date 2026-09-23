@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
+import json
 import os
 import re
 import sys
 
+from news_relevance import filter_snapshot_news
+
 path = Path("xauusd-data.js")
+ASSIGNMENT = "window.XAUUSD_DATA = "
 
 if not path.exists():
     print("ERROR: xauusd-data.js was not generated")
@@ -35,6 +39,29 @@ text = re.sub(
     text,
 )
 
+# Parse the generated payload and apply deterministic public-feed sanitation.
+# Provider search is intentionally treated as discovery only: an article is
+# published only when its own title/summary contains both a gold/XAU concept
+# and a material macro driver.
+try:
+    marker_pos = text.find(ASSIGNMENT)
+    if marker_pos < 0:
+        raise ValueError("window.XAUUSD_DATA assignment not found")
+    json_start = marker_pos + len(ASSIGNMENT)
+    json_end = text.rfind(";")
+    if json_end <= json_start:
+        raise ValueError("snapshot assignment is incomplete")
+    snapshot = json.loads(text[json_start:json_end].strip())
+    if not isinstance(snapshot, dict):
+        raise ValueError("snapshot payload is not an object")
+    before_news = len(snapshot.get("news") or []) if isinstance(snapshot.get("news"), list) else 0
+    snapshot = filter_snapshot_news(snapshot)
+    after_news = len(snapshot.get("news") or []) if isinstance(snapshot.get("news"), list) else 0
+    text = text[:json_start] + json.dumps(snapshot, ensure_ascii=False, indent=2) + text[json_end:]
+except (ValueError, json.JSONDecodeError) as exc:
+    print(f"ERROR: Public snapshot sanitation failed: {exc}")
+    sys.exit(1)
+
 path.write_text(text, encoding="utf-8")
 
 cleaned = path.read_text(encoding="utf-8")
@@ -60,4 +87,5 @@ if missing:
     sys.exit(1)
 
 print("Security check passed.")
+print(f"News relevance filter: {before_news} fetched -> {after_news} published.")
 print("Snapshot verification passed.")
