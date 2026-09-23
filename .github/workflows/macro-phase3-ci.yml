@@ -15,8 +15,8 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
       - name: Run JavaScript tests
@@ -43,6 +43,7 @@ jobs:
           node --check macro/ui/trade-plan-view.mjs
           node --check macro/ui/trade-plan-controller.mjs
           node --check macro/ui/trade-plan-integration.mjs
+          node --check macro/ui/runtime-safety.js
           node --check macro/ui/app.mjs
       - name: Validate public event history JSON
         run: node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('data/event-history.json','utf8'));if(p.schemaVersion!=='1.0'||!Array.isArray(p.samples))process.exit(1)"
