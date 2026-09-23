@@ -48,6 +48,22 @@ class SnapshotSemanticsTest(unittest.TestCase):
         self.assertIn(redact_cmd, workflow)
         self.assertLess(workflow.index(normalize_cmd), workflow.index(redact_cmd))
 
+    def test_daily_workflow_refreshes_when_trusted_pipeline_changes(self):
+        workflow = (ROOT / ".github/workflows/xauusd-daily.yml").read_text(encoding="utf-8")
+        self.assertIn("push:", workflow)
+        self.assertIn("branches: [main]", workflow)
+        for path in (
+            "scripts/update_xauusd.py",
+            "scripts/normalize_snapshot_semantics.py",
+            "scripts/redact_public_data.py",
+            "requirements.txt",
+            ".github/workflows/xauusd-daily.yml",
+        ):
+            self.assertIn(path, workflow)
+
+        # Snapshot commits must not trigger the updater again and create a loop.
+        self.assertNotIn("- 'xauusd-data.js'", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()
