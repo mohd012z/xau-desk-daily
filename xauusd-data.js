@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-22T09:35:29+08:00",
+    "generatedAt": "2026-09-23T09:28:23+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -13,38 +13,38 @@ window.XAUUSD_DATA = {
       "xau": {
         "ok": true,
         "label": "Twelve Data XAU/USD",
-        "detail": "latest daily bar 2026-09-22",
-        "timestamp": "2026-09-22T09:35:30+08:00"
+        "detail": "latest daily bar 2026-09-23",
+        "timestamp": "2026-09-23T09:28:23+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-22T09:35:30+08:00"
+        "timestamp": "2026-09-23T09:28:23+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
         "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
-        "timestamp": "2026-09-22T09:35:37+08:00"
+        "timestamp": "2026-09-23T09:28:31+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
-        "detail": "latest 2026-09-18",
-        "timestamp": "2026-09-22T09:35:38+08:00"
+        "detail": "latest 2026-09-21",
+        "timestamp": "2026-09-23T09:28:32+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
         "detail": "8 recent items",
-        "timestamp": "2026-09-22T09:35:38+08:00"
+        "timestamp": "2026-09-23T09:28:32+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-22T09:35:38+08:00"
+        "timestamp": "2026-09-23T09:28:32+08:00"
       }
     },
     "warnings": [
@@ -52,17 +52,17 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-22 09:35 MYT",
+  "updated": "2026-09-23 09:28 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4352.72,
-    "change": 8.91,
-    "changePct": 0.21,
-    "dayRange": "4,338.55 - 4,375.41",
-    "monthPct": 0.56,
-    "yearPct": 0.87,
+    "spot": 4344.74,
+    "change": -12.94,
+    "changePct": -0.3,
+    "dayRange": "4,344.43 - 4,370.17",
+    "monthPct": -0.98,
+    "yearPct": 0.69,
     "ath": 5597.23,
-    "note": "Latest provider daily bar: 2026-09-22; rolling history used: 370 bars"
+    "note": "Latest provider daily bar: 2026-09-23; rolling history used: 370 bars"
   },
   "macro": [
     {
@@ -74,10 +74,10 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "US 10Y",
-      "value": "5.010%",
-      "delta": "+7.0 bp",
-      "tone": "bad",
-      "note": "FRED DGS10 · 2026-09-18"
+      "value": "4.960%",
+      "delta": "-5.0 bp",
+      "tone": "good",
+      "note": "FRED DGS10 · 2026-09-21"
     },
     {
       "label": "Brent",
@@ -88,12 +88,12 @@ window.XAUUSD_DATA = {
     }
   ],
   "sentiment": {
-    "bias": "DOWNWARD",
-    "goldTone": "BEARISH",
-    "score": -0.452,
+    "bias": "UPWARD",
+    "goldTone": "BULLISH",
+    "score": 0.305,
     "confidence": 69,
     "summary": "Mechanical daily pressure model using sourced USD/yield moves plus a small observed XAU-momentum term. It is not a forecast or trade instruction.",
-    "netSpeechSignal": "DOWN",
+    "netSpeechSignal": "UP",
     "netSpeechPct": 0.0,
     "netNote": "Direction only. No fabricated percentage impact is assigned to headlines or speeches."
   },
@@ -134,87 +134,102 @@ window.XAUUSD_DATA = {
   },
   "news": [
     {
-      "time": "2026-09-21 00:43 UTC",
-      "title": "Global Market Today: Asian stocks edge higher, oil extends losses",
-      "summary": "MSCI’s Asia Pacific equities gauge advanced 0.2% with Japan shut for a public holiday. S&P 500 futures rose 0.3% after the underlying gauge eked out a gain Friday, while contracts on the Nasdaq 100 Index climbed 0.4%.",
+      "time": "2026-09-22 01:19 UTC",
+      "title": "US threatens secondary sanctions over services to Iranian airlines",
+      "summary": "The warning targets airports, fuel suppliers and ticketing companies as Washington intensifies pressure on Tehran’s international financial and commercial networks",
+      "source": "BusinessLine",
+      "url": "https://www.thehindubusinessline.com/economy/logistics/us-threatens-secondary-sanctions-over-services-to-iranian-airlines/article71493938.ece",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-22 00:00 UTC",
+      "title": "India fastest-growing economy, but taxation and rules can deter investment: JPMorgan CEO Jamie Dimon",
+      "summary": "JPMorgan Chase CEO Jamie Dimon praised India's strong economic growth.  He noted that inconsistent taxation and rule application deter foreign investment.  Dimon emphasized promoting competition and fair treatment for global capital.  He expressed confidence …",
       "source": "The Times of India",
-      "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/global-market-today-asian-stocks-edge-higher-oil-extends-losses/articleshow/134377413.cms",
+      "url": "https://economictimes.indiatimes.com/news/india/india-fastest-growing-economy-but-taxation-and-rules-can-deter-investment-jpmorgan-ceo-jamie-dimon/articleshow/134397161.cms",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-21 00:40 UTC",
-      "title": "Tech leads shares higher in Asia, oil eases",
-      "summary": "SYDNEY, Sept 21 : Share markets edged higher in Asia on Monday as AI's insatiable demand for data buoyed chipmakers, and oil eased as hopes Saudi Arabia could boost supplies offset news of a Houthi attack on Riyadh.Trade was thin with Japan on its Silver Week…",
-      "source": "CNA",
-      "url": "https://www.channelnewsasia.com/business/tech-leads-shares-higher-in-asia-oil-eases-6398351",
+      "time": "2026-09-21 23:59 UTC",
+      "title": "The mill 200 farmers can't afford to lose",
+      "summary": "Australia's only remaining grower-owned sugar mill needs a multi-million-dollar loan to survive.",
+      "source": "ABC News (AU)",
+      "url": "https://www.abc.net.au/news/rural/2026-09-22/australia-last-grower-owned-sugar-mill-seeks-government-bailout/107158784",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-21 00:40 UTC",
-      "title": "Tech leads shares higher in Asia as oil slips",
-      "summary": "SYDNEY, Sept 21 : Share markets edged higher in Asia on Monday as AI's insatiable demand for data buoyed chipmakers, and oil eased on reports more oil was finding its way out of the Middle East than previously thought despite the ongoing conflict in the Gulf.…",
-      "source": "CNA",
-      "url": "https://www.channelnewsasia.com/business/tech-leads-shares-higher-in-asia-oil-slips-6398351",
+      "time": "2026-09-21 22:30 UTC",
+      "title": "FilmQuest 2026 Announces Its Nominees for the Coveted Cthulhu Awards - Genre Movie Madness Awaits!",
+      "summary": "I’ve been attending the FilmQuest film festival since it first launched, and it’s been incredibly cool watching the festival grow and evolve over the years into what it is today. It has become one of my favorite genre film festivals to attend, and every year …",
+      "source": "GeekTyrant",
+      "url": "https://geektyrant.com/news/filmquest-2026-announces-its-nominees-for-the-coveted-cthulhu-awards-genre-movie-madness-awaits",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-21 00:03 UTC",
-      "title": "Gold steadies as traders weigh inflation risks against Fed rate hike fallout",
-      "summary": "Gold's volatility amid inflation and Fed rate hikes highlights economic uncertainty, impacting investor strategies and market stability.\nThe post Gold steadies as traders weigh inflation risks against Fed rate hike fallout appeared first on Crypto Briefing.",
-      "source": "Crypto Briefing",
-      "url": "https://cryptobriefing.com/gold-steadies-inflation-risks-fed-rate-hike/",
-      "impact": "bearish",
-      "signal": "DOWN",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-21 00:01 UTC",
-      "title": "Gold steadies as traders weigh inflation, Fed rate hike outlook",
-      "summary": "Market caution persists as inflation and Fed rate hikes shape gold's outlook, impacting confidence in its year-end price potential.\nThe post Gold steadies as traders weigh inflation, Fed rate hike outlook appeared first on Crypto Briefing.",
-      "source": "Crypto Briefing",
-      "url": "https://cryptobriefing.com/gold-steadies-as-traders-weigh-inflation-fed-rate-hike-outlook/",
-      "impact": "bearish",
-      "signal": "DOWN",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-20 23:45 UTC",
-      "title": "Binance Announces 24/7 FX Perpetuals With USD/BRL Contract Set For September 21",
-      "summary": "Read the latest update on Binance Announces 24/7 FX Perpetuals With USD/BRL Contract Set For September 21.",
-      "source": "newsBTC",
-      "url": "http://www.newsbtc.com/news/binance-announces-247-fx-perpetuals-with-usdbrl-contract-set-for-september-21/",
+      "time": "2026-09-21 22:15 UTC",
+      "title": "Why Do So Many People Still Oppose Bitcoin as the Ultimate Inflation Escape?",
+      "summary": "Add ZyCrypto News On GoogleBitcoin proponent Jeff Swanson has tweeted about why the premier cryptocurrency still has its fair share of naysayers, even though it is the best hope for the average person to escape inflation and keep control of their money. His c…",
+      "source": "ZyCrypto",
+      "url": "https://zycrypto.com/why-do-so-many-people-still-oppose-bitcoin-as-the-ultimate-inflation-escape/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-20 23:19 UTC",
-      "title": "Ethan Hawke's HBO Max Batman Series Is Back With New Episodes At The Perfect Time",
-      "summary": "Ethan Hawke returns as Batman again in his DC series on HBO Max, and the show's new episodes could not have arrived at a better time for Bruce Wayne.",
-      "source": "Screen Rant",
-      "url": "https://screenrant.com/ethan-hawke-batwheels-hbo-max-batman-tv-show-september-2026-episodes/",
+      "time": "2026-09-21 21:16 UTC",
+      "title": "If a president speaks, but TV crews aren’t there to capture audio, does he make a sound? Networks keep cameras away after Trump bans CNN",
+      "summary": "President Donald Trump showed off his new White House helicopter landing pad on Monday, attempting to brush aside a First Amendment firestorm.",
+      "source": "Fortune",
+      "url": "https://fortune.com/2026/09/21/trump-tv-pool-cnn-ban-white-house-landing-pad-networks-abc-cbs-nbc-fox/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-20 22:09 UTC",
-      "title": "Banyan Announces $50 Million LIFE Offering and Concurrent $8 Million Private Placement",
-      "summary": "Not for distribution to United States newswire services or for dissemination in the United States VANCOUVER, British Columbia, Sept. 20, 2026 (GLOBE NEWSWIRE) — Banyan Gold Corp. (TSXV:BYN) (OTCQB: BYAGF) (“Banyan” or the “Company”) announces today that it ha…",
-      "source": "Financial Post",
-      "url": "https://financialpost.com/globe-newswire/banyan-announces-50-million-life-offering-and-concurrent-8-million-private-placement",
+      "time": "2026-09-21 20:38 UTC",
+      "title": "Trump Says Arch Must Be Built Because We Need Somewhere To Store Our Precious ‘Sniper Ammo’",
+      "summary": "Satire is dead. But it’s been dead since the first Trump administration, back when people were “owning the libs” with a combination of horse dewormers and willfully contracting COVID. Bleach consumption was discussed. It was a whole thing. Not enough of those…",
+      "source": "Techdirt",
+      "url": "http://www.techdirt.com/2026/09/21/trump-says-arch-must-be-built-because-we-need-somewhere-to-store-our-precious-sniper-ammo/",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-21 20:32 UTC",
+      "title": "Now Is a Good Time to Start Your Melasma Routine",
+      "summary": "While a dermatologist can certainly step in with a variety of protocols, it is possible to tackle melasma at home without spending crazy money on lasers and prescription topicals.",
+      "source": "The Cut",
+      "url": "http://www.thecut.com/article/now-is-a-good-time-to-start-your-melasma-routine-products.html",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     }
   ],
   "speakers": [
+    {
+      "name": "Discount Window Modernization and Treasury Market Functioning",
+      "role": "Federal Reserve speaker",
+      "side": "neutral",
+      "signal": "NEUTRAL",
+      "quote": "Discount Window Modernization and Treasury Market Functioning Watch Live Vice Chair Philip N. Jefferson At the 2026 U.S. Treasury Market Conference, Federal Reserve Bank of New York, New York, New York",
+      "impact": "Official Fed speech listing; stance is not automatically inferred.",
+      "date": "2026",
+      "source": "Federal Reserve",
+      "url": "https://www.federalreserve.gov/newsevents/speech/jefferson20260922a.htm",
+      "w": 0.0,
+      "s": 0.0,
+      "f": 0.0,
+      "impactPct": 0.0
+    },
     {
       "name": "The Final Chapter on Modernizing Bank Regulatory Stress Testing",
       "role": "Federal Reserve speaker",
@@ -289,35 +304,20 @@ window.XAUUSD_DATA = {
       "s": 0.0,
       "f": 0.0,
       "impactPct": 0.0
-    },
-    {
-      "name": "Outlook for the U.S. and Alaskan Economies",
-      "role": "Federal Reserve speaker",
-      "side": "neutral",
-      "signal": "NEUTRAL",
-      "quote": "Outlook for the U.S. and Alaskan Economies Governor Lisa D. Cook At the 2026 Economic Luncheon of the Anchorage Economic Development Corporation, Anchorage, Alaska",
-      "impact": "Official Fed speech listing; stance is not automatically inferred.",
-      "date": "2026",
-      "source": "Federal Reserve",
-      "url": "https://www.federalreserve.gov/newsevents/speech/cook20260805a.htm",
-      "w": 0.0,
-      "s": 0.0,
-      "f": 0.0,
-      "impactPct": 0.0
     }
   ],
   "levels": {
     "resistance": [
-      4378.48,
-      4413.15,
-      4441.77,
+      4391.93,
+      4426.19,
+      4476.96,
       4514.11
     ],
     "support": [
-      4315.19,
-      4286.56,
-      4251.89,
-      4238.37
+      4306.9,
+      4256.13,
+      4238.37,
+      4221.87
     ],
     "note": "Classic pivot levels from previous daily OHLC plus recent 20-day extreme; mechanical, not guarantees."
   },
@@ -325,27 +325,23 @@ window.XAUUSD_DATA = {
   "pressure": [
     {
       "label": "US 10Y daily move",
-      "level": "+7.0 bp",
-      "w": 58,
-      "dir": "down"
+      "level": "-5.0 bp",
+      "w": 41,
+      "dir": "up"
     },
     {
       "label": "Observed XAU momentum",
-      "level": "+0.21%",
-      "w": 13,
-      "dir": "up"
+      "level": "-0.30%",
+      "w": 19,
+      "dir": "down"
     }
   ],
   "priceSeries": {
     "label": "XAU/USD daily close (Twelve Data)",
     "unit": "USD / troy oz",
-    "yMin": 4247.55,
-    "yMax": 4418.22,
+    "yMin": 4250.14,
+    "yMax": 4394.06,
     "points": [
-      {
-        "x": "2026-09-09",
-        "y": 4401.7
-      },
       {
         "x": "2026-09-10",
         "y": 4316.76
@@ -396,7 +392,11 @@ window.XAUUSD_DATA = {
       },
       {
         "x": "2026-09-22",
-        "y": 4352.72
+        "y": 4357.68
+      },
+      {
+        "x": "2026-09-23",
+        "y": 4344.74
       }
     ]
   },
@@ -407,7 +407,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-22",
+        "x": "2026-09-23",
         "y": 0
       }
     ]
@@ -419,7 +419,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-22",
+        "x": "2026-09-23",
         "y": 0
       }
     ]
