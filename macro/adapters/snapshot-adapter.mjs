@@ -19,16 +19,20 @@ export function adaptSnapshot(snapshot = {}) {
   const price = snapshot.price ?? {};
   const sources = Array.isArray(snapshot.sources) ? snapshot.sources.slice() : [];
   const calendar = Array.isArray(snapshot.calendar) ? snapshot.calendar.slice() : [];
+  const normalizedPrice = nullable(price.latestDailyClose) ?? nullable(price.spot);
 
   return {
     status: 'SNAPSHOT',
     updatedAt: nullable(meta.generatedAt) ?? nullable(snapshot.updated),
     verified: meta.verified === true,
     instruments: {
-      'XAU/USD': instrumentView('XAU/USD', price.spot, {
+      'XAU/USD': instrumentView('XAU/USD', normalizedPrice, {
+        priceType: nullable(price.priceType) ?? (String(meta.cadence).toLowerCase() === 'daily' ? 'DAILY_CLOSE' : null),
         change: nullable(price.change),
         changePct: nullable(price.changePct),
-        dayRange: nullable(price.dayRange)
+        dayRange: nullable(price.dayRange),
+        rollingHigh: nullable(price.rollingHigh),
+        rollingWindowBars: nullable(price.rollingWindowBars)
       }),
       'EUR/USD': instrumentView('EUR/USD'),
       'GBP/USD': instrumentView('GBP/USD'),

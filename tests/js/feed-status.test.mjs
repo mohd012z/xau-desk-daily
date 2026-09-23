@@ -15,3 +15,7 @@ test('old cached object cannot be called streaming', () => {
 test('snapshot is explicit when live path is unavailable', () => {
   assert.equal(classifyFeedStatus({ providerTimestamp: null, now, hasSnapshot: true, networkFailed: true }), 'SNAPSHOT');
 });
+
+test('invalid provider timestamp is not misclassified as stale', () => {
+  assert.equal(classifyFeedStatus({ providerTimestamp: 'not-a-timestamp', now, hasSnapshot: true }), 'INVALID_TIMESTAMP');
+});

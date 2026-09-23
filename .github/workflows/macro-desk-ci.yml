@@ -3,18 +3,28 @@ name: MACRO DESK CI
 on:
   push:
     paths:
+      - 'index.html'
       - 'macro/**'
       - 'data/**'
+      - 'scripts/**'
       - 'macro-preview.html'
       - 'tests/js/**'
+      - 'tests/python/**'
+      - 'requirements.txt'
       - '.github/workflows/macro-desk-ci.yml'
+      - '.github/workflows/pages.yml'
   pull_request:
     paths:
+      - 'index.html'
       - 'macro/**'
       - 'data/**'
+      - 'scripts/**'
       - 'macro-preview.html'
       - 'tests/js/**'
+      - 'tests/python/**'
+      - 'requirements.txt'
       - '.github/workflows/macro-desk-ci.yml'
+      - '.github/workflows/pages.yml'
 
 permissions:
   contents: read
@@ -68,12 +78,24 @@ jobs:
           node --check macro/ui/trade-plan-view.mjs
           node --check macro/ui/trade-plan-controller.mjs
           node --check macro/ui/trade-plan-integration.mjs
+          node --check macro/ui/runtime-safety.js
           node --check macro/ui/app.mjs
+
+      - name: Check Python syntax and collector tests
+        run: |
+          python --version
+          python -m py_compile scripts/*.py
+          if [ -d "scripts/event_history" ]; then
+            python -m py_compile scripts/event_history/*.py
+          fi
+          if [ -d "tests/python" ]; then
+            python -m unittest discover -s tests/python -p 'test_*.py'
+          fi
 
       - name: Validate public event history JSON
         run: node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('data/event-history.json','utf8'));if(p.schemaVersion!=='1.0'||!Array.isArray(p.samples))process.exit(1)"
 
-      - name: Public-source safety checks
+      - name: Repository-wide source safety checks
         run: |
-          ! grep -R -E 'apikey=[A-Za-z0-9_-]{8,}|TWELVE_DATA_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}|NEWS_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}|FRED_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}' macro data macro-preview.html
+          ! git grep -I -n -E 'apikey=[A-Za-z0-9_-]{8,}|TWELVE_DATA_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}|NEWS_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}|FRED_API_KEY[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_-]{8,}'
           ! grep -R -E 'BUY setup|SELL setup|Stop loss|Take profit' macro/events macro/history macro/ui/trade-plan-*.mjs macro/ui/advance-model-view.mjs macro-preview.html
