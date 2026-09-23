@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.news_relevance import is_gold_macro_relevant
+from scripts.news_relevance import filter_snapshot_news, is_gold_macro_relevant
 
 
 class NewsRelevanceTest(unittest.TestCase):
@@ -44,6 +44,31 @@ class NewsRelevanceTest(unittest.TestCase):
     def test_handles_empty_or_none_text(self):
         self.assertFalse(is_gold_macro_relevant(""))
         self.assertFalse(is_gold_macro_relevant(None))
+
+    def test_snapshot_filter_keeps_only_relevant_news_and_updates_source_detail(self):
+        snapshot = {
+            "meta": {"sourceStatus": {"news": {"ok": True, "detail": "3 recent items"}}},
+            "news": [
+                {
+                    "title": "Gold rises as dollar weakens ahead of Fed decision",
+                    "summary": "Treasury yields eased before the policy announcement.",
+                },
+                {
+                    "title": "Chronological Reading for Tuesday",
+                    "summary": "",
+                },
+                {
+                    "title": "Gold jewellery retail rates today",
+                    "summary": "Check local 24K prices in major cities.",
+                },
+            ],
+        }
+
+        out = filter_snapshot_news(snapshot)
+        self.assertEqual(len(out["news"]), 1)
+        self.assertEqual(out["news"][0]["title"], snapshot["news"][0]["title"])
+        self.assertEqual(out["meta"]["sourceStatus"]["news"]["detail"], "1 relevant recent items")
+        self.assertEqual(len(snapshot["news"]), 3, "input snapshot must not be mutated")
 
 
 if __name__ == "__main__":
