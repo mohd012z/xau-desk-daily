@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-23T12:31:41+08:00",
+    "generatedAt": "2026-09-23T12:37:00+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -14,37 +14,37 @@ window.XAUUSD_DATA = {
         "ok": true,
         "label": "Twelve Data XAU/USD",
         "detail": "latest daily bar 2026-09-23",
-        "timestamp": "2026-09-23T12:31:41+08:00"
+        "timestamp": "2026-09-23T12:37:01+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-23T12:31:41+08:00"
+        "timestamp": "2026-09-23T12:37:01+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
         "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
-        "timestamp": "2026-09-23T12:31:49+08:00"
+        "timestamp": "2026-09-23T12:37:09+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
         "detail": "latest 2026-09-21",
-        "timestamp": "2026-09-23T12:31:49+08:00"
+        "timestamp": "2026-09-23T12:37:10+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
-        "detail": "8 recent items",
-        "timestamp": "2026-09-23T12:31:49+08:00"
+        "detail": "0 relevant recent items",
+        "timestamp": "2026-09-23T12:37:10+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-23T12:31:50+08:00"
+        "timestamp": "2026-09-23T12:37:10+08:00"
       }
     },
     "warnings": [
@@ -52,18 +52,18 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-23 12:31 MYT",
+  "updated": "2026-09-23 12:37 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4345.73,
-    "change": -11.95,
-    "changePct": -0.27,
+    "spot": 4346.23,
+    "change": -11.45,
+    "changePct": -0.26,
     "dayRange": "4,333.51 - 4,370.17",
-    "monthPct": -0.96,
-    "yearPct": 0.71,
+    "monthPct": -0.95,
+    "yearPct": 0.72,
     "ath": null,
     "note": "Latest provider daily bar: 2026-09-23; rolling history used: 370 bars",
-    "latestDailyClose": 4345.73,
+    "latestDailyClose": 4346.23,
     "priceType": "DAILY_CLOSE",
     "rollingHigh": 5597.23,
     "rollingWindowBars": 370,
@@ -95,7 +95,7 @@ window.XAUUSD_DATA = {
   "sentiment": {
     "bias": "UPWARD",
     "goldTone": "BULLISH",
-    "score": 0.308,
+    "score": 0.309,
     "confidence": 69,
     "summary": "Mechanical daily pressure model using sourced USD/yield moves plus a small observed XAU-momentum term. It is not a forecast or trade instruction.",
     "netSpeechSignal": "UP",
@@ -137,88 +137,7 @@ window.XAUUSD_DATA = {
       }
     ]
   },
-  "news": [
-    {
-      "time": "2026-09-22 04:20 UTC",
-      "title": "Nifty trade above 23,400 in early trade; breadth strong",
-      "summary": "At 09:30 IST, the barometer index, the S&P BSE Sensex, jumped 88.66 points or 0.12% to 74,953.86. The Nifty 50 index rose 32.85 points or 0.14% to 23,447.15.",
-      "source": "Business Standard",
-      "url": "https://www.business-standard.com/markets/capital-market-news/nifty-trade-above-23-400-in-early-trade-breadth-strong-126092200188_1.html",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-22 04:06 UTC",
-      "title": "Chronological Reading for Tuesday September 22, 2026 (NIV)",
-      "summary": "",
-      "source": "Biblegateway.com",
-      "url": "https://www.biblegateway.com/reading-plans/chronological/2026/09/22/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-22 04:04 UTC",
-      "title": "Gold, silver prices today, 22 September: Check retail rates of 24K, 22K gold, 999 silver in Delhi, Mumbai and Kolkata",
-      "summary": "Gold and silver prices today, 22 September: Check the latest 24K, 22K gold and 999 silver retail rates across Delhi, Mumbai, Kolkata and other major Indian cities, along with MCX market updates.",
-      "source": "Livemint",
-      "url": "https://www.livemint.com/money/personal-finance/gold-silver-prices-today-22-september-check-retail-rates-of-24k-22k-gold-999-silver-in-delhi-mumbai-and-kolkata-11789402181069.html",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-22 03:10 UTC",
-      "title": "Trump inaugurates new White House helipad; TV networks boycott coverage over CNN ban",
-      "summary": "US President Trump inaugurated a new White House helipad with a ribbon-cutting ceremony. Major television networks boycotted the event in protest of CNN's ban. Trump posted about the helipad's maiden voyage on his social media. Media access restrictions have …",
-      "source": "The Times of India",
-      "url": "https://economictimes.indiatimes.com/news/international/world-news/trump-inaugurates-new-white-house-helipad-tv-networks-boycott-coverage-over-cnn-ban/articleshow/134400614.cms",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-22 02:32 UTC",
-      "title": "Trump inaugurates new White House helipad, but networks skip coverage",
-      "summary": "President Donald Trump showed off his new White House helicopter landing pad on Monday, attempting to brush aside a First Amendment firestorm even as major television networks kept their cameras away because CNN wasn't allowed to cover the event.\nTrump used o…",
-      "source": "Business Standard",
-      "url": "https://www.business-standard.com/world-news/trump-inaugurates-new-white-house-helipad-but-networks-skip-coverage-126092200004_1.html",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-22 02:31 UTC",
-      "title": "How much passive income can I earn off an $800,000 superannuation balance?",
-      "summary": "Here's a quick sum to work out what passive income you could earn off your superannuation balance.\nThe post How much passive income can I earn off an $800,000 superannuation balance? appeared first on The Motley Fool Australia.",
-      "source": "Motley Fool Australia",
-      "url": "https://www.fool.com.au/2026/09/22/how-much-passive-income-can-i-earn-off-an-800000-superannuation-balance/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-22 02:24 UTC",
-      "title": "Moto Wrap Weekly – SMX Fireworks – MXGP – Rally – Trials + more…",
-      "summary": "Webb and Deegan clash, Triumph makes motocross history and Herlings extends his winning streak. Catch up on the Aussie results, Reed’s Holeshot Challenge, Wilson and Bolt injury updates, rally news and TrialGP title deciders.\nThe post Moto Wrap Weekly – SMX F…",
-      "source": "Mcnews.com.au",
-      "url": "https://www.mcnews.com.au/moto-news-weekly-wrap-september-22-2026/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-22 02:21 UTC",
-      "title": "LIC, Axis Bank: Kotak Securities explains why they prefer these 2 stocks",
-      "summary": "Stocks to buy today: Shrikant Chouhan, Head of Equity Research of Kotak Securities explains why the analyst is bullish on LIC and Axis Bank.",
-      "source": "Business Standard",
-      "url": "https://www.business-standard.com/markets/news/stocks-to-buy-today-lic-axis-bank-kotak-securities-explains-why-they-prefer-these-2-stocks-126092200091_1.html",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    }
-  ],
+  "news": [],
   "speakers": [
     {
       "name": "Discount Window Modernization and Treasury Market Functioning",
@@ -336,8 +255,8 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "Observed XAU momentum",
-      "level": "-0.27%",
-      "w": 18,
+      "level": "-0.26%",
+      "w": 17,
       "dir": "down"
     }
   ],
@@ -401,7 +320,7 @@ window.XAUUSD_DATA = {
       },
       {
         "x": "2026-09-23",
-        "y": 4345.73
+        "y": 4346.23
       }
     ]
   },
