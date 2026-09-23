@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-23T09:28:23+08:00",
+    "generatedAt": "2026-09-23T12:31:41+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -14,37 +14,37 @@ window.XAUUSD_DATA = {
         "ok": true,
         "label": "Twelve Data XAU/USD",
         "detail": "latest daily bar 2026-09-23",
-        "timestamp": "2026-09-23T09:28:23+08:00"
+        "timestamp": "2026-09-23T12:31:41+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-23T09:28:23+08:00"
+        "timestamp": "2026-09-23T12:31:41+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
         "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
-        "timestamp": "2026-09-23T09:28:31+08:00"
+        "timestamp": "2026-09-23T12:31:49+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
         "detail": "latest 2026-09-21",
-        "timestamp": "2026-09-23T09:28:32+08:00"
+        "timestamp": "2026-09-23T12:31:49+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
         "detail": "8 recent items",
-        "timestamp": "2026-09-23T09:28:32+08:00"
+        "timestamp": "2026-09-23T12:31:49+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-23T09:28:32+08:00"
+        "timestamp": "2026-09-23T12:31:50+08:00"
       }
     },
     "warnings": [
@@ -52,17 +52,22 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-23 09:28 MYT",
+  "updated": "2026-09-23 12:31 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4344.74,
-    "change": -12.94,
-    "changePct": -0.3,
-    "dayRange": "4,344.43 - 4,370.17",
-    "monthPct": -0.98,
-    "yearPct": 0.69,
-    "ath": 5597.23,
-    "note": "Latest provider daily bar: 2026-09-23; rolling history used: 370 bars"
+    "spot": 4345.73,
+    "change": -11.95,
+    "changePct": -0.27,
+    "dayRange": "4,333.51 - 4,370.17",
+    "monthPct": -0.96,
+    "yearPct": 0.71,
+    "ath": null,
+    "note": "Latest provider daily bar: 2026-09-23; rolling history used: 370 bars",
+    "latestDailyClose": 4345.73,
+    "priceType": "DAILY_CLOSE",
+    "rollingHigh": 5597.23,
+    "rollingWindowBars": 370,
+    "providerBarTime": "2026-09-23"
   },
   "macro": [
     {
@@ -90,7 +95,7 @@ window.XAUUSD_DATA = {
   "sentiment": {
     "bias": "UPWARD",
     "goldTone": "BULLISH",
-    "score": 0.305,
+    "score": 0.308,
     "confidence": 69,
     "summary": "Mechanical daily pressure model using sourced USD/yield moves plus a small observed XAU-momentum term. It is not a forecast or trade instruction.",
     "netSpeechSignal": "UP",
@@ -134,81 +139,81 @@ window.XAUUSD_DATA = {
   },
   "news": [
     {
-      "time": "2026-09-22 01:19 UTC",
-      "title": "US threatens secondary sanctions over services to Iranian airlines",
-      "summary": "The warning targets airports, fuel suppliers and ticketing companies as Washington intensifies pressure on Tehran’s international financial and commercial networks",
-      "source": "BusinessLine",
-      "url": "https://www.thehindubusinessline.com/economy/logistics/us-threatens-secondary-sanctions-over-services-to-iranian-airlines/article71493938.ece",
+      "time": "2026-09-22 04:20 UTC",
+      "title": "Nifty trade above 23,400 in early trade; breadth strong",
+      "summary": "At 09:30 IST, the barometer index, the S&P BSE Sensex, jumped 88.66 points or 0.12% to 74,953.86. The Nifty 50 index rose 32.85 points or 0.14% to 23,447.15.",
+      "source": "Business Standard",
+      "url": "https://www.business-standard.com/markets/capital-market-news/nifty-trade-above-23-400-in-early-trade-breadth-strong-126092200188_1.html",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-22 00:00 UTC",
-      "title": "India fastest-growing economy, but taxation and rules can deter investment: JPMorgan CEO Jamie Dimon",
-      "summary": "JPMorgan Chase CEO Jamie Dimon praised India's strong economic growth.  He noted that inconsistent taxation and rule application deter foreign investment.  Dimon emphasized promoting competition and fair treatment for global capital.  He expressed confidence …",
+      "time": "2026-09-22 04:06 UTC",
+      "title": "Chronological Reading for Tuesday September 22, 2026 (NIV)",
+      "summary": "",
+      "source": "Biblegateway.com",
+      "url": "https://www.biblegateway.com/reading-plans/chronological/2026/09/22/",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-22 04:04 UTC",
+      "title": "Gold, silver prices today, 22 September: Check retail rates of 24K, 22K gold, 999 silver in Delhi, Mumbai and Kolkata",
+      "summary": "Gold and silver prices today, 22 September: Check the latest 24K, 22K gold and 999 silver retail rates across Delhi, Mumbai, Kolkata and other major Indian cities, along with MCX market updates.",
+      "source": "Livemint",
+      "url": "https://www.livemint.com/money/personal-finance/gold-silver-prices-today-22-september-check-retail-rates-of-24k-22k-gold-999-silver-in-delhi-mumbai-and-kolkata-11789402181069.html",
+      "impact": "neutral",
+      "signal": "NEUTRAL",
+      "impactPct": null
+    },
+    {
+      "time": "2026-09-22 03:10 UTC",
+      "title": "Trump inaugurates new White House helipad; TV networks boycott coverage over CNN ban",
+      "summary": "US President Trump inaugurated a new White House helipad with a ribbon-cutting ceremony. Major television networks boycotted the event in protest of CNN's ban. Trump posted about the helipad's maiden voyage on his social media. Media access restrictions have …",
       "source": "The Times of India",
-      "url": "https://economictimes.indiatimes.com/news/india/india-fastest-growing-economy-but-taxation-and-rules-can-deter-investment-jpmorgan-ceo-jamie-dimon/articleshow/134397161.cms",
+      "url": "https://economictimes.indiatimes.com/news/international/world-news/trump-inaugurates-new-white-house-helipad-tv-networks-boycott-coverage-over-cnn-ban/articleshow/134400614.cms",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-21 23:59 UTC",
-      "title": "The mill 200 farmers can't afford to lose",
-      "summary": "Australia's only remaining grower-owned sugar mill needs a multi-million-dollar loan to survive.",
-      "source": "ABC News (AU)",
-      "url": "https://www.abc.net.au/news/rural/2026-09-22/australia-last-grower-owned-sugar-mill-seeks-government-bailout/107158784",
+      "time": "2026-09-22 02:32 UTC",
+      "title": "Trump inaugurates new White House helipad, but networks skip coverage",
+      "summary": "President Donald Trump showed off his new White House helicopter landing pad on Monday, attempting to brush aside a First Amendment firestorm even as major television networks kept their cameras away because CNN wasn't allowed to cover the event.\nTrump used o…",
+      "source": "Business Standard",
+      "url": "https://www.business-standard.com/world-news/trump-inaugurates-new-white-house-helipad-but-networks-skip-coverage-126092200004_1.html",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-21 22:30 UTC",
-      "title": "FilmQuest 2026 Announces Its Nominees for the Coveted Cthulhu Awards - Genre Movie Madness Awaits!",
-      "summary": "I’ve been attending the FilmQuest film festival since it first launched, and it’s been incredibly cool watching the festival grow and evolve over the years into what it is today. It has become one of my favorite genre film festivals to attend, and every year …",
-      "source": "GeekTyrant",
-      "url": "https://geektyrant.com/news/filmquest-2026-announces-its-nominees-for-the-coveted-cthulhu-awards-genre-movie-madness-awaits",
+      "time": "2026-09-22 02:31 UTC",
+      "title": "How much passive income can I earn off an $800,000 superannuation balance?",
+      "summary": "Here's a quick sum to work out what passive income you could earn off your superannuation balance.\nThe post How much passive income can I earn off an $800,000 superannuation balance? appeared first on The Motley Fool Australia.",
+      "source": "Motley Fool Australia",
+      "url": "https://www.fool.com.au/2026/09/22/how-much-passive-income-can-i-earn-off-an-800000-superannuation-balance/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-21 22:15 UTC",
-      "title": "Why Do So Many People Still Oppose Bitcoin as the Ultimate Inflation Escape?",
-      "summary": "Add ZyCrypto News On GoogleBitcoin proponent Jeff Swanson has tweeted about why the premier cryptocurrency still has its fair share of naysayers, even though it is the best hope for the average person to escape inflation and keep control of their money. His c…",
-      "source": "ZyCrypto",
-      "url": "https://zycrypto.com/why-do-so-many-people-still-oppose-bitcoin-as-the-ultimate-inflation-escape/",
+      "time": "2026-09-22 02:24 UTC",
+      "title": "Moto Wrap Weekly – SMX Fireworks – MXGP – Rally – Trials + more…",
+      "summary": "Webb and Deegan clash, Triumph makes motocross history and Herlings extends his winning streak. Catch up on the Aussie results, Reed’s Holeshot Challenge, Wilson and Bolt injury updates, rally news and TrialGP title deciders.\nThe post Moto Wrap Weekly – SMX F…",
+      "source": "Mcnews.com.au",
+      "url": "https://www.mcnews.com.au/moto-news-weekly-wrap-september-22-2026/",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
     },
     {
-      "time": "2026-09-21 21:16 UTC",
-      "title": "If a president speaks, but TV crews aren’t there to capture audio, does he make a sound? Networks keep cameras away after Trump bans CNN",
-      "summary": "President Donald Trump showed off his new White House helicopter landing pad on Monday, attempting to brush aside a First Amendment firestorm.",
-      "source": "Fortune",
-      "url": "https://fortune.com/2026/09/21/trump-tv-pool-cnn-ban-white-house-landing-pad-networks-abc-cbs-nbc-fox/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-21 20:38 UTC",
-      "title": "Trump Says Arch Must Be Built Because We Need Somewhere To Store Our Precious ‘Sniper Ammo’",
-      "summary": "Satire is dead. But it’s been dead since the first Trump administration, back when people were “owning the libs” with a combination of horse dewormers and willfully contracting COVID. Bleach consumption was discussed. It was a whole thing. Not enough of those…",
-      "source": "Techdirt",
-      "url": "http://www.techdirt.com/2026/09/21/trump-says-arch-must-be-built-because-we-need-somewhere-to-store-our-precious-sniper-ammo/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-21 20:32 UTC",
-      "title": "Now Is a Good Time to Start Your Melasma Routine",
-      "summary": "While a dermatologist can certainly step in with a variety of protocols, it is possible to tackle melasma at home without spending crazy money on lasers and prescription topicals.",
-      "source": "The Cut",
-      "url": "http://www.thecut.com/article/now-is-a-good-time-to-start-your-melasma-routine-products.html",
+      "time": "2026-09-22 02:21 UTC",
+      "title": "LIC, Axis Bank: Kotak Securities explains why they prefer these 2 stocks",
+      "summary": "Stocks to buy today: Shrikant Chouhan, Head of Equity Research of Kotak Securities explains why the analyst is bullish on LIC and Axis Bank.",
+      "source": "Business Standard",
+      "url": "https://www.business-standard.com/markets/news/stocks-to-buy-today-lic-axis-bank-kotak-securities-explains-why-they-prefer-these-2-stocks-126092200091_1.html",
       "impact": "neutral",
       "signal": "NEUTRAL",
       "impactPct": null
@@ -331,8 +336,8 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "Observed XAU momentum",
-      "level": "-0.30%",
-      "w": 19,
+      "level": "-0.27%",
+      "w": 18,
       "dir": "down"
     }
   ],
@@ -396,7 +401,7 @@ window.XAUUSD_DATA = {
       },
       {
         "x": "2026-09-23",
-        "y": 4344.74
+        "y": 4345.73
       }
     ]
   },
