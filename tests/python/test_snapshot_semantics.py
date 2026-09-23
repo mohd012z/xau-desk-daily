@@ -1,6 +1,10 @@
 import unittest
+from pathlib import Path
 
 from scripts.normalize_snapshot_semantics import normalize_snapshot
+
+
+ROOT = Path(__file__).resolve().parents[2]
 
 
 class SnapshotSemanticsTest(unittest.TestCase):
@@ -35,6 +39,14 @@ class SnapshotSemanticsTest(unittest.TestCase):
         normalize_snapshot(snapshot)
         self.assertEqual(snapshot["price"]["ath"], 110.0)
         self.assertNotIn("latestDailyClose", snapshot["price"])
+
+    def test_daily_workflow_normalizes_before_public_redaction(self):
+        workflow = (ROOT / ".github/workflows/xauusd-daily.yml").read_text(encoding="utf-8")
+        normalize_cmd = "python scripts/normalize_snapshot_semantics.py"
+        redact_cmd = "python scripts/redact_public_data.py"
+        self.assertIn(normalize_cmd, workflow)
+        self.assertIn(redact_cmd, workflow)
+        self.assertLess(workflow.index(normalize_cmd), workflow.index(redact_cmd))
 
 
 if __name__ == "__main__":
