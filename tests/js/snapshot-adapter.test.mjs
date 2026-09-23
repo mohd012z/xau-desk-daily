@@ -25,6 +25,25 @@ test('daily XAU snapshot normalizes as metal and never claims streaming', () => 
   assert.deepEqual(out.sources, ['XAU provider']);
 });
 
+test('explicit daily close overrides the legacy spot alias and exposes price semantics', () => {
+  const snapshot = {
+    meta: { cadence: 'daily', verified: true },
+    price: {
+      latestDailyClose: 4327.23,
+      spot: 9999,
+      priceType: 'DAILY_CLOSE',
+      rollingHigh: 4500.5,
+      rollingWindowBars: 370
+    }
+  };
+  const out = adaptSnapshot(snapshot);
+  const xau = out.instruments['XAU/USD'];
+  assert.equal(xau.price, 4327.23);
+  assert.equal(xau.priceType, 'DAILY_CLOSE');
+  assert.equal(xau.rollingHigh, 4500.5);
+  assert.equal(xau.rollingWindowBars, 370);
+});
+
 test('unknown fields remain null instead of fabricated', () => {
   const out = adaptSnapshot({ meta: {}, price: {}, sources: [] });
   assert.equal(out.instruments['XAU/USD'].price, null);
