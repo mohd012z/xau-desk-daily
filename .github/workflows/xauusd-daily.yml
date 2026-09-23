@@ -45,6 +45,9 @@ jobs:
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
         run: python scripts/update_xauusd.py
 
+      - name: Normalize snapshot semantics
+        run: python scripts/normalize_snapshot_semantics.py
+
       - name: Secure and verify public data
         env:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
@@ -75,4 +78,5 @@ jobs:
           echo "Time zone : Asia/Kuala_Lumpur"
           echo "Schedule  : 07:10 MYT daily"
           echo "Branch    : main"
+          echo "Schema    : DAILY_CLOSE + rollingHigh normalized before publish"
           echo "===================================="
