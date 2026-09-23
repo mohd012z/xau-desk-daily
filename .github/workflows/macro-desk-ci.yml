@@ -1,4 +1,4 @@
-name: MACRO DESK CI
+name: HELIX VEYRA CI
 
 on:
   push:
@@ -7,9 +7,10 @@ on:
       - 'macro/**'
       - 'data/**'
       - 'scripts/**'
+      - 'config/**'
+      - 'tools/**'
       - 'macro-preview.html'
-      - 'tests/js/**'
-      - 'tests/python/**'
+      - 'tests/**'
       - 'requirements.txt'
       - '.github/workflows/macro-desk-ci.yml'
       - '.github/workflows/macro-phase3-ci.yml'
@@ -21,9 +22,10 @@ on:
       - 'macro/**'
       - 'data/**'
       - 'scripts/**'
+      - 'config/**'
+      - 'tools/**'
       - 'macro-preview.html'
-      - 'tests/js/**'
-      - 'tests/python/**'
+      - 'tests/**'
       - 'requirements.txt'
       - '.github/workflows/macro-desk-ci.yml'
       - '.github/workflows/macro-phase3-ci.yml'
@@ -46,11 +48,23 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Run MACRO DESK tests
+      - name: Run existing market and macro tests
         run: node --test tests/js/*.test.mjs
+
+      - name: Run HELIX VEYRA migration tests
+        run: node --test tests/*.test.mjs
+
+      - name: Run HELIX VEYRA migration safety gate
+        run: node tools/verify-migration.mjs
 
       - name: Check JavaScript syntax
         run: |
+          node --check config/product-identity.mjs
+          node --check config/endpoints.mjs
+          node --check tools/rename-audit.mjs
+          node --check tools/endpoint-audit.mjs
+          node --check tools/security/secret-scan.mjs
+          node --check tools/verify-migration.mjs
           node --check macro/core/instruments.mjs
           node --check macro/core/events.mjs
           node --check macro/core/reaction.mjs
