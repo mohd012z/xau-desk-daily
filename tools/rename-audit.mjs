@@ -49,9 +49,11 @@ export async function scanPaths(root = '.', patterns = DEFAULT_PATTERNS, options
     if (looksBinary(buffer)) continue;
     const lines = buffer.toString('utf8').split(/\r?\n/);
     lines.forEach((lineText, index) => {
-      for (const pattern of patterns) {
-        if (lineText.includes(pattern)) findings.push({ file: rel, pattern, line: index + 1 });
-      }
+      // The patterns overlap. A full raw GitHub URL also contains the shorter
+      // owner/repository and slug forms, but it is still one coupling. Keep
+      // the first (most-specific) match so every source line is actionable once.
+      const pattern = patterns.find((candidate) => lineText.includes(candidate));
+      if (pattern) findings.push({ file: rel, pattern, line: index + 1 });
     });
   }
   return findings;
