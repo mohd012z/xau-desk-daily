@@ -4,8 +4,10 @@ import fs from 'node:fs';
 
 const html = fs.readFileSync('macro-preview.html', 'utf8');
 
-test('preview exposes the new product identity and navigation', () => {
-  assert.match(html, /MACRO\/\/DESK/);
+test('preview exposes the VEYRA Pulse product identity and navigation', () => {
+  assert.match(html, /VEYRA/);
+  assert.match(html, /Pulse/);
+  assert.doesNotMatch(html, /MACRO\/\/DESK/);
   assert.match(html, /METALS/);
   assert.match(html, /FX/);
   assert.match(html, /DIGITAL ASSETS/);
