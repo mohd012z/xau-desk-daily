@@ -2,13 +2,13 @@ import { createHash } from 'node:crypto';
 
 function required(value, name) {
   if (typeof value !== 'string' || value.trim() === '') throw new TypeError(`${name} is required`);
-  return value;
+  return value.trim();
 }
 
 function utc(value, name) {
-  required(value, name);
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime()) || !String(value).endsWith('Z')) throw new TypeError(`${name} must be UTC`);
+  const normalized = required(value, name);
+  const date = new Date(normalized);
+  if (Number.isNaN(date.getTime()) || !normalized.endsWith('Z')) throw new TypeError(`${name} must be UTC`);
   return date.toISOString();
 }
 
