@@ -1,9 +1,8 @@
-name: Deploy XAU DESK to GitHub Pages
+name: Deploy VEYRA to GitHub Pages
 
 on:
   workflow_dispatch:
 
-  # Deploy when you manually edit the website/data.
   push:
     branches:
       - main
@@ -16,11 +15,9 @@ on:
       - '.nojekyll'
       - '.github/workflows/pages.yml'
 
-  # IMPORTANT:
-  # GITHUB_TOKEN commits from the daily updater do not normally
-  # start another push workflow.
-  #
-  # workflow_run solves that problem.
+  # GITHUB_TOKEN commits from the daily updater do not normally start another
+  # push workflow. workflow_run keeps Pages synchronized after a verified
+  # snapshot completes.
   workflow_run:
     workflows:
       - "XAUUSD Daily Verified Snapshot"
@@ -33,14 +30,13 @@ permissions:
   id-token: write
 
 concurrency:
-  group: github-pages-xau-desk
+  group: github-pages-veyra
   cancel-in-progress: false
 
 jobs:
   deploy:
-    name: Deploy XAU DESK
+    name: Deploy VEYRA
 
-    # For workflow_run, deploy only when the updater succeeded.
     if: >
       github.event_name != 'workflow_run' ||
       github.event.workflow_run.conclusion == 'success'
@@ -61,8 +57,9 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Prepare website
+      - name: Prepare VEYRA website
         run: |
+          set -euo pipefail
           rm -rf _site
           mkdir -p _site
 
@@ -81,37 +78,19 @@ jobs:
             cp -R data _site/data
           fi
 
-          # The legacy source still contains an old embedded snapshot for local
-          # compatibility. Inject the fail-closed guard immediately before the
-          # legacy renderer so a missing xauusd-data.js can never present that
-          # stale market content as current data.
-          python - <<'PY'
-          from pathlib import Path
-
-          page = Path("_site/index.html")
-          text = page.read_text(encoding="utf-8")
-          guard = '<script src="./macro/ui/runtime-safety.js"></script>'
-          needle = 'var D = window.XAUUSD_DATA || window.XAUUSD_EMBEDDED;'
-
-          if guard not in text:
-              renderer_pos = text.find(needle)
-              if renderer_pos < 0:
-                  raise SystemExit("Legacy renderer marker not found; refusing unsafe Pages build")
-              script_pos = text.rfind("<script", 0, renderer_pos)
-              if script_pos < 0:
-                  raise SystemExit("Legacy renderer script start not found; refusing unsafe Pages build")
-              text = text[:script_pos] + guard + "\n  " + text[script_pos:]
-              page.write_text(text, encoding="utf-8")
-
-          if 'window.XAUUSD_EMBEDDED' not in text or guard not in text:
-              raise SystemExit("Runtime safety wiring validation failed")
-          PY
-
           if [ -f ".nojekyll" ]; then
             cp .nojekyll _site/.nojekyll
           else
             touch _site/.nojekyll
           fi
+
+          # The production index is now the VEYRA/HELIX runtime. Do not inject
+          # the retired XAU-DESK embedded-snapshot renderer contract. Validate
+          # the runtime-safety module as a shipped asset instead.
+          test -s _site/index.html
+          test -s _site/xauusd-data.js
+          test -f _site/macro/ui/runtime-safety.js
+          grep -q 'VEYRA' _site/index.html
 
           echo "Files prepared:"
           find _site -maxdepth 3 -type f -print
@@ -128,11 +107,11 @@ jobs:
       - name: Deployment summary
         run: |
           echo "===================================="
-          echo "XAU DESK + MACRO DESK PREVIEW DEPLOYED"
+          echo "VEYRA / HELIX PULSE DEPLOYED"
           echo "===================================="
           echo "Branch : main"
           echo "Home   : index.html"
           echo "Preview: macro-preview.html"
           echo "Data   : xauusd-data.js + data/event-history.json"
-          echo "Safety : macro/ui/runtime-safety.js injected before legacy renderer"
+          echo "Safety : macro/ui/runtime-safety.js shipped with runtime"
           echo "===================================="
