@@ -18,6 +18,20 @@ function assertUtc(value) {
   }
 }
 
+function deepClone(value) {
+  if (Array.isArray(value)) return value.map(deepClone);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, nested]) => [key, deepClone(nested)]));
+  }
+  return value;
+}
+
+function deepFreeze(value) {
+  if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
+  for (const nested of Object.values(value)) deepFreeze(nested);
+  return Object.freeze(value);
+}
+
 export function canTransition(from, to) {
   if (!validState(from) || !validState(to)) return false;
   return TRANSITIONS[from].includes(to);
@@ -31,9 +45,9 @@ export function transitionSignal(signal, to, atUtc, reason) {
   assertUtc(atUtc);
   if (typeof reason !== 'string' || reason.trim() === '') throw new TypeError('reason is required');
 
-  const history = Array.isArray(signal.history) ? signal.history.map((item) => ({ ...item })) : [];
+  const history = Array.isArray(signal.history) ? deepClone(signal.history) : [];
   history.push({ from, to, at_utc: atUtc, reason: reason.trim() });
-  Object.freeze(history);
+  deepFreeze(history);
   return Object.freeze({ ...signal, state: to, history });
 }
 
