@@ -4,6 +4,11 @@ function result(action,signal,reason){return Object.freeze({action,signal,reason
 export function advanceBbmaShadowSignal({ signal, confluence, gate, atUtc, expire=false }) {
  if(!signal||!confluence||!gate) throw new TypeError('signal, confluence and gate are required');
  if(expire){ if(signal.state!=='ACTIVE') return result('HOLD',signal,'EXPIRY_NOT_APPLICABLE'); return result('TRANSITION',transitionSignal(signal,'EXPIRED',atUtc,'explicit expiry policy'),'EXPIRED'); }
+ const directionReversal=signal.direction&&confluence.direction&&signal.direction!==confluence.direction;
+ if(directionReversal){
+   if(signal.state==='ACTIVE') return result('RECOMMEND_INVALIDATION',signal,'DIRECTION_REVERSAL');
+   return result('HOLD',signal,'DIRECTION_REVERSAL');
+ }
  if(confluence.readiness==='BLOCKED'||confluence.direction==null){
    if(signal.state==='ACTIVE') return result('RECOMMEND_INVALIDATION',signal,'CONTRADICTORY_OR_BLOCKED_EVIDENCE');
    return result('HOLD',signal,'CONFLUENCE_BLOCKED');
