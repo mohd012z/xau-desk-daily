@@ -4,7 +4,7 @@ import { aggregateBbmaEvidence, BBMA_TIMEFRAMES } from '../../macro/bbma/mtf-evi
 
 const c=(t,o={})=>({timestamp_utc:t,open:100,high:104,low:96,close:101,bb_upper:105,bb_mid:100,bb_lower:95,ma5_high:102,ma5_low:98,ma10_high:101,ma10_low:99,ema50:100,...o});
 const t1='2026-09-24T06:15:00.000Z',t2='2026-09-24T06:30:00.000Z';
-const neutral=()=>[c(t1),c(t2)];
+const neutral=()=>[c(t1,{open:100,high:101,low:99,close:100}),c(t2,{open:100,high:101,low:99,close:100})];
 const buy=()=>[c(t1,{close:101}),c(t2,{high:108,close:106})];
 const sell=()=>[c(t1,{open:99,high:101,low:96,close:99,ema50:110}),c(t2,{open:98,high:100,low:92,close:94,ema50:110,ma5_high:101})];
 const all=(factory)=>Object.fromEntries(BBMA_TIMEFRAMES.map(tf=>[tf,factory()]));
