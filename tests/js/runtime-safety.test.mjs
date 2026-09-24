@@ -47,7 +47,10 @@ test('verified daily snapshot is preserved but normalized to explicit daily-clos
   assert.equal(external.price.ath, null);
 });
 
-test('Pages deployment injects runtime safety before the legacy renderer', () => {
-  assert.match(pagesWorkflow, /runtime-safety\.js/);
-  assert.match(pagesWorkflow, /XAUUSD_EMBEDDED/);
+test('Pages deployment ships and validates runtime safety with the VEYRA production runtime', () => {
+  assert.match(pagesWorkflow, /Deploy VEYRA to GitHub Pages/);
+  assert.match(pagesWorkflow, /test -f _site\/macro\/ui\/runtime-safety\.js/);
+  assert.match(pagesWorkflow, /grep -q 'VEYRA' _site\/index\.html/);
+  assert.doesNotMatch(pagesWorkflow, /Legacy renderer marker not found/);
+  assert.doesNotMatch(pagesWorkflow, /var D = window\.XAUUSD_DATA \|\| window\.XAUUSD_EMBEDDED/);
 });
