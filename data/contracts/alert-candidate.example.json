@@ -1,0 +1,28 @@
+{
+  "signal_id": "XAUUSD-M15-BBMA_REENTRY-BUY-20260924T123000Z-demo0001",
+  "symbol": "XAUUSD",
+  "type": "BBMA_REENTRY",
+  "direction": "BUY",
+  "timeframe": "M15",
+  "state": "CONFIRMED",
+  "priority": "P2",
+  "generated_utc": "2026-09-24T12:31:00.000Z",
+  "generated_myt": "24 Sep 2026 20:31:00 MYT",
+  "technical": {
+    "score": 91,
+    "timeframes": ["M15", "M30", "H1"]
+  },
+  "bbma": {
+    "setup": "REENTRY",
+    "evidence": ["M15_REENTRY"]
+  },
+  "macro": {
+    "state": "NORMAL"
+  },
+  "data_health": {
+    "technical_confirmation_allowed": true,
+    "macro_state": "AVAILABLE"
+  },
+  "engine_version": "phase1",
+  "rule_version": "bbma-contract-v1"
+}
