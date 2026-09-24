@@ -6,8 +6,19 @@ import { auditEndpoint } from '../config/endpoints.mjs';
 
 const URL_RE = /https?:\/\/[^\s"'<>`)]+/g;
 const SKIP = new Set(['.git','node_modules','dist','build','coverage']);
+const SKIP_PREFIXES = ['docs/','tests/'];
+
+function normalized(value) {
+  return value.split(path.sep).join('/');
+}
+
+function shouldSkipFile(root, full) {
+  const rel = normalized(path.relative(root, full));
+  return SKIP_PREFIXES.some((prefix) => rel.startsWith(prefix));
+}
 
 export async function scanEndpointFiles(root='.') {
+  const absoluteRoot = path.resolve(root);
   const findings=[];
   async function walk(current) {
     const entries=await fs.readdir(current,{withFileTypes:true});
@@ -15,17 +26,17 @@ export async function scanEndpointFiles(root='.') {
       if (SKIP.has(entry.name)) continue;
       const full=path.join(current,entry.name);
       if (entry.isDirectory()) { await walk(full); continue; }
-      if (!entry.isFile()) continue;
+      if (!entry.isFile() || shouldSkipFile(absoluteRoot, full)) continue;
       let text; try { text=await fs.readFile(full,'utf8'); } catch { continue; }
       text.split(/\r?\n/).forEach((lineText,index)=>{
         for (const match of lineText.matchAll(URL_RE)) {
           const result=auditEndpoint(match[0]);
-          if (!result.ok) findings.push({file:path.relative(root,full).split(path.sep).join('/'),line:index+1,url:match[0],reasons:result.reasons});
+          if (!result.ok) findings.push({file:normalized(path.relative(absoluteRoot,full)),line:index+1,url:match[0],reasons:result.reasons});
         }
       });
     }
   }
-  await walk(path.resolve(root));
+  await walk(absoluteRoot);
   return findings;
 }
 
