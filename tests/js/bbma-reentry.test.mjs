@@ -36,7 +36,12 @@ test('SELL re-entry requires bearish context and inclusive pullback to MA5 high 
 test('zone touch against context stays visible as conflict evidence, not signal', () => {
   const series = [
     candle('2026-09-24T06:00:00.000Z', { open: 100, high: 103, low: 95, close: 96, ema50: 101 }),
-    candle('2026-09-24T06:15:00.000Z', { open: 100, high: 103, low: 98, close: 99, ma5_low: 98, ema50: 101 })
+    candle('2026-09-24T06:15:00.000Z', {
+      open: 100, high: 103, low: 98, close: 99,
+      ma5_low: 98,
+      ma5_high: 104,
+      ema50: 101
+    })
   ];
   const out = detectReentry({ series, timeframe: 'M15' });
   assert.equal(out.detected, false);
