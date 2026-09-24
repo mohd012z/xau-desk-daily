@@ -1,0 +1,16 @@
+{
+  "event_id": "USD-CPI-20260924-2030",
+  "timestamp_utc": "2026-09-24T12:30:00.000Z",
+  "timestamp_myt": "24 Sep 2026 20:30:00 MYT",
+  "currency": "USD",
+  "title": "CPI",
+  "impact": "HIGH",
+  "status": "UPCOMING",
+  "actual": null,
+  "forecast": "2.8%",
+  "previous": "2.7%",
+  "evidence_class": "OFFICIAL_RELEASE",
+  "source_timestamp": "2026-09-24T12:00:00.000Z",
+  "verified": true,
+  "freshness": "FRESH"
+}
