@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { detectReentry } from '../../macro/bbma/reentry.mjs';
 
+// This suite is also a PR-level regression gate for BBMA re-entry evidence.
 const candle = (timestamp_utc, overrides = {}) => ({
   timestamp_utc, open: 100, high: 103, low: 99, close: 102,
   bb_upper: 105, bb_mid: 100, bb_lower: 95,
