@@ -11,7 +11,7 @@ test('Phase 3 preview exposes MYT Trade Plan surface and stylesheet',()=>{
   assert.match(html,/id="trade-plan-host"/);
   assert.match(html,/MYT EVENT TRADE PLAN/);
   assert.match(html,/PHASE 3/);
-  assert.match(html,/Phase 3 preview/);
+  assert.match(html,/HELIX Pulse preview/);
 });
 
 test('desktop navigation includes PLAN and mobile order is PLAN EVENTS FX METALS MORE',()=>{
@@ -36,6 +36,6 @@ test('runtime loads history once and connects it to the advance model and Trade 
   assert.match(app,/macrodesk:event-update/);
 });
 
-test('Phase 3 preview still declares production index unchanged',()=>{
-  assert.match(html,/production index unchanged/);
+test('Phase 3 preview declares production index migration is staged separately',()=>{
+  assert.match(html,/production index migration staged separately/);
 });
