@@ -1,0 +1,28 @@
+name: HELIX VEYRA Migration Gate
+
+on:
+  push:
+    branches:
+      - 'plan/helix-veyra-implementation'
+      - 'refactor/helix-migration'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  migration-safety:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Run migration contract tests
+        run: node --test tests/rename-audit.test.mjs tests/product-identity.test.mjs tests/branding.test.mjs tests/branding-audit.test.mjs tests/endpoints.test.mjs tests/secret-scan.test.mjs tests/verify-migration.test.mjs
+      - name: Run HELIX VEYRA migration verifier
+        run: node tools/verify-migration.mjs
