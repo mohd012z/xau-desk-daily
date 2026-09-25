@@ -26,8 +26,14 @@ test('18:00 exposes RETESTING_M08 when price revisits M08 zone and holds',()=>{
  assert.equal(buildM08Checkpoint({checkpoint:'18:00',m08,candles:rows,policy}).state,'RETESTING_M08');
 });
 
-test('future candle cannot leak into checkpoint',()=>{
+test('candle closing exactly at 18:00 MYT is available to the checkpoint',()=>{
  const rows=[c('2026-09-26T09:30:00Z',106,107,90,91,'2026-09-26T10:00:00Z')];
+ const out=buildM08Checkpoint({checkpoint:'18:00',m08,candles:rows,policy});
+ assert.equal(out.candlesUsed,1);
+});
+
+test('candle closing after 18:00 MYT cannot leak into checkpoint',()=>{
+ const rows=[c('2026-09-26T10:00:00Z',106,107,90,91,'2026-09-26T10:30:00Z')];
  const out=buildM08Checkpoint({checkpoint:'18:00',m08,candles:rows,policy});
  assert.equal(out.candlesUsed,0);
  assert.equal(out.state,'UNRESOLVED');
