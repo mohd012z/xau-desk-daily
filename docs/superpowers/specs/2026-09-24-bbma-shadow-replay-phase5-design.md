@@ -1,64 +1,115 @@
 # BBMA + News Shadow Replay & Evidence Phase 5 — Design
 
-Date: 2026-09-24
-Status: Proposed for review
+Date: 2026-09-25
+Status: Approved architecture — hardening revision
 Parent: Phase 4 BBMA + News cross-function shadow pipeline
 
 ## Purpose
 
-Validate the behavior of the Phase-4 shadow engine against replayable historical/shadow observations before any production alert-policy cutover. Phase 5 measures decision quality and engine behavior; it does not create a trading-performance claim and does not execute trades.
+Validate Phase-4 shadow decisions against replayable historical/shadow observations before any production alert-policy cutover. Phase 5 measures engine behavior and evidence quality only. It does not execute trades, create a trading-performance claim, or authorize a live cutover.
+
+## Binding Direction Boundary
+
+The authoritative flow is:
+
+`BBMA determines direction -> News/Macro contextualizes + gates -> Shadow observation -> Replay -> Outcome attachment -> Evidence only`
+
+This is a semantic boundary, not merely a diagram.
+
+### BBMA owns direction
+
+- `BUY` and `SELL` may originate only from the existing BBMA technical pipeline.
+- Phase 5 must preserve the BBMA direction received from Phase 4; it must not infer, manufacture, reverse, upgrade, or replace direction.
+- If BBMA direction is absent, mixed, incomplete, or otherwise non-directional, News/Macro cannot turn it into `BUY` or `SELL`.
+
+### News/Macro owns context and gating
+
+News/Macro may add event context, macro regime/reason codes, data-health implications, and gate state such as `ALLOW`, `WATCH_ONLY`, or `BLOCK`. News/Macro may suppress or constrain confirmation through the existing Phase-4 gate policy, but it may not create or reverse technical direction.
+
+Examples:
+
+- BBMA `BUY` + macro `ALLOW` -> direction remains `BUY`; evidence records the permissive context.
+- BBMA `BUY` + macro `BLOCK` -> direction remains traceable as `BUY`, but the observation is blocked; it does not become `SELL`.
+- BBMA `SELL` + conflicting macro context -> direction remains `SELL`; gate/readiness may become restrictive according to Phase 4.
+- BBMA `NONE/MIXED/INCOMPLETE` + bullish news -> must not become `BUY`.
 
 ## Architecture
 
 `replay fixtures -> Phase-4 shadow pipeline -> observation ledger -> outcome attachment -> evidence metrics -> audit report`
 
-The replay layer must call the existing Phase-4 pipeline rather than reimplement BBMA, macro/news, data-health, confirmation-gate, or lifecycle policy.
+The replay layer calls the existing Phase-4 pipeline rather than reimplementing BBMA, macro/news, data-health, confirmation-gate, or lifecycle policy.
 
 ## Replay record
 
-Every replay input contains an explicit UTC observation timestamp, symbol, Phase-2/3 BBMA evidence input, event records, event policy, health input and current lifecycle signal. Inputs are immutable and ordered by UTC plus a stable record id. No wall-clock reads are allowed.
+Every replay input contains an explicit UTC observation timestamp, symbol, Phase-2/3 BBMA evidence input, event records, event policy, health input, and current lifecycle signal. Inputs are immutable and ordered by UTC plus stable record id. No wall-clock reads are allowed.
 
-The replay output retains the complete Phase-4 shadow observation plus a deterministic replay id and source/reference metadata. Replaying identical inputs must produce deep-equal decision content.
+Future/outcome fields are forbidden anywhere in decision input. The replay output retains the complete Phase-4 shadow observation plus deterministic replay id and source/reference metadata. Identical inputs must produce deep-equal decision content.
 
 ## Observation ledger
 
-The ledger is append-oriented and deduplicates only exact replay identities. It must not merge observations merely because they have the same direction or timestamp. Direction reversals, gate changes, lifecycle transitions and reason-code changes remain distinct auditable records.
+The ledger is append-oriented and deduplicates only exact replay identities. It must not merge observations merely because they share direction or timestamp. Direction reversals, gate changes, lifecycle transitions, readiness changes, and reason-code changes remain distinct auditable records.
 
-Duplicate detection uses stable explicit identity fields rather than object serialization order or current time.
+A reused replay id with different content is an identity conflict, not a duplicate.
 
 ## Outcome attachment
 
-Outcomes are attached after an observation and remain separate from the decision itself to prevent look-ahead leakage. Phase 5 supports explicit caller-supplied forward observations such as price at configured horizons and maximum favorable/adverse excursion values when available.
+Outcomes are attached only after an observation exists and remain separate from the decision to prevent look-ahead leakage.
 
-The engine never reads future prices while producing the original shadow decision. Outcome data may only be consumed by the evaluation layer after the observation exists.
+Configured horizons must have explicit semantics. A horizon such as `15m` or `1h` is not an arbitrary label: outcome time must correspond to the configured duration from `observed_utc`, subject only to an explicitly documented tolerance policy if market-data timestamps require one.
+
+Outcome identity is `replay_id + horizon`. An existing identity cannot be silently overwritten with different prices or timestamps.
+
+## Directional outcome semantics
+
+Directional follow-through is descriptive evidence, not a trading signal or profitability claim.
+
+For a valid outcome:
+
+- BBMA `BUY`: `forward_price > entry_price` -> `FOLLOWED`; equality -> `FLAT`; lower -> `OPPOSED`.
+- BBMA `SELL`: `forward_price < entry_price` -> `FOLLOWED`; equality -> `FLAT`; higher -> `OPPOSED`.
+- Non-directional observations do not enter BUY/SELL directional outcome denominators.
+- Missing or invalid outcomes remain `MISSING` and never become `FOLLOWED`, `FLAT`, or `OPPOSED`.
 
 ## Evidence metrics
 
 Metrics are descriptive and stratified. At minimum report:
+
 - observation count and exact duplicate count;
 - lifecycle action/state distribution;
 - gate distribution (`ALLOW`, `WATCH_ONLY`, `BLOCK`);
 - BBMA direction/readiness distribution;
-- macro reason/event distribution;
+- cross-strata `direction × gate × readiness`;
+- macro reason/event distribution and, where available, macro-regime strata;
 - direction-reversal and invalidation-recommendation counts;
 - stale/unsafe/incomplete/mixed-data counts;
-- outcome coverage by evaluation horizon;
-- directional follow-through statistics only for observations with valid attached outcomes.
+- outcome coverage per horizon as `eligible / covered / missing`;
+- directional outcome counts as `FOLLOWED / FLAT / OPPOSED` only for valid attached outcomes.
 
-Metrics must separate BUY and SELL, readiness/state, gate state, and relevant macro regime where sample size permits. Missing outcomes are reported as missing, never treated as wins/losses.
+Ghost/unknown replay ids must not enter coverage, directional denominators, or report-level covered-observation counts.
+
+## Evidence report
+
+The report exposes sample size, replay range, replay ids, source references, coverage by horizon, warnings, and descriptive metrics. If any configured horizon is incomplete, the report retains `INCOMPLETE_OUTCOME_COVERAGE`.
+
+Aggregate evidence must remain traceable to raw replay observations. The report must not hide missing coverage behind a combined success percentage.
 
 ## No arbitrary production score
 
-Phase 5 does not create a single opaque confidence/win-rate score or automatic threshold for live alerts. Sample size, coverage and regime stratification must remain visible. Any later production threshold requires a separately reviewed policy based on accumulated evidence.
+Phase 5 does not create an opaque confidence/win-rate score, automatic production threshold, or recommendation to execute a trade. Sample size, coverage, direction, gate, readiness, and relevant regime strata remain visible.
 
-## Safety / leakage controls
+## Prohibited capabilities
 
-- No future/outcome fields are passed into Phase-4 decision generation.
-- No Telegram/APK/broker/live alert-router cutover.
-- No autonomous position sizing, SL/TP, or order execution.
-- `MIXED`, `INCOMPLETE`, stale and blocked decisions remain represented rather than filtered from the denominator.
-- Exact reason codes and source references remain available for replay/audit.
+The following are outside Phase 5 and must remain absent:
+
+- broker execution or order placement;
+- automatic BUY/SELL creation from News/Macro;
+- live alert-router or production trading cutover;
+- autonomous position sizing or lot sizing;
+- SL/TP generation;
+- code paths that convert evidence metrics into execution instructions.
 
 ## Verification
 
-Test-first coverage includes deterministic replay, chronological ordering, exact duplicate handling, same-time-different-evidence preservation, outcome separation/no-look-ahead, missing outcomes, BUY/SELL stratification, gate/lifecycle distributions, reversal/invalidation counts, stale/incomplete/mixed classifications, and immutable reports. Repository HELIX VEYRA, migration and safety checks must remain green before merge.
+Test-first verification must cover deterministic replay, chronological ordering, exact duplicate handling, identity conflicts, same-time-different-evidence preservation, nested future-field rejection, outcome separation/no-look-ahead, strict horizon semantics, missing outcomes, ghost ids, BUY/SELL preservation, News/Macro non-direction authority, gate/lifecycle distributions, cross-strata, `FOLLOWED/FLAT/OPPOSED`, stale/incomplete/mixed classifications, immutable reports, and absence of delivery/execution side effects.
+
+Repository HELIX VEYRA, migration, and safety checks must be green on the exact PR head before merge.
