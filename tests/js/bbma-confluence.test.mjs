@@ -18,7 +18,7 @@ test('aligned BUY matures through explicit readiness requirements', () => {
   assert.equal(out.direction,'BUY'); assert.equal(out.readiness,'CONFIRMABLE');
   assert.deepEqual(out.supporting_timeframes,['MN','W1','D1','H4','H1','M15','M5']);
   assert.equal(out.higher_timeframe_context.state,'ALIGNED');
-  assert.deepEqual(out.higher_timeframe_context.supporting_timeframes,['MN','W1','D1']);
+  assert.deepEqual(out.higher_timeframe_context.supporting_timeframes,['MN','W1']);
   assert.equal(Object.isFrozen(out),true); assert.equal(Object.isFrozen(out.reason_codes),true);
 });
 
@@ -26,6 +26,7 @@ test('SELL follows the same deterministic contract across MN through M5', () => 
   const out = evaluateBbmaConfluence({ evidence: evidence('ALIGNED_SELL',{MN:'SELL',W1:'SELL',D1:'SELL',H4:'SELL',H1:'SELL',M15:'SELL',M5:'SELL'}) });
   assert.equal(out.direction,'SELL'); assert.equal(out.readiness,'CONFIRMABLE');
   assert.equal(out.higher_timeframe_context.state,'ALIGNED');
+  assert.deepEqual(out.higher_timeframe_context.supporting_timeframes,['MN','W1']);
 });
 
 test('mixed, incomplete and neutral evidence cannot confirm', () => {
