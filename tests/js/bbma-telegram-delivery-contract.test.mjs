@@ -4,7 +4,7 @@ import { buildTelegramDeliveryRequest,buildTelegramDeliveryEvidence } from '../.
 
 const alert={alert_id:'obs-777',symbol:'XAUUSD',display_time_myt:'14:30',bbma:{direction:'BUY',readiness:'SETUP_READY',fractal_snapshot:{}},news:{impact:'HIGH',event:'USD event'},gate:{state:'CAUTION'}};
 
-test('delivery request contains rendered message but no credential fields',()=>{
+test('delivery request contains rendered message and six lifecycle buttons but no credential fields',()=>{
  const request=buildTelegramDeliveryRequest({alert});
  assert.equal(request.channel,'telegram');
  assert.equal(request.operation,'send_message');
@@ -12,7 +12,10 @@ test('delivery request contains rendered message but no credential fields',()=>{
  assert.equal(request.chat_ref,'BBMA_ALERTS');
  assert.equal('token' in request,false);
  assert.equal('chat_id' in request,false);
- assert.equal(request.payload.reply_markup.inline_keyboard.flat().length,4);
+ const buttons=request.payload.reply_markup.inline_keyboard.flat();
+ assert.equal(buttons.length,6);
+ assert.ok(buttons.some(button=>button.callback_data==='bbma:why:obs-777'));
+ assert.ok(buttons.some(button=>button.callback_data==='bbma:changes:obs-777'));
 });
 
 test('delivery evidence is correlated without storing secrets',()=>{
