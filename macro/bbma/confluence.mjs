@@ -11,6 +11,12 @@ function freeze(value) {
   return Object.freeze(value);
 }
 
+function normalizeTimeframes(source) {
+  if (Array.isArray(source)) return source;
+  if (source && typeof source === 'object') return Object.values(source);
+  return null;
+}
+
 function buildHigherTimeframeContext(byTf, dir) {
   const unavailable = CONTEXT_ORDER.filter(k => {
     const item = byTf.get(k);
@@ -31,10 +37,11 @@ function buildHigherTimeframeContext(byTf, dir) {
 }
 
 export function evaluateBbmaConfluence({ evidence }) {
-  if (!evidence || typeof evidence !== 'object' || !VALID.has(evidence.overall_state) || !Array.isArray(evidence.timeframes)) {
+  const timeframes = normalizeTimeframes(evidence?.timeframes);
+  if (!evidence || typeof evidence !== 'object' || !VALID.has(evidence.overall_state) || !timeframes || timeframes.some(item=>!item||typeof item!=='object'||!item.timeframe)) {
     throw new TypeError('valid BBMA MTF evidence is required');
   }
-  const byTf = new Map(evidence.timeframes.map(item => [item.timeframe, item]));
+  const byTf = new Map(timeframes.map(item => [item.timeframe, item]));
   const dir = evidence.overall_state === 'ALIGNED_BUY' ? 'BUY' : evidence.overall_state === 'ALIGNED_SELL' ? 'SELL' : null;
   const support = dir ? ORDER.filter(k => byTf.get(k)?.direction === dir) : [];
   const opposing = dir ? (dir === 'BUY' ? 'SELL' : 'BUY') : null;
