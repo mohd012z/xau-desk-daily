@@ -1,6 +1,7 @@
 const clone=v=>v==null?v:JSON.parse(JSON.stringify(v));
 const idOf=o=>String(o?.alert_id??o?.observation_id??o?.candidate?.alert_id??o?.candidate?.observation_id??'');
 const detectors=e=>e?.active_detectors??e?.detectors??[];
+const gateState=gate=>gate?.state??gate?.action??gate?.decision??'OBSERVE';
 
 /** Read-only adapter. It never creates orders, SL/TP, lot size or broker instructions. */
 export function adaptShadowObservationForTelegram(observation,{fractalSnapshot}={}){
@@ -17,8 +18,8 @@ export function adaptShadowObservationForTelegram(observation,{fractalSnapshot}=
    direction:observation.direction??'NEUTRAL',
    readiness:observation.readiness??'OBSERVE',
    bbma:{direction:observation.direction??'NEUTRAL',readiness:observation.readiness??'OBSERVE',fractal_snapshot:clone(tf)},
-   news:{event:macro.event_name??macro.title??macro.dominant_event??'NO_ACTIVE_EVENT',impact:macro.impact??macro.risk_level??'UNKNOWN',gate:gate.action??gate.decision??'OBSERVE'},
-   evidence:{coverage:observation.candidate?.coverage??`${Object.keys(tf).length} TF`,reason_codes:[...(observation.reason_codes??[])]},
+   news:{event:macro.event_name??macro.title??macro.dominant_event??'NO_ACTIVE_EVENT',impact:macro.impact??macro.risk_level??'UNKNOWN',gate:gateState(gate)},
+   evidence:{coverage:observation.candidate?.coverage??`${Object.keys(tf).length} TF`,reason_codes:[...(observation.reason_codes??[]),...(gate.reason_codes??[])]},
    generated_utc:observation.generated_utc,
    telegram_mode:'SHADOW_OBSERVATION',
    execution:Object.freeze({broker:false,orders:false,sl_tp:false,lot_sizing:false})
