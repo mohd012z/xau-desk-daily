@@ -28,6 +28,13 @@ test('outcomes are descriptive counts by horizon and label',()=>{
  assert.deepEqual(out.groups[0].outcomes['120'],{CONTINUATION:1,REVERSAL:1});
 });
 
+test('captures available MFE MAE and forward movement observations for statistics',()=>{
+ const measured=row('8',{outcomes:[{horizonMinutes:120,status:'AVAILABLE',forwardMove:8,mfe:9,mae:-2}]});
+ const missing=row('9',{outcomes:[{horizonMinutes:120,status:'UNAVAILABLE',forwardMove:null,mfe:null,mae:null}]});
+ const out=buildM08N20EvidenceMatrix([measured,missing]);
+ assert.deepEqual(out.groups[0].observations,[{horizonMinutes:120,forwardMove:8,mfe:9,mae:-2,replayId:'8'}]);
+});
+
 test('partial records are counted but excluded from complete-only groups by default',()=>{
  const partial=row('5',{completeness:'PARTIAL'});
  const out=buildM08N20EvidenceMatrix([row('1'),partial]);
