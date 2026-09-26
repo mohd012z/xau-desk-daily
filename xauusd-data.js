@@ -2,7 +2,7 @@
 window.XAUUSD_DATA = {
   "meta": {
     "pipelineVersion": "2.0.0",
-    "generatedAt": "2026-09-25T09:27:12+08:00",
+    "generatedAt": "2026-09-26T09:30:33+08:00",
     "timezone": "Asia/Kuala_Lumpur",
     "cadence": "daily",
     "expectedUpdateLocal": "07:10",
@@ -13,38 +13,38 @@ window.XAUUSD_DATA = {
       "xau": {
         "ok": true,
         "label": "Twelve Data XAU/USD",
-        "detail": "latest daily bar 2026-09-25",
-        "timestamp": "2026-09-25T09:27:12+08:00"
+        "detail": "latest daily bar 2026-09-26",
+        "timestamp": "2026-09-26T09:30:33+08:00"
       },
       "dxy": {
         "ok": false,
         "label": "Twelve Data DXY",
         "detail": "No exact/confirmed DXY symbol found",
-        "timestamp": "2026-09-25T09:27:12+08:00"
+        "timestamp": "2026-09-26T09:30:33+08:00"
       },
       "brent": {
         "ok": false,
         "label": "Twelve Data Brent",
         "detail": "404 Client Error: Not Found for url: https://api.twelvedata.com/time_series?symbol=XBR%2FUSD&interval=1day&outputsize=3&order=DESC&timezone=UTC&apikey=[REDACTED]",
-        "timestamp": "2026-09-25T09:27:20+08:00"
+        "timestamp": "2026-09-26T09:30:41+08:00"
       },
       "us10y": {
         "ok": true,
         "label": "FRED DGS10",
-        "detail": "latest 2026-09-23",
-        "timestamp": "2026-09-25T09:27:21+08:00"
+        "detail": "latest 2026-09-24",
+        "timestamp": "2026-09-26T09:30:43+08:00"
       },
       "news": {
         "ok": true,
         "label": "NewsAPI",
-        "detail": "2 relevant recent items",
-        "timestamp": "2026-09-25T09:27:21+08:00"
+        "detail": "1 relevant recent items",
+        "timestamp": "2026-09-26T09:30:43+08:00"
       },
       "fedSpeeches": {
         "ok": true,
         "label": "Federal Reserve speeches",
         "detail": "6 official listings",
-        "timestamp": "2026-09-25T09:27:21+08:00"
+        "timestamp": "2026-09-26T09:30:43+08:00"
       }
     },
     "warnings": [
@@ -52,22 +52,22 @@ window.XAUUSD_DATA = {
       "Brent unavailable for this run."
     ]
   },
-  "updated": "2026-09-25 09:27 MYT",
+  "updated": "2026-09-26 09:30 MYT",
   "session": "Daily verified snapshot · sourced data + labelled heuristic overlays",
   "price": {
-    "spot": 4293.25,
-    "change": 17.97,
-    "changePct": 0.42,
-    "dayRange": "4,263.88 - 4,294.38",
-    "monthPct": -3.09,
-    "yearPct": -0.51,
+    "spot": 4286.2,
+    "change": -0.54,
+    "changePct": -0.01,
+    "dayRange": "4,284.86 - 4,286.45",
+    "monthPct": -3.22,
+    "yearPct": -0.67,
     "ath": null,
-    "note": "Latest provider daily bar: 2026-09-25; rolling history used: 370 bars",
-    "latestDailyClose": 4293.25,
+    "note": "Latest provider daily bar: 2026-09-26; rolling history used: 370 bars",
+    "latestDailyClose": 4286.2,
     "priceType": "DAILY_CLOSE",
     "rollingHigh": 5597.23,
     "rollingWindowBars": 370,
-    "providerBarTime": "2026-09-25"
+    "providerBarTime": "2026-09-26"
   },
   "macro": [
     {
@@ -79,10 +79,10 @@ window.XAUUSD_DATA = {
     },
     {
       "label": "US 10Y",
-      "value": "5.110%",
-      "delta": "+15.0 bp",
+      "value": "5.180%",
+      "delta": "+7.0 bp",
       "tone": "bad",
-      "note": "FRED DGS10 · 2026-09-23"
+      "note": "FRED DGS10 · 2026-09-24"
     },
     {
       "label": "Brent",
@@ -95,7 +95,7 @@ window.XAUUSD_DATA = {
   "sentiment": {
     "bias": "DOWNWARD",
     "goldTone": "BEARISH",
-    "score": -0.767,
+    "score": -0.479,
     "confidence": 69,
     "summary": "Mechanical daily pressure model using sourced USD/yield moves plus a small observed XAU-momentum term. It is not a forecast or trade instruction.",
     "netSpeechSignal": "DOWN",
@@ -139,23 +139,13 @@ window.XAUUSD_DATA = {
   },
   "news": [
     {
-      "time": "2026-09-24 01:16 UTC",
-      "title": "Rickards: The Dollar’s Not Dying",
-      "summary": "Last week’s financial media was full of apocalyptic headlines: “$40 trillion in national debt!” “U.S. debt in a doom loop!” “The end of the dollar is near!” Gold and bitcoin soared in lockstep with the dollar doom and gloom. If you took the headlines at face …",
-      "source": "Activistpost.com",
-      "url": "https://activistpost.com/rickards-the-dollars-not-dying/",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
-      "impactPct": null
-    },
-    {
-      "time": "2026-09-23 21:07 UTC",
-      "title": "Kinross provides operational and return of capital update",
-      "summary": "(All dollar amounts are expressed in U.S. dollars, unless otherwise noted.) TORONTO, Sept. 23, 2026 (GLOBE NEWSWIRE) — Kinross Gold Corporation (TSX: K; NYSE: KGC) (“Kinross” or the “Company”) today provided an operational, guidance and return of capital upda…",
-      "source": "Financial Post",
-      "url": "https://financialpost.com/globe-newswire/kinross-provides-operational-and-return-of-capital-update",
-      "impact": "neutral",
-      "signal": "NEUTRAL",
+      "time": "2026-09-25 00:07 UTC",
+      "title": "Gold prices dip amid Iran tensions, Fed rate hike expectations",
+      "summary": "Geopolitical tensions and Fed rate hikes may lead to sustained pressure on gold prices, impacting investment strategies and market dynamics.\nThe post Gold prices dip amid Iran tensions, Fed rate hike expectations appeared first on Crypto Briefing.",
+      "source": "Crypto Briefing",
+      "url": "https://cryptobriefing.com/gold-prices-dip-amid-iran-tensions-fed-rate-hike-expectations/",
+      "impact": "bearish",
+      "signal": "DOWN",
       "impactPct": null
     }
   ],
@@ -253,16 +243,16 @@ window.XAUUSD_DATA = {
   ],
   "levels": {
     "resistance": [
-      4305.15,
-      4335.02,
-      4365.94,
+      4316.63,
+      4346.52,
+      4377.45,
       4443.2
     ],
     "support": [
-      4244.36,
+      4255.81,
       4238.37,
-      4213.45,
-      4183.58
+      4224.88,
+      4194.99
     ],
     "note": "Classic pivot levels from previous daily OHLC plus recent 20-day extreme; mechanical, not guarantees."
   },
@@ -270,15 +260,15 @@ window.XAUUSD_DATA = {
   "pressure": [
     {
       "label": "US 10Y daily move",
-      "level": "+15.0 bp",
-      "w": 100,
+      "level": "+7.0 bp",
+      "w": 58,
       "dir": "down"
     },
     {
       "label": "Observed XAU momentum",
-      "level": "+0.42%",
-      "w": 28,
-      "dir": "up"
+      "level": "-0.01%",
+      "w": 0,
+      "dir": "down"
     }
   ],
   "priceSeries": {
@@ -287,10 +277,6 @@ window.XAUUSD_DATA = {
     "yMin": 4250.14,
     "yMax": 4394.06,
     "points": [
-      {
-        "x": "2026-09-12",
-        "y": 4348.46
-      },
       {
         "x": "2026-09-13",
         "y": 4348.46
@@ -341,7 +327,11 @@ window.XAUUSD_DATA = {
       },
       {
         "x": "2026-09-25",
-        "y": 4293.25
+        "y": 4286.74
+      },
+      {
+        "x": "2026-09-26",
+        "y": 4286.2
       }
     ]
   },
@@ -352,7 +342,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-25",
+        "x": "2026-09-26",
         "y": 0
       }
     ]
@@ -364,7 +354,7 @@ window.XAUUSD_DATA = {
     "yMax": 1,
     "points": [
       {
-        "x": "2026-09-25",
+        "x": "2026-09-26",
         "y": 0
       }
     ]
