@@ -1,14 +1,18 @@
-const ms=v=>{const n=new Date(v).getTime();return Number.isFinite(n)?n:null};
+const ms=v=>{if(typeof v!=='string'||!v.trim())return null;const n=Date.parse(v);return Number.isFinite(n)?n:null};
 const same=(a,b)=>['openUtc','open','high','low','close','closeUtc'].every(k=>a[k]===b[k]);
 function normalize(rows,tf){
  const map=new Map();
  for(const raw of rows??[]){
-  if(ms(raw?.openUtc)===null||ms(raw?.closeUtc)===null)throw new TypeError('finalized candle timestamps are required');
-  if(!['open','high','low','close'].every(k=>Number.isFinite(raw[k])))throw new TypeError('valid OHLC values are required');
+  const openMs=ms(raw?.openUtc),closeMs=ms(raw?.closeUtc);
+  if(openMs===null||closeMs===null||closeMs<=openMs)throw new TypeError('finalized candle timestamps are required');
+  const k=new Date(openMs).toISOString();
+  if(map.has(k)){
+   if(!same(map.get(k),raw))throw new TypeError('conflicting duplicate candle');
+   continue;
+  }
+  if(!['open','high','low','close'].every(key=>Number.isFinite(raw[key])))throw new TypeError('valid OHLC values are required');
   if(raw.high<Math.max(raw.open,raw.close,raw.low)||raw.low>Math.min(raw.open,raw.close,raw.high))throw new TypeError('OHLC range is invalid');
-  const k=new Date(ms(raw.openUtc)).toISOString();
-  if(map.has(k)&&!same(map.get(k),raw))throw new TypeError('conflicting duplicate candle');
-  if(!map.has(k))map.set(k,structuredClone(raw));
+  map.set(k,structuredClone(raw));
  }
  const candles=[...map.values()].sort((a,b)=>ms(a.openUtc)-ms(b.openUtc)),gaps=[];
  for(let i=1;i<candles.length;i++){const delta=(ms(candles[i].openUtc)-ms(candles[i-1].openUtc))/60000;if(delta>tf)gaps.push({afterOpenUtc:candles[i-1].openUtc,beforeOpenUtc:candles[i].openUtc,missingIntervals:Math.max(0,Math.round(delta/tf)-1)});}
