@@ -10,10 +10,14 @@ export function buildM08N20EvidenceMatrix(records,{includePartial=false}={}){
   if(r?.completeness==='COMPLETE')complete++;else partial++;
   if(!includePartial&&r?.completeness!=='COMPLETE')continue;
   const sig=signature(r??{}),k=key(sig);
-  if(!groups.has(k))groups.set(k,{signature:sig,sampleSize:0,replayIds:[],outcomes:{}});
+  if(!groups.has(k))groups.set(k,{signature:sig,sampleSize:0,replayIds:[],outcomes:{},observations:[]});
   const g=groups.get(k);g.sampleSize++;g.replayIds.push(val(r?.replayId));
-  for(const o of r?.outcomes??[]){const h=String(val(o?.horizonMinutes)),label=val(o?.label);g.outcomes[h]??={};g.outcomes[h][label]=(g.outcomes[h][label]??0)+1}
+  for(const o of r?.outcomes??[]){
+   const h=String(val(o?.horizonMinutes));
+   if(o?.label){const label=val(o.label);g.outcomes[h]??={};g.outcomes[h][label]=(g.outcomes[h][label]??0)+1}
+   if(o?.status==='AVAILABLE'&&[o.forwardMove,o.mfe,o.mae].every(Number.isFinite))g.observations.push({horizonMinutes:o.horizonMinutes,forwardMove:o.forwardMove,mfe:o.mfe,mae:o.mae,replayId:val(r?.replayId)});
+  }
  }
- const ordered=[...groups.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([,g])=>{g.replayIds.sort();for(const h of Object.keys(g.outcomes)){g.outcomes[h]=Object.fromEntries(Object.entries(g.outcomes[h]).sort(([a],[b])=>a.localeCompare(b)))}return g});
+ const ordered=[...groups.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([,g])=>{g.replayIds.sort();g.observations.sort((a,b)=>a.horizonMinutes-b.horizonMinutes||String(a.replayId).localeCompare(String(b.replayId)));for(const h of Object.keys(g.outcomes)){g.outcomes[h]=Object.fromEntries(Object.entries(g.outcomes[h]).sort(([a],[b])=>a.localeCompare(b)))}return g});
  return deepFreeze({schemaVersion:'m08-n20-evidence-matrix-v1',totalRecords:records.length,completeRecords:complete,partialRecords:partial,groups:ordered});
 }
