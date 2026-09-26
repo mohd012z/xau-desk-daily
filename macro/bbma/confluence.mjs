@@ -1,3 +1,5 @@
+import { buildBbmaFractalSnapshot } from './fractal-snapshot.mjs';
+
 const ORDER = Object.freeze(['MN','W1','D1','H4','H1','M30','M15','M5']);
 const SETUP_ORDER = Object.freeze(['D1','H4','H1','M30','M15','M5']);
 const CONTEXT_ORDER = Object.freeze(['MN','W1']);
@@ -80,6 +82,7 @@ export function evaluateBbmaConfluence({ evidence }) {
     supporting_timeframes: support,
     conflict_timeframes: [...new Set(conflicts)],
     higher_timeframe_context: higherTimeframeContext,
+    fractal_snapshot: buildBbmaFractalSnapshot(evidence),
     reason_codes: [...new Set(reasons)],
     data_status: evidence.status ?? 'OK',
     rule_version: evidence.rule_version
