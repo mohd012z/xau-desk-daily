@@ -1,6 +1,6 @@
 const ORDER = Object.freeze(['MN','W1','D1','H4','H1','M30','M15','M5']);
 const SETUP_ORDER = Object.freeze(['D1','H4','H1','M30','M15','M5']);
-const CONTEXT_ORDER = Object.freeze(['MN','W1','D1']);
+const CONTEXT_ORDER = Object.freeze(['MN','W1']);
 const VALID = new Set(['ALIGNED_BUY','ALIGNED_SELL','MIXED','NEUTRAL','INCOMPLETE']);
 
 function freeze(value) {
@@ -20,7 +20,7 @@ function buildHigherTimeframeContext(byTf, dir) {
   const conflicts = opposing ? available.filter(k => byTf.get(k)?.direction === opposing || byTf.get(k)?.direction === 'CONFLICT') : [];
 
   let state = 'NEUTRAL';
-  if (unavailable.includes('MN') && unavailable.includes('W1')) state = 'UNAVAILABLE';
+  if (unavailable.length === CONTEXT_ORDER.length) state = 'UNAVAILABLE';
   else if (dir && conflicts.length && supporting.length) state = 'MIXED';
   else if (dir && conflicts.length) state = 'OPPOSED';
   else if (dir && supporting.length) state = 'ALIGNED';
