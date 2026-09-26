@@ -4,7 +4,7 @@ import {handleTelegramCallback} from '../macro/bbma/telegram-callback-runtime.mj
 
 const token=process.env.TELEGRAM_BOT_TOKEN;
 const allowedChat=String(process.env.TELEGRAM_CHAT_ID??'');
-const ledgerPath=process.env.BBMA_OBSERVATION_LEDGER??'data/bbma-observations.json';
+const ledgerPath=process.env.BBMA_OBSERVATION_LEDGER??'data/bbma-telegram-validation.json';
 if(!token||!allowedChat){console.error('Telegram secrets are not configured');process.exit(2);}
 
 const api=async(method,payload={})=>{
@@ -16,35 +16,33 @@ const api=async(method,payload={})=>{
 
 const loadLedger=()=>{
  try{const raw=JSON.parse(fs.readFileSync(ledgerPath,'utf8')); const rows=Array.isArray(raw)?raw:(raw.observations??[]); return new Map(rows.map(x=>[String(x.alert_id??x.observation_id??x.id),x]));}
- catch{return new Map();}
+ catch(e){console.log(`DIAG ledger_load=FAILED reason=${e.code??'PARSE'}`);return new Map();}
 };
 const ledger=loadLedger();
-const getObservation=id=>ledger.get(String(id))??null;
+console.log(`DIAG ledger_load=OK observations=${ledger.size}`);
+const getObservation=id=>{const x=ledger.get(String(id))??null;console.log(`DIAG observation_lookup id=${String(id).slice(0,64)} found=${Boolean(x)}`);return x;};
 const getCurrentStatus=obs=>({direction:obs?.bbma?.direction??obs?.direction??'UNAVAILABLE',readiness:obs?.bbma?.readiness??obs?.readiness??'UNAVAILABLE'});
 const answerCallback=async({callbackQueryId,text})=>{
- try{return await api('answerCallbackQuery',{callback_query_id:callbackQueryId,text,show_alert:false});}
- catch(e){
-   // Telegram rejects old callback_query ids after their acknowledgement window. A stale queued
-   // callback must not kill the receiver or prevent a fresh button press from being processed.
-   if(e.status===400){console.log('Skipped stale/invalid callback acknowledgement');return false;}
-   throw e;
- }
+ try{const x=await api('answerCallbackQuery',{callback_query_id:callbackQueryId,text,show_alert:false});console.log('DIAG callback_ack=OK');return x;}
+ catch(e){if(e.status===400){console.log('DIAG callback_ack=STALE_400');return false;}throw e;}
 };
-const respond=({chatId,text,parse_mode})=>api('sendMessage',{chat_id:chatId,text,parse_mode});
+const respond=async({chatId,text,parse_mode})=>{const x=await api('sendMessage',{chat_id:chatId,text,parse_mode});console.log('DIAG response_send=OK');return x;};
 
-let offset=Number(process.env.TELEGRAM_OFFSET??0);
+let offset=Number(process.env.TELEGRAM_OFFSET??0),received=0,authorized=0,handled=0;
 const deadline=Date.now()+Math.min(Number(process.env.POLL_WINDOW_MS??45000),55000);
 while(Date.now()<deadline){
  const updates=await api('getUpdates',{offset,timeout:10,allowed_updates:['callback_query']});
  for(const u of updates){
-   offset=Math.max(offset,Number(u.update_id)+1);
+   offset=Math.max(offset,Number(u.update_id)+1); received++;
+   const data=String(u.callback_query?.data??'');
+   const [scope,action,alertId]=data.split(':');
+   console.log(`DIAG callback_received action=${action??'UNKNOWN'} alert_id=${String(alertId??'').slice(0,64)}`);
    const chat=String(u.callback_query?.message?.chat?.id??'');
-   if(chat!==allowedChat){
-     if(u.callback_query?.id) await answerCallback({callbackQueryId:u.callback_query.id,text:'Unauthorized chat'});
-     continue;
-   }
-   try{await handleTelegramCallback({update:u,getObservation,getCurrentStatus,answerCallback,respond});}
-   catch(e){console.error(`Callback processing failed: ${e.message}`);}
+   if(chat!==allowedChat){console.log('DIAG authorized=false');if(u.callback_query?.id) await answerCallback({callbackQueryId:u.callback_query.id,text:'Unauthorized chat'});continue;}
+   authorized++; console.log('DIAG authorized=true');
+   try{const result=await handleTelegramCallback({update:u,getObservation,getCurrentStatus,answerCallback,respond});handled++;console.log(`DIAG routed=${scope==='bbma'} action=${result.action??action??'UNKNOWN'} ok=${result.ok} mode=${result.mode??'NONE'}`);}
+   catch(e){console.error(`DIAG processing_failed=${e.message}`);}
  }
 }
+console.log(`DIAG summary received=${received} authorized=${authorized} handled=${handled}`);
 console.log(`Telegram callback polling completed; next_offset=${offset}`);
