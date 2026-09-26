@@ -9,7 +9,9 @@ if(!token||!allowedChat){console.error('Telegram secrets are not configured');pr
 
 const api=async(method,payload={})=>{
  const r=await fetch(`https://api.telegram.org/bot${token}/${method}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)});
- const j=await r.json().catch(()=>null); if(!r.ok||j?.ok!==true) throw new Error(`Telegram ${method} failed (${r.status}/${j?.error_code??'unknown'})`); return j.result;
+ const j=await r.json().catch(()=>null);
+ if(!r.ok||j?.ok!==true){const e=new Error(`Telegram ${method} failed (${r.status}/${j?.error_code??'unknown'})`);e.status=r.status;e.telegramCode=j?.error_code;e.description=j?.description??'';throw e;}
+ return j.result;
 };
 
 const loadLedger=()=>{
@@ -19,7 +21,15 @@ const loadLedger=()=>{
 const ledger=loadLedger();
 const getObservation=id=>ledger.get(String(id))??null;
 const getCurrentStatus=obs=>({direction:obs?.bbma?.direction??obs?.direction??'UNAVAILABLE',readiness:obs?.bbma?.readiness??obs?.readiness??'UNAVAILABLE'});
-const answerCallback=({callbackQueryId,text})=>api('answerCallbackQuery',{callback_query_id:callbackQueryId,text,show_alert:false});
+const answerCallback=async({callbackQueryId,text})=>{
+ try{return await api('answerCallbackQuery',{callback_query_id:callbackQueryId,text,show_alert:false});}
+ catch(e){
+   // Telegram rejects old callback_query ids after their acknowledgement window. A stale queued
+   // callback must not kill the receiver or prevent a fresh button press from being processed.
+   if(e.status===400){console.log('Skipped stale/invalid callback acknowledgement');return false;}
+   throw e;
+ }
+};
 const respond=({chatId,text,parse_mode})=>api('sendMessage',{chat_id:chatId,text,parse_mode});
 
 let offset=Number(process.env.TELEGRAM_OFFSET??0);
@@ -33,7 +43,8 @@ while(Date.now()<deadline){
      if(u.callback_query?.id) await answerCallback({callbackQueryId:u.callback_query.id,text:'Unauthorized chat'});
      continue;
    }
-   await handleTelegramCallback({update:u,getObservation,getCurrentStatus,answerCallback,respond});
+   try{await handleTelegramCallback({update:u,getObservation,getCurrentStatus,answerCallback,respond});}
+   catch(e){console.error(`Callback processing failed: ${e.message}`);}
  }
 }
 console.log(`Telegram callback polling completed; next_offset=${offset}`);
