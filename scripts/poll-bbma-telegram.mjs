@@ -2,8 +2,7 @@ import process from 'node:process';
 import fs from 'node:fs';
 import {handleTelegramCallback} from '../macro/bbma/telegram-callback-runtime.mjs';
 import {adaptShadowObservationForTelegram} from '../macro/bbma/telegram-observation-adapter.mjs';
-import {classifyTelegramLifecycle} from '../macro/bbma/telegram-lifecycle.mjs';
-import {explainTelegramObservation,diffTelegramObservations} from '../macro/bbma/telegram-delta.mjs';
+import {buildTelegramObservationHistory} from '../macro/bbma/telegram-history.mjs';
 
 const token=process.env.TELEGRAM_BOT_TOKEN;
 const allowedChat=String(process.env.TELEGRAM_CHAT_ID??'');
@@ -13,13 +12,12 @@ if(!token||!allowedChat){console.error('Telegram secrets are not configured');pr
 const api=async(method,payload={})=>{const r=await fetch(`https://api.telegram.org/bot${token}/${method}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)});const j=await r.json().catch(()=>null);if(!r.ok||j?.ok!==true){const e=new Error(`Telegram ${method} failed (${r.status}/${j?.error_code??'unknown'})`);e.status=r.status;e.telegramCode=j?.error_code;e.description=j?.description??'';throw e;}return j.result;};
 const readRows=path=>{const raw=JSON.parse(fs.readFileSync(path,'utf8'));return Array.isArray(raw)?raw:(raw.observations??[]);};
 const loadLedger=()=>{let rows=[],source='NONE';try{rows=readRows(ledgerPath);source=ledgerPath;}catch(e){console.log(`DIAG primary_ledger=UNAVAILABLE path=${ledgerPath} reason=${e.code??'PARSE'}`);try{rows=readRows(fallbackPath);source=fallbackPath;}catch(x){console.log(`DIAG fallback_ledger=FAILED reason=${x.code??'PARSE'}`);}}const adapted=[];for(const row of rows){try{adapted.push(row?.kind==='BBMA_NEWS_SHADOW_OBSERVATION'?adaptShadowObservationForTelegram(row):row);}catch(e){console.log(`DIAG observation_adapt=SKIP reason=${e.message}`);}}console.log(`DIAG ledger_source=${source} observations=${adapted.length}`);return adapted;};
-const rows=loadLedger();
-const ledger=new Map(rows.map(x=>[String(x.alert_id??x.observation_id??x.id),x]));
-const bySymbol=new Map(); for(const x of rows){const key=String(x.symbol??'XAUUSD');const a=bySymbol.get(key)??[];a.push(x);bySymbol.set(key,a);}
-const getObservation=id=>{const x=ledger.get(String(id))??null;console.log(`DIAG observation_lookup id=${String(id).slice(0,64)} found=${Boolean(x)}`);return x;};
+const history=buildTelegramObservationHistory(loadLedger());
+console.log(`DIAG history_indexed=${history.size}`);
+const getObservation=id=>{const x=history.getObservation(id);console.log(`DIAG observation_lookup id=${String(id).slice(0,64)} found=${Boolean(x)}`);return x;};
 const getCurrentStatus=obs=>({direction:obs?.bbma?.direction??obs?.direction??'UNAVAILABLE',readiness:obs?.bbma?.readiness??obs?.readiness??'UNAVAILABLE'});
-const getExplanation=obs=>explainTelegramObservation(obs,classifyTelegramLifecycle(obs));
-const getChanges=obs=>{const list=bySymbol.get(String(obs.symbol??'XAUUSD'))??[];const i=list.indexOf(obs);const previous=i>0?list[i-1]:null;return previous?diffTelegramObservations(previous,obs):{added:[],removed:[],direction_changed:false,gate_changed:false,readiness_changed:false};};
+const getExplanation=obs=>history.getExplanation(obs);
+const getChanges=obs=>history.getChanges(obs);
 const answerCallback=async({callbackQueryId,text})=>{try{const x=await api('answerCallbackQuery',{callback_query_id:callbackQueryId,text,show_alert:false});console.log('DIAG callback_ack=OK');return x;}catch(e){if(e.status===400){console.log('DIAG callback_ack=STALE_400');return false;}throw e;}};
 const respond=async({chatId,text,parse_mode})=>{const x=await api('sendMessage',{chat_id:chatId,text,parse_mode});console.log('DIAG response_send=OK');return x;};
 let offset=Number(process.env.TELEGRAM_OFFSET??0),received=0,authorized=0,handled=0;
